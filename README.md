@@ -26,17 +26,7 @@ pw_local_env-php
 pw_local_env-db
 ```
 
-The application should be running in the 8030 port of your local machine but, before trying it, lets add one entry to your **hosts** file.
-
-For OSX users, this file should located at `/etc/hosts`. For Windows users, you can check [this guide](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/).
-
-Edit the file and add the following entry:
-
-```
-127.0.0.1 pw.test
-```
-
-At this point, you should be able to access to the application by visiting the following address in your browser [http://pw.test:8030/](http://pw.test:8030/).
+At this point, you should be able to access to the application by visiting the following address in your browser [http://pwpay.grup16:8030/](http://pwpay.grup16:8030/).
 
 ### Database
 
