@@ -23,9 +23,3 @@
         <input type="submit" value="Register">
     </form>
 {% endblock %}
-{% block scripts %}
-    {{ parent() }}
-    <script
-            type="application/javascript"
-            src="{{ full_url_for('home') }}assets/js/ajax.js"></script>
-{% endblock %}
