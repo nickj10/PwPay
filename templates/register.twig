@@ -1,0 +1,31 @@
+{% extends "base.twig" %}
+{% block title %} Login {% endblock %}
+{% block content %}
+    <form id="register-form"
+          action="{{ url_for('register') }}"
+          method="POST">
+        <label>
+            Username
+            <input type="text" name="username">
+        </label>
+        <label>
+            Password
+            <input type="password" name="password">
+        </label>
+        <label>
+            Birthday
+            <input type="text" name="birthday">
+        </label>
+        <label>
+            Phone
+            <input type="text" name="phone">
+        </label>
+        <input type="submit" value="Register">
+    </form>
+{% endblock %}
+{% block scripts %}
+    {{ parent() }}
+    <script
+            type="application/javascript"
+            src="{{ full_url_for('home') }}assets/js/ajax.js"></script>
+{% endblock %}
