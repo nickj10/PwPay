@@ -21,4 +21,7 @@ final class RegisterController
     {
         return $this->container->get('view')->render($response, 'register.twig', []);
     }
+    public function registerAction(Request $request, Response $response): Response
+    {
+    }
 }

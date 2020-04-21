@@ -53,3 +53,5 @@ $app->get('/login', LoginController::class . ':showLoginFormAction');
 $app->post('/login', LoginController::class . ':loginAction')->setName('login');
 
 $app->get('/register', RegisterController::class . ':showRegisterFormAction');
+
+$app->post('/register', RegisterController::class . ':registerAction')->setName('register');
