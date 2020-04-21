@@ -8,6 +8,7 @@ use \SallePW\SlimApp\Controller\FlashController;
 use \SallePW\SlimApp\Controller\PostUserController;
 use \SallePW\SlimApp\Controller\FileController;
 use \SallePW\SlimApp\Controller\LoginController;
+use \SallePW\SlimApp\Controller\RegisterController;
 
 
 $app->add(StartSessionMiddleware::class);
@@ -50,3 +51,5 @@ $app->post(
 $app->get('/login', LoginController::class . ':showLoginFormAction');
 
 $app->post('/login', LoginController::class . ':loginAction')->setName('login');
+
+$app->get('/register', RegisterController::class . ':showRegisterFormAction');
