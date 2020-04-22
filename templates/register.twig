@@ -5,8 +5,8 @@
           action="{{ url_for('register') }}"
           method="POST">
         <label>
-            Username
-            <input type="text" name="username">
+            Email
+            <input type="text" name="email">
         </label>
         <label>
             Password
@@ -14,11 +14,11 @@
         </label>
         <label>
             Birthday
-            <input type="text" name="birthday">
+            <input type="date" name="birthday">
         </label>
         <label>
             Phone
-            <input type="text" name="phone">
+            <input type="number" name="phone">
         </label>
         <input type="submit" value="Register">
     </form>

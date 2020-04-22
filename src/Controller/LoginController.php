@@ -30,7 +30,7 @@ final class LoginController
         $data = $request->getParsedBody();
 
         $errors = $this->validate($data);
-
+        echo $errors;
         if (count($errors) > 0) {
             $response->getBody()->write(json_encode(['errors' => $errors]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
