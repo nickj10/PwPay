@@ -19,7 +19,13 @@ final class LoginController
 
     public function showLoginFormAction(Request $request, Response $response): Response
     {
-        return $this->container->get('view')->render($response, 'login.twig', []);
+        return $this->container->get('view')->render(
+            $response,
+            'login.twig',
+            [
+                "id" => $request->getAttribute('id')
+            ]
+        );
     }
 
     public function loginAction(Request $request, Response $response): Response
@@ -40,13 +46,12 @@ final class LoginController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 
-    private function validate (array $data): array 
+    private function validate(array $data): array
     {
         $errors = [];
         $errors = $this->validateEmail($errors, $data);
         $errors = $this->validatePassword($errors, $data);
         return $errors;
-    
     }
 
     private function validateEmail(array $data): array
