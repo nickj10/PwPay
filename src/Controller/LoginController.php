@@ -43,7 +43,7 @@ final class LoginController
             } else {
                 $response->getBody()->write(json_encode([]));
                 if ($this->container->get('user_repository')->getUserByEmail($data['email'])) {
-                 echo 'User exists'   
+                 
                 }
             }
 
