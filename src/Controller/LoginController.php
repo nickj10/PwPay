@@ -42,16 +42,32 @@ final class LoginController
 
     private function validate(array $data): array
     {
+        $email = $data['email'];
         $errors = [];
 
-        if (empty($data['username'])) {
-            $errors['username'] = 'The username cannot be empty.';
+        if (empty($data['email'])) {
+            $errors['email'] = 'The username cannot be empty.';
+        } else {
+            $email_aux = explode('@', $email);
+            $domain = array_pop($email_aux);
+            if ($domain != 'salle.url.edu') {
+                $errors['email'] = 'Email is not valid';
+            }
         }
 
-        if (empty($data['password']) || strlen($data['password']) < 6) {
-            $errors['password'] = 'The password must contain at least 6 characters.';
-        }
+        return $errors;
+    }
 
+    private function validatePassword($errors, $data): array
+    {
+        $password = $data['password'];
+        if (empty($password)) {
+            $errors['password'] = 'The password cannot be empty';
+        } else {
+            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/", $password)) {
+                $errors['password'] = 'The password must contain both letters and numbers with more than 5 characters.';
+            }
+        }
         return $errors;
     }
 }
