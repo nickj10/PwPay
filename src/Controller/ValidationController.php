@@ -26,7 +26,15 @@ final class ValidationController
             return $response->withHeader('Location', '/login')->withStatus(302);
         }
         else {
-            return $response->withHeader('Location', '/')->withStatus(302);
+            //return $response->withHeader('Location', '/')->withStatus(302);
+            $warning = "Link is not valid anymore.";
+            return $this->container->get('view')->render(
+                $response, 
+                'hello.twig', 
+                [
+                    'warning' => $warning
+                ]);
+
         }
     }
 }

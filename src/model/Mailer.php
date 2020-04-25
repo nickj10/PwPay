@@ -17,8 +17,8 @@ class Mailer {
             $mail->Host = 'smtp.sendgrid.net';
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'TLS';
-            $mail->Username = 'apikey';
-            $mail->Password = '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';
+            $mail->Username = $_ENV['SENDGRID_USERNAME'];
+            $mail->Password = $_ENV['SENDGRID_PASSWORD'];
             $mail->Port = 587;
             $mail->isHTML(true);
             $mail->setFrom('kayeann.ignacio@students.salle.url.edu', 'Pwpay');
