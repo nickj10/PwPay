@@ -10,10 +10,10 @@
 			<a id="logo-container" href="#" class="brand-logo">Logo</a>
 			<ul class="right hide-on-med-and-down">
 				<li>
-					<a href="/login">Sign in</a>
+					<a href="/sign-in">Sign in</a>
 				</li>
 				<li>
-					<a href="#">Sign up</a>
+					<a href="/sign-up">Sign up</a>
 				</li>
 			</ul>
 
@@ -173,5 +173,7 @@
 	<script src="js/materialize.js"></script>
 	<script src="js/init.js"></script>
 
-		<script type='text/javascript'>alert('{{warning}}');</script>
+	<script type='text/javascript'>
+		alert('{{ warning }}');
+	</script>
 {% endblock %}

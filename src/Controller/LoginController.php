@@ -40,12 +40,18 @@ final class LoginController
             if (count($errors) > 0) {
                 $response->getBody()->write(json_encode(['errors' => $errors]));
                 return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+            } else {
+                $response->getBody()->write(json_encode([]));
+                if ($this->container->get('user_repository')->getUserByEmail($data['email'])) {
+                 echo 'User exists'   
+                }
             }
+
         } catch (Exception $e) {
             $response->getBody()->write('Unexpected error: ' . $e->getMessage());
             return $response->withStatus(500);
         }
-        $response->getBody()->write(json_encode([]));
+        
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 
