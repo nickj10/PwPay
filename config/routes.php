@@ -49,9 +49,8 @@ $app->post(
 )->setName('upload');
 
 $app->get('/login', LoginController::class . ':showLoginFormAction');
-
 $app->post('/login', LoginController::class . ':loginAction')->setName('login');
 
-$app->get('/register', RegisterController::class . ':showRegisterFormAction');
 
-$app->post('/register', RegisterController::class . ':registerAction')->setName('register');
+$app->get('/sign-up', RegisterController::class . ':showRegisterFormAction');
+$app->post('/sign-up', RegisterController::class . ':registerAction')->setName('register');

@@ -7,6 +7,8 @@ namespace SallePW\SlimApp\Controller;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use SallePW\SlimApp\model\User;
+
 
 final class RegisterController
 {
@@ -23,18 +25,30 @@ final class RegisterController
     }
     public function registerAction(Request $request, Response $response): Response
     {
+
         $data = $request->getParsedBody();
+        $errors = [];
         $errors = $this->validate($data);
-        echo count($errors);
-        if (count($errors) > 0) {
-            $response->getBody()->write(json_encode(['errors' => $errors]));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+        try {
+            if (count($errors) == 0) {
+                $user = new User ($data['email'], $data['password'], $data['birthday'], $data['phone']);
+                $this->container->get('user_repository')->save($user);
+            }
+            else {
+                return $this->container->get('view')->render (
+                    $response,
+                    'register.twig',
+                    [
+                        'form_errors' => $errors,
+                        'data' => $data
+                    ]
+                    );
+            }
+        } catch (Exception $e) {
+            $response->getBody()->write('Unexpected error: ' . $e->getMessage());
+            return $response->withStatus(500);
         }
-
-        $response->getBody()->write(json_encode([]));
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
-        
-
+        return $response->withStatus(201);
     }
     private function validate (array $data): array 
     {
@@ -101,5 +115,4 @@ final class RegisterController
         return $errors;
     
     }
-
 }

@@ -27,6 +27,6 @@ final class FlashController
         );
 
 
-        return $response->withHeader('Location', '/')->withStatus(302);
+        return $response->withHeader('Location', '/sign-up')->withStatus(302);
     }
 }
