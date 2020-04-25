@@ -19,25 +19,20 @@ final class LoginController
 
     public function showLoginFormAction(Request $request, Response $response): Response
     {
-        return $this->container->get('view')->render($response, 'login.twig', []);
+        return $this->container->get('view')->render(
+            $response, 
+            'login.twig', 
+            [
+                "id" => $request->getAttribute('id')
+            ]);
     }
 
     public function loginAction(Request $request, Response $response): Response
     {
 
-
-        // This method decodes the received json
-        $data = $request->getParsedBody();
-
-        $errors = $this->validate($data);
-
-        if (count($errors) > 0) {
-            $response->getBody()->write(json_encode(['errors' => $errors]));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
-        }
-
-        $response->getBody()->write(json_encode([]));
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
+        $id = $request->getAttribute('id');
+        echo $id;
+        return $response->withStatus(201);
     }
 
     private function validate(array $data): array

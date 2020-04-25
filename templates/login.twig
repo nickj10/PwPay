@@ -2,7 +2,7 @@
 {% block title %} Login {% endblock %}
 {% block content %}
     <form id="login-form"
-          action="{{ url_for('login') }}"
+          action="{{ url_for('login', {"id": id})}}"
           method="POST">
         <label>
             Username
@@ -14,10 +14,4 @@
         </label>
         <input type="submit" value="Login">
     </form>
-{% endblock %}
-{% block scripts %}
-    {{ parent() }}
-    <script
-            type="application/javascript"
-            src="{{ full_url_for('home') }}assets/js/ajax.js"></script>
 {% endblock %}

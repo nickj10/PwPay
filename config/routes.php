@@ -8,6 +8,8 @@ use \SallePW\SlimApp\Controller\FlashController;
 use \SallePW\SlimApp\Controller\PostUserController;
 use \SallePW\SlimApp\Controller\FileController;
 use \SallePW\SlimApp\Controller\LoginController;
+use \SallePW\SlimApp\Controller\RegisterController;
+use \SallePW\SlimApp\Controller\ValidationController;
 
 
 $app->add(StartSessionMiddleware::class);
@@ -48,5 +50,9 @@ $app->post(
 )->setName('upload');
 
 $app->get('/login', LoginController::class . ':showLoginFormAction');
-
 $app->post('/login', LoginController::class . ':loginAction')->setName('login');
+
+$app->get('/id={id}', ValidationController::class . ':showLoginFormAction');
+
+$app->get('/sign-up', RegisterController::class . ':showRegisterFormAction');
+$app->post('/sign-up', RegisterController::class . ':registerAction')->setName('register');
