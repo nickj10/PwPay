@@ -41,12 +41,11 @@ final class RegisterController
                 $user = new User ($data['email'], $data['password'], $data['birthday'], intval($data['phone']));
                 $this->container->get('user_repository')->save($user);
                 //We have to retreive its id for the activation link
-                $user = $this->container->get('user_repository')->getUser($data['email']);
-                echo $user['user_id'];
+                $user = $this->container->get('user_repository')->getUserByEmail($data['email']);
+                $mail = new Mailer();
+                $mail->sendEmail($user['user_id'], $user['email']);
             }
             else {
-                //$mail = new Mailer();
-                //$mail->sendEmail();
                 return $this->container->get('view')->render (
                     $response,
                     'register.twig',

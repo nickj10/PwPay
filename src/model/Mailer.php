@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 class Mailer {
-    public function sendEmail() {
+    public function sendEmail($id, $to) {
         $mail = new PHPMailer(true);
         try {
             $mail->SMTPDebug = SMTP::DEBUG_SERVER; 
@@ -24,7 +24,7 @@ class Mailer {
             $mail->setFrom('kayeann.ignacio@students.salle.url.edu', 'Pwpay');
             $mail->addAddress('kayeann.sn@gmail.com');
             $mail->Subject = 'Activation Link';
-            $mail->Body = 'Welcome to Pwpay! Click the following link to activate your account: ';
+            $mail->Body = 'Welcome to Pwpay! Click the following link to activate your account: http://' . $_SERVER['HTTP_HOST'] . '/id=' . $id;
             $mail->send();
             echo 'Message has been sent';
         } catch (Exception $e) {

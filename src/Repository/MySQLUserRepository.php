@@ -52,7 +52,7 @@ final class MySQLUserRepository implements UserRepository
 
     }
 
-    public function getUser($email) {
+    public function getUserByEmail($email) {
         $query = "SELECT * FROM user WHERE email = :email;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':email', $email, PDO::PARAM_STR);
@@ -64,5 +64,31 @@ final class MySQLUserRepository implements UserRepository
         }
         return $row;
     }
+
+    public function getUserById($id) {
+        $query = "SELECT * FROM user WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':id', $id, PDO::PARAM_STR);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+            if ($row['status'] == 'inactive') {
+                $this->updateStatus($id);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function updateStatus($id) {
+        $query = "UPDATE user SET status = 'active' WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':id', $id, PDO::PARAM_STR);
+        $statement->execute();
+    }
+
+    
 
 }
