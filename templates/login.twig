@@ -1,23 +1,35 @@
 {% extends "base.twig" %}
-{% block title %} Login {% endblock %}
+{% block title %}
+	Login
+{% endblock %}
+{% block extracss %}
+	<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/login.css"/>
+{% endblock %}
 {% block content %}
-    <form id="login-form"
-          action="{{ url_for('login') }}"
-          method="POST">
-        <label>
-            Username
-            <input type="text" name="username">
-        </label>
-        <label>
-            Password
-            <input type="password" name="password">
-        </label>
-        <input type="submit" value="Login">
-    </form>
+	<div class="login-container">
+		<div class="row">
+			<div class="col">
+				<div class="card small-margin">
+					<h4>
+						Sign in
+					</h4>
+					<form id="login-form" action="{{ url_for('login') }}" method="POST">
+						<label>
+							Username
+							<input type="text" name="username">
+						</label>
+						<label>
+							Password
+							<input type="password" name="password">
+						</label>
+						<input class="btn waves-effect waves-light" type="submit" value="Login">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 {% block scripts %}
-    {{ parent() }}
-    <script
-            type="application/javascript"
-            src="{{ full_url_for('home') }}assets/js/ajax.js"></script>
+	{{ parent() }}
+	<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/ajax.js"></script>
 {% endblock %}
