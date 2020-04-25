@@ -40,7 +40,16 @@ final class LoginController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 
-    private function validate(array $data): array
+    private function validate (array $data): array 
+    {
+        $errors = [];
+        $errors = $this->validateEmail($errors, $data);
+        $errors = $this->validatePassword($errors, $data);
+        return $errors;
+    
+    }
+
+    private function validateEmail(array $data): array
     {
         $email = $data['email'];
         $errors = [];
