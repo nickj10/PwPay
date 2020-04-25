@@ -34,14 +34,17 @@ final class LoginController
 
         // This method decodes the received json
         $data = $request->getParsedBody();
-
+        $errors = [];
         $errors = $this->validate($data);
-
-        if (count($errors) > 0) {
-            $response->getBody()->write(json_encode(['errors' => $errors]));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+        try {
+            if (count($errors) > 0) {
+                $response->getBody()->write(json_encode(['errors' => $errors]));
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+            }
+        } catch (Exception $e) {
+            $response->getBody()->write('Unexpected error: ' . $e->getMessage());
+            return $response->withStatus(500);
         }
-
         $response->getBody()->write(json_encode([]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
@@ -83,5 +86,14 @@ final class LoginController
             }
         }
         return $errors;
+    }
+
+    public function logoutAction(Request $request, Response $response): Response
+    {
+        return $this->container->get('view')->render(
+            $response,
+            'hello.twig',
+            []
+        );
     }
 }

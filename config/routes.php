@@ -50,3 +50,5 @@ $app->post(
 $app->get('/login', LoginController::class . ':showLoginFormAction');
 
 $app->post('/login', LoginController::class . ':loginAction')->setName('login');
+
+$app->get('/logout', LoginController::class . ':logoutAction');
