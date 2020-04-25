@@ -20,3 +20,6 @@ html {
     color: 
     #e20b0bab;
 }
+#inSession {
+    display: none;
+}
