@@ -8,6 +8,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use SallePW\SlimApp\model\User;
+use SallePW\SlimApp\model\Mailer;
+
 
 
 final class RegisterController
@@ -34,8 +36,11 @@ final class RegisterController
                 $birthdate = date_create($data['birthday']);
                 $user = new User ($data['email'], $data['password'], $birthdate, intval($data['phone']));
                 $this->container->get('user_repository')->save($user);
+                //The user should be created
             }
             else {
+                $mail = new Mailer();
+                $mail->sendEmail();
                 return $this->container->get('view')->render (
                     $response,
                     'register.twig',
