@@ -11,27 +11,16 @@ final class User
     private int $id;
     private string $email;
     private string $password;
-    private Date $birthday;
-    private double $phone;
+    private DateTime $birthday;
+    private int $phone;
 
-    public function __construct(
-        string $email,
-        string $password,
-        Date $birthday,
-        double $phone
-    ) {
-        if (!isset($phone)) {
-            $this->email = $email;
-            $this->password = $password;
-            $this->birthday = $birthday;
-        }
-        else {
-            $this->email = $email;
-            $this->password = $password;
-            $this->birthday = $birthday;
-            $this->phone = $phone;   
-        }     
-    }
+    public function __construct($email, $password, $birthday, $phone = 0) 
+    {
+        $this->email = $email;
+        $this->password = $password;
+        $this->birthday = $birthday;
+        $this->phone = $phone;   
+    }     
 
     public function id(): int
     {
@@ -62,5 +51,16 @@ final class User
     public function phone(): string
     {
         return $this->phone;
+    }
+
+    public function showInfo() {
+        $info = "<h1>User information:</h1>";
+        $info.= "Email: ".$this->email;
+        $info.= "<br/> Password: ".$this->password;
+        $info.= "<br/> Birthday: ".$this->birthday->format('y-m-d');
+        $info.= "<br/> Phone: ".$this->phone;
+         
+        return $info;
+
     }
 }

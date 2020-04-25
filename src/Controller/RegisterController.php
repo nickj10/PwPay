@@ -31,7 +31,8 @@ final class RegisterController
         $errors = $this->validate($data);
         try {
             if (count($errors) == 0) {
-                $user = new User ($data['email'], $data['password'], $data['birthday'], $data['phone']);
+                $birthdate = date_create($data['birthday']);
+                $user = new User ($data['email'], $data['password'], $birthdate, intval($data['phone']));
                 $this->container->get('user_repository')->save($user);
             }
             else {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SallePW\SlimApp\Repository;
 
 use PDO;
-use Pw\SlimApp\Model\User;
-use Pw\SlimApp\Model\UserRepository;
+use SallePW\SlimApp\Model\User;
+use SallePW\SlimApp\Model\UserRepository;
 
 final class MySQLUserRepository implements UserRepository
 {
