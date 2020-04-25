@@ -24,12 +24,12 @@ $container->set(
 );
 
 $container->set('db', function () {
-    return PDOSingleton::getInstance(
-        $_ENV['MYSQL_USER'],
+    return PDOSingleton::getInstance('root','admin','db',3306,'pwpay'
+        /*$_ENV['MYSQL_USER'],
         $_ENV['MYSQL_ROOT_PASSWORD'],
         $_ENV['MYSQL_HOST'],
         $_ENV['MYSQL_PORT'],
-        $_ENV['MYSQL_DATABASE']
+        $_ENV['MYSQL_DATABASE']*/
     );
 });
 

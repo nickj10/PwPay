@@ -11,7 +11,7 @@ final class User
     private int $id;
     private string $email;
     private string $password;
-    private DateTime $birthday;
+    private string $birthday;
     private int $phone;
 
     public function __construct($email, $password, $birthday, $phone = 0) 
@@ -48,7 +48,7 @@ final class User
         return $this->birthday;
     }
     
-    public function phone(): string
+    public function phone(): int
     {
         return $this->phone;
     }

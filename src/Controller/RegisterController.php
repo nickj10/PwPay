@@ -26,21 +26,27 @@ final class RegisterController
         return $this->container->get('view')->render($response, 'register.twig', []);
     }
     public function registerAction(Request $request, Response $response): Response
-    {
-
+    {        
         $data = $request->getParsedBody();
         $errors = [];
         $errors = $this->validate($data);
         try {
+            //Check if user data already exists
+            if ($this->container->get('user_repository')->isEmailTaken($data['email'])) {
+                $errors['emailTaken'] = 'This email is already taken';
+            }
             if (count($errors) == 0) {
-                $birthdate = date_create($data['birthday']);
-                $user = new User ($data['email'], $data['password'], $birthdate, intval($data['phone']));
+                //$birthdate = date_create($data['birthday']);
+                
+                $user = new User ($data['email'], $data['password'], $data['birthday'], intval($data['phone']));
                 $this->container->get('user_repository')->save($user);
-                //The user should be created
+                //We have to retreive its id for the activation link
+                $user = $this->container->get('user_repository')->getUser($data['email']);
+                echo $user['user_id'];
             }
             else {
-                $mail = new Mailer();
-                $mail->sendEmail();
+                //$mail = new Mailer();
+                //$mail->sendEmail();
                 return $this->container->get('view')->render (
                     $response,
                     'register.twig',

@@ -11,6 +11,9 @@
         {% if form_errors['email'] is not empty %}
             <p> {{ form_errors['email'] }} </p>
         {% endif %}
+        {% if form_errors['emailTaken'] is not empty %}
+            <p> {{ form_errors['emailTaken'] }} </p>
+        {% endif %}
         <label>
             Password
             <input type="password" name="password">
