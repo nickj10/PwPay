@@ -18,10 +18,20 @@
 							Email
 							<input type="text" name="email">
 						</label>
+						{% if form_errors['email'] is not empty %}
+							<p>
+								{{ form_errors['email'] }}
+							</p>
+						{% endif %}
 						<label>
 							Password
 							<input type="password" name="password">
 						</label>
+						{% if form_errors['password'] is not empty %}
+							<p>
+								{{ form_errors['password'] }}
+							</p>
+						{% endif %}
 						<input class="btn waves-effect waves-light" type="submit" value="Login">
 					</form>
 				</div>
