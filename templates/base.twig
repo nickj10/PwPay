@@ -23,9 +23,9 @@
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.js"></script>
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.min.js"></script>
 			<script>
-			 document.addEventListener('DOMContentLoaded', function() {
-    		var elems = document.querySelectorAll('.carousel');
-    		var instances = M.Carousel.init(elems);
+			document.addEventListener('DOMContentLoaded', function() {
+    			var elems = document.querySelectorAll('.dropdown-trigger');
+    			var instances = M.Dropdown.init(elems, options);
   			});
 			</script>
 		{% endblock %}
