@@ -37,4 +37,7 @@
         {% endif %}
         <input type="submit" value="Register">
     </form>
+    {% if form_errors['activation_link'] is not empty %}
+            <p> {{ form_errors['activation_link'] }} </p>
+        {% endif %}
 {% endblock %}

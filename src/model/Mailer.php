@@ -9,11 +9,11 @@ use PHPMailer\PHPMailer\Exception;
 
 class Mailer {
     public function sendEmail($id, $to) {
+
         $mail = new PHPMailer(true);
         try {
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER; 
+            //$mail->SMTPDebug = SMTP::DEBUG_SERVER; 
             $mail->isSMTP();
-            //$mail->Host = 'mail.smtpbucket.com';
             $mail->Host = 'smtp.sendgrid.net';
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'TLS';
@@ -26,9 +26,10 @@ class Mailer {
             $mail->Subject = 'Activation Link';
             $mail->Body = 'Welcome to Pwpay! Click the following link to activate your account: http://' . $_SERVER['HTTP_HOST'] . '/id=' . $id;
             $mail->send();
-            echo 'Message has been sent';
+            return true;
         } catch (Exception $e) {
-            echo $e->getMessage() . $mail->ErrorInfo;
+            //$e->getMessage() . $mail->ErrorInfo;
+            return false;
         }
     }
 

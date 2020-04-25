@@ -75,15 +75,15 @@ final class MySQLUserRepository implements UserRepository
         if ($count > 0) {
             $row = $statement->fetch();
             if ($row['status'] == 'inactive') {
-                $this->updateStatus($id);
+                $this->updateActivatingUser($id);
                 return true;
             }
         }
         return false;
     }
 
-    public function updateStatus($id) {
-        $query = "UPDATE user SET status = 'active' WHERE user_id = :id;";
+    public function updateActivatingUser($id) {
+        $query = "UPDATE user SET status = 'active', balance=20.00 WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':id', $id, PDO::PARAM_STR);
         $statement->execute();

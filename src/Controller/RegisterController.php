@@ -43,18 +43,19 @@ final class RegisterController
                 //We have to retreive its id for the activation link
                 $user = $this->container->get('user_repository')->getUserByEmail($data['email']);
                 $mail = new Mailer();
-                $mail->sendEmail($user['user_id'], $user['email']);
+                if (($mail->sendEmail($user['user_id'], $user['email']))) {
+                    $errors['activation_link'] = "Message was sent to your email to activate your account.";
+                }
             }
-            else {
-                return $this->container->get('view')->render (
-                    $response,
-                    'register.twig',
-                    [
-                        'form_errors' => $errors,
-                        'data' => $data
-                    ]
-                    );
-            }
+            
+            return $this->container->get('view')->render (
+                $response,
+                'register.twig',
+                [
+                    'form_errors' => $errors,
+                    'data' => $data
+                ]
+            );
         } catch (Exception $e) {
             $response->getBody()->write('Unexpected error: ' . $e->getMessage());
             return $response->withStatus(500);
