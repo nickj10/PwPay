@@ -69,7 +69,7 @@ final class LoginController
         $errors = [];
 
         if (empty($data['email'])) {
-            $errors['email'] = 'The username cannot be empty.';
+            $errors['email'] = 'The email cannot be empty.';
         } else {
             $email_aux = explode('@', $email);
             $domain = array_pop($email_aux);
