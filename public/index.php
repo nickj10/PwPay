@@ -18,6 +18,8 @@ $app = AppFactory::create();
 
 $app->add(TwigMiddleware::createFromContainer($app));
 
+$app->addBodyParsingMiddleware();
+
 $app->addRoutingMiddleware();
 
 $app->addErrorMiddleware(true, false, false);

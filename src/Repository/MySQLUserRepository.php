@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SallePW\SlimApp\Repository;
 
 use PDO;
-use Pw\SlimApp\Model\User;
-use Pw\SlimApp\Model\UserRepository;
+use SallePW\SlimApp\Model\User;
+use SallePW\SlimApp\Model\UserRepository;
 
 final class MySQLUserRepository implements UserRepository
 {
@@ -21,22 +21,74 @@ final class MySQLUserRepository implements UserRepository
 
     public function save(User $user): void
     {
-        $query = <<<'QUERY'
-        INSERT INTO user(email, password, created_at, updated_at)
-        VALUES(:email, :password, :created_at, :updated_at)
-QUERY;
+        $query = "INSERT INTO user(email, password, birthday, phone)
+        values (:email, :pass, :birthday, :phone);";
         $statement = $this->database->connection()->prepare($query);
 
         $email = $user->email();
         $password = $user->password();
-        $createdAt = $user->createdAt()->format(self::DATE_FORMAT);
-        $updatedAt = $user->updatedAt()->format(self::DATE_FORMAT);
+        $bday = $user->birthday();
+        $phone = $user->phone();
 
-        $statement->bindParam('email', $email, PDO::PARAM_STR);
-        $statement->bindParam('password', $password, PDO::PARAM_STR);
-        $statement->bindParam('created_at', $createdAt, PDO::PARAM_STR);
-        $statement->bindParam('updated_at', $updatedAt, PDO::PARAM_STR);
+        $statement->bindParam(':email', $email, PDO::PARAM_STR);
+        $statement->bindParam(':pass', $password, PDO::PARAM_STR);
+        $statement->bindParam(':birthday', $bday, PDO::PARAM_STR);
+        $statement->bindParam(':phone', $phone, PDO::PARAM_STR);
 
         $statement->execute();
     }
+
+    public function isEmailTaken($email) {
+        $query = "SELECT * FROM user WHERE email = :email;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':email', $email, PDO::PARAM_STR);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count>0) {
+            return true;
+        }
+        return false;
+
+    }
+
+    public function getUserByEmail($email) {
+        $query = "SELECT * FROM user WHERE email = :email;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':email', $email, PDO::PARAM_STR);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+        }
+        return $row;
+    }
+
+    public function getUserById($id) {
+        $query = "SELECT * FROM user WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':id', $id, PDO::PARAM_STR);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+            if ($row['status'] == 'inactive') {
+                $this->updateActivatingUser($id);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function updateActivatingUser($id) {
+        $query = "UPDATE user SET status = 'active', balance=20.00 WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':id', $id, PDO::PARAM_STR);
+        $statement->execute();
+    }
+
+    
+
 }
