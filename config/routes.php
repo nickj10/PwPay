@@ -49,8 +49,8 @@ $app->post(
     FileController::class . ':uploadFileAction'
 )->setName('upload');
 
-$app->get('/login', LoginController::class . ':showLoginFormAction');
-$app->post('/login', LoginController::class . ':loginAction')->setName('login');
+$app->get('/sign-in', LoginController::class . ':showLoginFormAction');
+$app->post('/sign-in', LoginController::class . ':loginAction')->setName('login');
 
 $app->get('/id={id}', ValidationController::class . ':showLoginFormAction');
 
