@@ -20,33 +20,92 @@ final class LoginController
     public function showLoginFormAction(Request $request, Response $response): Response
     {
         return $this->container->get('view')->render(
-            $response, 
-            'login.twig', 
+            $response,
+            'login.twig',
             [
                 "id" => $request->getAttribute('id')
-            ]);
+            ]
+        );
     }
 
     public function loginAction(Request $request, Response $response): Response
     {
+        // This method decodes the received json
+        $data = $request->getParsedBody();
+        $errors = [];
+        $errors = $this->validate($data);
+        try {
+            if (count($errors) > 0) {
+                return $this->container->get('view')->render(
+                    $response,
+                    'login.twig',
+                    [
+                        'errors' => $errors,
+                        'data' => $data
+                    ]
+                );
+            } else {
+                $response->getBody()->write(json_encode([]));
+                // If there are no errors, we check the user 
+                if ($this->container->get('user_repository')->getUserByEmail($data['email'])) {
+                    return $this->container->get('view')->render($response, 'dashboard.twig',[]);
+                } else {
+                    $errors['nonexistingUser'] = 'This email is not associated to any user.';
+                }
+            }
+        } catch (Exception $e) {
+            $response->getBody()->write('Unexpected error: ' . $e->getMessage());
+            return $response->withStatus(500);
+        }
 
-        $id = $request->getAttribute('id');
-        echo $id;
-        return $response->withStatus(201);
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 
     private function validate(array $data): array
     {
         $errors = [];
+        $errors = $this->validateEmail($errors, $data);
+        $errors = $this->validatePassword($errors, $data);
+        return $errors;
+    }
 
-        if (empty($data['username'])) {
-            $errors['username'] = 'The username cannot be empty.';
-        }
+    private function validateEmail($errors, $data): array
+    {
+        $email = $data['email'];
+        $errors = [];
 
-        if (empty($data['password']) || strlen($data['password']) < 6) {
-            $errors['password'] = 'The password must contain at least 6 characters.';
+        if (empty($data['email'])) {
+            $errors['email'] = 'The email cannot be empty.';
+        } else {
+            $email_aux = explode('@', $email);
+            $domain = array_pop($email_aux);
+            if ($domain != 'salle.url.edu') {
+                $errors['email'] = 'Email is not valid.';
+            }
         }
 
         return $errors;
+    }
+
+    private function validatePassword($errors, $data): array
+    {
+        $password = $data['password'];
+        if (empty($password)) {
+            $errors['password'] = 'The password cannot be empty.';
+        } else {
+            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/", $password)) {
+                $errors['password'] = 'The password must contain both letters and numbers with more than 5 characters.';
+            }
+        }
+        return $errors;
+    }
+
+    public function logoutAction(Request $request, Response $response): Response
+    {
+        return $this->container->get('view')->render(
+            $response,
+            'hello.twig',
+            []
+        );
     }
 }
