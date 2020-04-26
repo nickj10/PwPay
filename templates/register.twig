@@ -6,7 +6,7 @@
           method="POST">
         <label>
             Email
-            <input type="text" name="email">
+            <input type="text" name="email" value={{data['email']}}>
         </label>
         {% if form_errors['email'] is not empty %}
             <p> {{ form_errors['email'] }} </p>
@@ -16,21 +16,21 @@
         {% endif %}
         <label>
             Password
-            <input type="password" name="password">
+            <input type="password" name="password" value={{data['password']}}>
         </label>
         {% if form_errors['password'] is not empty %}
             <p> {{ form_errors['password'] }} </p>
         {% endif %}
         <label>
             Birthday
-            <input type="date" name="birthday">
+            <input type="date" name="birthday" value={{data['birthday']}}>
         </label>
         {% if form_errors['birthday'] is not empty %}
             <p> {{ form_errors['birthday'] }} </p>
         {% endif %}
         <label>
             Phone
-            <input type="number" name="phone">
+            <input type="number" name="phone" value={{data['phone']}}>
         </label>
         {% if form_errors['phone'] is not empty %}
             <p> {{ form_errors['phone'] }} </p>

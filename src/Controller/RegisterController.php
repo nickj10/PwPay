@@ -37,14 +37,18 @@ final class RegisterController
             }
             if (count($errors) == 0) {
                 //$birthdate = date_create($data['birthday']);
-                
-                $user = new User ($data['email'], $data['password'], $data['birthday'], intval($data['phone']));
+                $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $password = filter_var($data['password'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $user = new User ($email, $password, $data['birthday'], intval($data['phone']));
                 $this->container->get('user_repository')->save($user);
                 //We have to retreive its id for the activation link
-                $user = $this->container->get('user_repository')->getUserByEmail($data['email']);
+                $user = $this->container->get('user_repository')->getUserByEmail($email);
                 $mail = new Mailer();
                 if (($mail->sendEmail($user['user_id'], $user['email']))) {
-                    $errors['activation_link'] = "Message was sent to your email to activate your account.";
+                    $errors['activation_link'] = "Great! Don't forget to check your email to validate your account.";
+                }
+                else {
+                    $errors['activation_link'] = "Something wrong happened. Please try again.";
                 }
             }
             
@@ -77,7 +81,7 @@ final class RegisterController
     }
 
     private function validateEmail ($errors, $data) : array {
-        $email = $data['email'];
+        $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($email)) {
             $errors['email'] = 'The email cannot be empty';
         }
@@ -92,7 +96,7 @@ final class RegisterController
     }
 
     private function validatePassword ($errors, $data) : array {
-        $password = $data['password'];
+        $password = filter_var($data['password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($password)) {
             $errors['password'] = 'The password cannot be empty';
         }
