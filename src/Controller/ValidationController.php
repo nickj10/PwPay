@@ -17,11 +17,13 @@ final class ValidationController
         $this->container = $container;
     }
 
-    public function showLoginFormAction(Request $request, Response $response): Response
+    public function showLoginFormAction(Request $request, Response $response, $args): Response
     {
         //If the id is still inactive = change status
         //If it's already active, show home page with flash message.
         $id = $request->getAttribute('id');
+        //$token = explode ('=', $id);
+        //$token_id = array_pop($token);
         if ($this->container->get('user_repository')->getUserById($id)) {
             return $response->withHeader('Location', '/login')->withStatus(302);
         }

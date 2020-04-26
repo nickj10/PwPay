@@ -24,7 +24,7 @@ class Mailer {
             $mail->setFrom('kayeann.ignacio@students.salle.url.edu', 'Pwpay');
             $mail->addAddress('kayeann.sn@gmail.com');
             $mail->Subject = 'Activation Link';
-            $mail->Body = 'Welcome to Pwpay! Click the following link to activate your account: http://' . $_SERVER['HTTP_HOST'] . '/id=' . $id;
+            $mail->Body = 'Welcome to Pwpay! Click the following link to activate your account: http://' . $_SERVER['HTTP_HOST'] . '/activate-token=' . $id;
             $mail->send();
             return true;
         } catch (Exception $e) {

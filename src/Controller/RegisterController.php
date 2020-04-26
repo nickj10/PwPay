@@ -101,7 +101,7 @@ final class RegisterController
             $errors['password'] = 'The password cannot be empty';
         }
         else {
-            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/",$password)) {
+            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/",$password)) {
                 $errors['password'] = 'The password must contain both letters and numbers with more than 5 characters.';
             }
         }
@@ -117,7 +117,7 @@ final class RegisterController
             $bday_aux = explode('-', $bday);
             $year = $bday_aux[0];
             if ((date('Y')-$year) <= 18) {
-                $errors['birthday'] = 'Sorry, you are underage';
+                $errors['birthday'] = 'Sorry, you are underage.';
             }
         }
         return $errors;
