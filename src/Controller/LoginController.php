@@ -93,7 +93,7 @@ final class LoginController
         if (empty($password)) {
             $errors['password'] = 'The password cannot be empty.';
         } else {
-            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/", $password)) {
+            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/", $password)) {
                 $errors['password'] = 'The password must contain both letters and numbers with more than 5 characters.';
             }
         }
