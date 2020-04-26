@@ -86,10 +86,15 @@ final class RegisterController
             $errors['email'] = 'The email cannot be empty';
         }
         else {
-            $email_aux = explode ('@', $email);
-            $domain = array_pop($email_aux);
-            if ($domain != 'salle.url.edu') {
+            if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'Email is not valid';
+            }
+            else {
+                $email_aux = explode ('@', $email);
+                $domain = array_pop($email_aux);
+                if ($domain != 'salle.url.edu') {
+                    $errors['email'] = 'We only accept emails with domain salle.url.edu';
+                }
             }
         }
         return $errors;
