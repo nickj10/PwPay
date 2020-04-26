@@ -57,6 +57,8 @@
 			</div>
 		</nav>
 	</div>
+
+	
 		{% block content %}{% endblock %}
 		{% block scripts %}
 			<script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
@@ -64,5 +66,33 @@
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.js"></script>
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.min.js"></script>
 		{% endblock %}
+	
+	<footer class="page-footer teal"> 				<!--   Footer   -->
+		<div class="container">
+			<div class="row">
+				<div class="col l2 s12 center">
+					<a class="white-text" href="#!">Help & Contact</a>
+					<p><script>echo $_ENV['MYSQL_USER']</script></p>
+				</div>
+				<div class="col l2 s12 center">
+					<a class="white-text" href="#!">About PwPay</a>
+				</div>
+				<div class="col l2 s12 center">
+					<a class="white-text" href="#!">Privacy</a>
+				</div>
+				<div class="col l2 s12 center">
+					<a class="white-text" href="#!">Legal</a>
+				</div>
+				<div class="col l2 s12 center">
+					<a class="white-text" href="#!">Feedback</a>
+				</div>
+			</div>
+		</div>
+		<div class="footer-copyright">
+			<div class="container">
+				©2020 PW II - Grup 16
+			</div>
+		</div>
+	</footer>
 	</body>
 </html>

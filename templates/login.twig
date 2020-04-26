@@ -1,17 +1,37 @@
 {% extends "base.twig" %}
 {% block title %} Login {% endblock %}
 {% block content %}
-    <form id="login-form"
-          action="{{ url_for('login', {"id": id})}}"
-          method="POST">
-        <label>
-            Username
-            <input type="text" name="username">
-        </label>
-        <label>
-            Password
-            <input type="password" name="password">
-        </label>
-        <input type="submit" value="Login">
+<style >
+  body{
+    background-image: url(assets/backgrounds/fondo4.jpg);
+    background-size: auto;
+  }
+</style>
+<div class="container"> 
+    <form id="login-form" action="{{ url_for('login', {"id": id})}}" method="POST">
+        <div class="row login">
+            <div class="col s12 14 offset-14">
+                <div class="card">
+                    <div class="card-action center red-text text-darken-4">
+                        <img src="assets/backgrounds/logo-simple.png" alt="logo" style="padding-top: 5%;">
+                    </div>
+                    <div class="card-content">
+                        <div class="form-field">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" value="<?php echo isset($_POST['username']) ? $_POST['username'] : '' ?>"required>
+                        </div> <br>
+                        <div class="form-field">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" value="<?php echo isset($_POST['password']) ? $_POST['password'] : '' ?>"required>
+                        </div> <br>
+                        <div class="form-field center-align">
+                            <button type="submit" value="Login" class="btn-large waves-effect waves-light teal lighten-1" >Login</button>
+                        </div><br>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
+</div>
+
 {% endblock %}
