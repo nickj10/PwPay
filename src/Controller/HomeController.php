@@ -23,7 +23,7 @@ final class HomeController
 
         return $this->container->get('view')->render(
             $response,
-            'hello.twig',
+            'home.twig',
             [
                 'notifications' => $notifications
             ]
