@@ -30,8 +30,6 @@ final class LoginController
 
     public function loginAction(Request $request, Response $response): Response
     {
-
-
         // This method decodes the received json
         $data = $request->getParsedBody();
         $errors = [];
@@ -43,15 +41,13 @@ final class LoginController
             } else {
                 $response->getBody()->write(json_encode([]));
                 if ($this->container->get('user_repository')->getUserByEmail($data['email'])) {
-                 
                 }
             }
-
         } catch (Exception $e) {
             $response->getBody()->write('Unexpected error: ' . $e->getMessage());
             return $response->withStatus(500);
         }
-        
+
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 
@@ -63,7 +59,7 @@ final class LoginController
         return $errors;
     }
 
-    private function validateEmail(array $data): array
+    private function validateEmail($errors, $data): array
     {
         $email = $data['email'];
         $errors = [];
