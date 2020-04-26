@@ -23,7 +23,7 @@
 						<div class="card-content">
 							<div class="form-field">
 								<label for="email">Email</label>
-								<input type="text" id="email" name="email" value={{data['email']}} required>
+								<input type="text" id="email" name="email" value={{data['email']}}>
 								{% if errors['email'] is not empty %}
 									<p>
 										{{ errors['email'] }}
@@ -33,17 +33,13 @@
 							<br>
 							<div class="form-field">
 								<label for="password">Password</label>
-								<input type="password" id="password" name="password" value={{data['password']}} required>
+								<input type="password" id="password" name="password" value={{data['password']}}>
 								{% if errors['password'] is not empty %}
 									<p>
 										{{ errors['password'] }}
 									</p>
 								{% endif %}
 							</div>
-							<br>
-							<div class="form-field center-align">
-								<button type="submit" value="Login" class="btn-large waves-effect waves-light teal lighten-1">Login</button>
-							</div><br>
 							{% if errors['nonexistingUser'] is not empty %}
 								<p>
 									{{ errors['nonexistingUser'] }}
@@ -54,6 +50,11 @@
 									{{ errors['passwordIncorrect'] }}
 								</p>
 							{% endif %}
+							<br>
+							<div class="form-field center-align">
+								<button type="submit" value="Login" class="btn-large waves-effect waves-light teal lighten-1">Login</button>
+							</div><br>
+
 						</div>
 					</div>
 				</div>

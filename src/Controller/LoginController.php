@@ -38,8 +38,8 @@ final class LoginController
             if (count($errors) == 0) {
                 $response->getBody()->write(json_encode([]));
                 // If there are no errors, we check the user 
-                $userInfo = $this->container->get('user_repository')->getUserByEmail($data['email']);
-                if (count($userInfo) > 0) {
+                if ($this->container->get('user_repository')->isEmailTaken($data['email'])) {
+                    $userInfo = $this->container->get('user_repository')->getUserByEmail($data['email']);
                     if ($userInfo['password'] == $data['password']) {
                         return $this->container->get('view')->render($response, 'dashboard.twig', []);
                     } else {
