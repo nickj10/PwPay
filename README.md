@@ -30,8 +30,6 @@ At this point, you should be able to access to the application by visiting the f
 
 ### Resources
 
-There are multiple ways to access to the database inside the docker container. In this case we are going to cover two options:
-
 1. MySQL Tables
 
 ```sql
