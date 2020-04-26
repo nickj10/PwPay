@@ -1,7 +1,21 @@
-.page-container {
-    background-image: url ('/assets/backgrounds/background1.jpg');
-
+.empty-container {
+    min-height: 900px;
+    line-height: 0;
+    height: auto;
+    color: rgba(255,255,255,.9);
+    position: relative;
+    overflow: hidden;
+    
 }
-.inner-container {
+.empty {
     position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.section-empty {
+    padding-top: 7rem;
 }
