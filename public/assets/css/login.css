@@ -1,0 +1,8 @@
+.small-margin {
+  padding: 16px;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+}

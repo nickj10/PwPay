@@ -1,17 +1,47 @@
 {% extends "base.twig" %}
-{% block title %} Login {% endblock %}
+{% block title %}
+	Sign in
+{% endblock %}
+{% block extracss %}
+	<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/login.css"/>
+{% endblock %}
 {% block content %}
-    <form id="login-form"
-          action="{{ url_for('login', {"id": id})}}"
-          method="POST">
-        <label>
-            Username
-            <input type="text" name="username">
-        </label>
-        <label>
-            Password
-            <input type="password" name="password">
-        </label>
-        <input type="submit" value="Login">
-    </form>
+	<div class="login-container">
+		<div class="row">
+			<div class="col">
+				<div class="card small-margin">
+					<h4>
+						Sign in
+					</h4>
+					<form id="login-form" action="{{ url_for('login', {"id": id})}}" method="POST">
+						<label>
+							Email
+							<input type="text" name="email">
+						</label>
+						{% if errors['email'] is not empty %}
+							<p>
+								{{ errors['email'] }}
+							</p>
+						{% endif %}
+						<label>
+							Password
+							<input type="password" name="password">
+						</label>
+						{% if errors['password'] is not empty %}
+							<p>
+								{{ errors['password'] }}
+							</p>
+						{% endif %}
+						<input class="btn waves-effect waves-light" type="submit" value="Login">
+						<a class="waves-effect waves-light btn red" href="/">Back</a>
+					</form>
+					{% if errors['nonexistingUser'] is not empty %}
+						<p>
+							{{ errors['nonexistingUser'] }}
+						</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

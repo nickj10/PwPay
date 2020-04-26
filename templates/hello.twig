@@ -13,8 +13,8 @@
 				<img src="assets/backgrounds/logo.png" alt="logo"></a>
 			
 				<ul class="right hide-on-med-and-down">
-					<li><a id="notInSession" href="login">Sign in</a></li>
-					<li><a id="notInSession" href="signup">Register</a></li>
+					<li><a id="notInSession" href="sign-in">Sign in</a></li>
+					<li><a id="notInSession" href="sign-up">Register</a></li>
 					<li><a id="inSession" href="#!">Profile</a></li>
 					<li><a id="inSession" href="#!">Dashboard</a></li>
 					<li><a id="inSession" href="#!">Transactions</a></li>
@@ -228,5 +228,7 @@
 	<script src="js/materialize.js"></script>
 	<script src="js/init.js"></script>
 
-		<script type='text/javascript'>alert('{{warning}}');</script>
+	<script type='text/javascript'>
+		alert('{{ warning }}');
+	</script>
 {% endblock %}
