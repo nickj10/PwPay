@@ -1,0 +1,25 @@
+.teal-text.text-lighten-2 {
+    color: 
+    #df3a3a !important;
+}
+.teal.lighten-1 {
+    background-color: 
+    #e95542 !important;
+}
+.teal {
+    background-color: 
+    #e20b0bab !important;
+}
+html {
+    line-height: 1.5;
+    font-weight: 700;
+	font-family: Montserrat, "Open Sans", Helvetica, Arial, sans-serif;
+    color: rgba(0,0,0,0.87);
+}
+.sidenav-trigger {
+    color: 
+    #e20b0bab;
+}
+#inSession {
+    display: none;
+}
