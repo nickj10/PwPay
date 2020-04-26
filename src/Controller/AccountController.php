@@ -19,20 +19,10 @@ final class AccountController
 
     public function showDashboard(Request $request, Response $response): Response
     {
-        //If user is active and has logged in
-        $id = $request->getAttribute('id');
-        if ($this->container->get('user_repository')->getUserById($id)) {
-            return $response->withHeader('Location', '/account/summary')->withStatus(302);
-        }
-        else {
-            $warning = "Link is not valid anymore.";
-            return $this->container->get('view')->render(
-                $response, 
-                'hello.twig', 
-                [
-                    'warning' => $warning
-                ]);
-
-        }
+        return $this->container->get('view')->render(
+            $response,
+            'dashboard.twig',
+            []
+        );
     }
 }

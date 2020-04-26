@@ -41,7 +41,7 @@ final class LoginController
                 if ($this->container->get('user_repository')->isEmailTaken($data['email'])) {
                     $userInfo = $this->container->get('user_repository')->getUserByEmail($data['email']);
                     if ($userInfo['password'] == $data['password']) {
-                        return $this->container->get('view')->render($response, 'dashboard.twig', []);
+                        return $response->withHeader('Location', '/account/summary')->withStatus(302);
                     } else {
                         $errors['passwordIncorrect'] = 'Password incorrect.';
                     }
