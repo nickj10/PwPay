@@ -36,8 +36,14 @@ final class LoginController
         $errors = $this->validate($data);
         try {
             if (count($errors) > 0) {
-                $response->getBody()->write(json_encode(['errors' => $errors]));
-                return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+                return $this->container->get('view')->render(
+                    $response,
+                    'login.twig',
+                    [
+                        'errors' => $errors,
+                        'data' => $data
+                    ]
+                );
             } else {
                 $response->getBody()->write(json_encode([]));
                 if ($this->container->get('user_repository')->getUserByEmail($data['email'])) {
@@ -70,7 +76,7 @@ final class LoginController
             $email_aux = explode('@', $email);
             $domain = array_pop($email_aux);
             if ($domain != 'salle.url.edu') {
-                $errors['email'] = 'Email is not valid';
+                $errors['email'] = 'Email is not valid.';
             }
         }
 
@@ -81,7 +87,7 @@ final class LoginController
     {
         $password = $data['password'];
         if (empty($password)) {
-            $errors['password'] = 'The password cannot be empty';
+            $errors['password'] = 'The password cannot be empty.';
         } else {
             if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/", $password)) {
                 $errors['password'] = 'The password must contain both letters and numbers with more than 5 characters.';
