@@ -10,7 +10,9 @@
 		{% block head %}
 			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/materialize.css"/>
 			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/materialize.min.css"/>
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/style.css"/>
+			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/theme.css"/>
 		{% endblock %}
 		{% block extracss %}
 
@@ -23,6 +25,12 @@
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/init.js"></script>
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.js"></script>
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.min.js"></script>
+			<script>
+			document.addEventListener('DOMContentLoaded', function() {
+    			var elems = document.querySelectorAll('.dropdown-trigger');
+    			var instances = M.Dropdown.init(elems, options);
+  			});
+			</script>
 		{% endblock %}
 	</body>
 </html>
