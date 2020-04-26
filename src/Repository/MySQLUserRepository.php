@@ -22,7 +22,7 @@ final class MySQLUserRepository implements UserRepository
     public function save(User $user): void
     {
         $query = "INSERT INTO user(email, password, birthday, phone)
-        values (:email, :pass, :birthday, :phone);";
+        values (:email, md5(:pass), :birthday, :phone);";
         $statement = $this->database->connection()->prepare($query);
 
         $email = $user->email();
