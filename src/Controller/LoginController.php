@@ -35,24 +35,28 @@ final class LoginController
         $errors = [];
         $errors = $this->validate($data);
         try {
-            if (count($errors) > 0) {
-                return $this->container->get('view')->render(
-                    $response,
-                    'login.twig',
-                    [
-                        'errors' => $errors,
-                        'data' => $data
-                    ]
-                );
-            } else {
+            if (count($errors) == 0) {
                 $response->getBody()->write(json_encode([]));
                 // If there are no errors, we check the user 
-                if ($this->container->get('user_repository')->getUserByEmail($data['email'])) {
-                    return $this->container->get('view')->render($response, 'dashboard.twig',[]);
+                $userInfo = $this->container->get('user_repository')->getUserByEmail($data['email']);
+                if (count($userInfo) > 0) {
+                    if ($userInfo['password'] == $data['password']) {
+                        return $this->container->get('view')->render($response, 'dashboard.twig', []);
+                    } else {
+                        $errors['passwordIncorrect'] = 'Password incorrect.';
+                    }
                 } else {
                     $errors['nonexistingUser'] = 'This email is not associated to any user.';
                 }
             }
+            return $this->container->get('view')->render(
+                $response,
+                'login.twig',
+                [
+                    'errors' => $errors,
+                    'data' => $data
+                ]
+            );
         } catch (Exception $e) {
             $response->getBody()->write('Unexpected error: ' . $e->getMessage());
             return $response->withStatus(500);
@@ -72,7 +76,6 @@ final class LoginController
     private function validateEmail($errors, $data): array
     {
         $email = $data['email'];
-        $errors = [];
 
         if (empty($data['email'])) {
             $errors['email'] = 'The email cannot be empty.';

@@ -40,6 +40,11 @@
 							{{ errors['nonexistingUser'] }}
 						</p>
 					{% endif %}
+					{% if errors['passwordIncorrect'] is not empty %}
+						<p>
+							{{ errors['passwordIncorrect'] }}
+						</p>
+					{% endif %}
 				</div>
 			</div>
 		</div>
