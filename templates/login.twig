@@ -35,6 +35,11 @@
 						<input class="btn waves-effect waves-light" type="submit" value="Login">
 						<a class="waves-effect waves-light btn red" href="/">Back</a>
 					</form>
+					{% if errors['nonexistingUser'] is not empty %}
+						<p>
+							{{ errors['nonexistingUser'] }}
+						</p>
+					{% endif %}
 				</div>
 			</div>
 		</div>

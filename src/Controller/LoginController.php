@@ -46,7 +46,11 @@ final class LoginController
                 );
             } else {
                 $response->getBody()->write(json_encode([]));
+                // If there are no errors, we check the user 
                 if ($this->container->get('user_repository')->getUserByEmail($data['email'])) {
+                    return $this->container->get('view')->render($response, 'dashboard.twig',[]);
+                } else {
+                    $errors['nonexistingUser'] = 'This email is not associated to any user.';
                 }
             }
         } catch (Exception $e) {
