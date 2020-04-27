@@ -117,7 +117,7 @@ final class LoginController
         unset($_SESSION['user_id']);
         return $this->container->get('view')->render(
             $response,
-            'logout.twig',
+            'home.twig',
             []
         );
     }
