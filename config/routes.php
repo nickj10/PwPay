@@ -11,6 +11,7 @@ use \SallePW\SlimApp\Controller\FileController;
 use \SallePW\SlimApp\Controller\LoginController;
 use \SallePW\SlimApp\Controller\RegisterController;
 use \SallePW\SlimApp\Controller\ValidationController;
+use SallePW\SlimApp\Controller\ProfileController;
 
 
 $app->add(StartSessionMiddleware::class);
@@ -58,6 +59,8 @@ $app->get('/activate-token={id}', ValidationController::class . ':showLoginFormA
 $app->get('/sign-up', RegisterController::class . ':showRegisterFormAction');
 $app->post('/sign-up', RegisterController::class . ':registerAction')->setName('register');
 
-$app->get('/logout', LoginController::class . ':logoutAction');
+$app->get('/logout', LoginController::class . ':logoutAction')->setName('logout');
 
 $app->get('/account/summary', AccountController::class . ':showDashboard');
+
+$app->get('/profile', ProfileController::class . ':showProfile');
