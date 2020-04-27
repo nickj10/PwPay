@@ -34,7 +34,11 @@
 					{% if session is not empty %}
 					<li><a id="inSession" href="/account/summary">Dashboard</a></li>
 					<li><a id="inSession" href="#!">Transactions</a></li>
-					<li><a id="inSession" href="/logout">Sign out</a></li>
+					<li>
+					<form id="logout_form" action="{{ url_for('logout') }}" method="POST">
+					<a id="inSession" href="/logout">Sign out</a>
+					</form>
+					</li>
 					<li>
 					<a id="inSession" href="/profile">
 					<img src="assets/backgrounds/profile.jpg" alt="Profile" class="circle responsive-img">

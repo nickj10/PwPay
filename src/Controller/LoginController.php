@@ -111,14 +111,4 @@ final class LoginController
         }
         return $errors;
     }
-
-    public function logoutAction(Request $request, Response $response): Response
-    {
-        unset($_SESSION['user_id']);
-        return $this->container->get('view')->render(
-            $response,
-            'logout.twig',
-            []
-        );
-    }
 }
