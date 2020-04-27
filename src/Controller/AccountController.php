@@ -20,7 +20,7 @@ final class AccountController
     public function showDashboard(Request $request, Response $response): Response
     {
         if (empty($_SESSION['user_id'])) {
-            return $response->withHeader('Location', '/login')->withStatus(403);
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
         return $this->container->get('view')->render(
             $response,
