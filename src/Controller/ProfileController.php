@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-final class AccountController
+final class ProfileController
 {
     private ContainerInterface $container;
 
@@ -17,14 +17,14 @@ final class AccountController
         $this->container = $container;
     }
 
-    public function showDashboard(Request $request, Response $response): Response
+    public function showProfile(Request $request, Response $response): Response
     {
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
         return $this->container->get('view')->render(
             $response,
-            'dashboard.twig',
+            'profile.twig',
             [
                 'session' => $_SESSION['user_id']
             ]

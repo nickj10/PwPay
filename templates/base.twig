@@ -15,9 +15,7 @@
 			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/pagenotfound.css"/>
 			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/theme.css"/>
 		{% endblock %}
-		{% block extracss %}
-
-		{% endblock %}
+		{% block extracss %}{% endblock %}
 	</head>
 	<body>
 		<div> 											<!--   Navbar   -->
@@ -28,74 +26,69 @@
 			
 				<ul class="right hide-on-med-and-down">
 					<!--   User not in session   -->
+					{% if session is empty %}
 					<li><a id="notInSession" href="/sign-in">Sign in</a></li>
 					<li><a id="notInSession" href="/sign-up">Register</a></li>
+					{% endif %}
 					<!--   User in session   -->
+					{% if session is not empty %}
 					<li><a id="inSession" href="/account/summary">Dashboard</a></li>
 					<li><a id="inSession" href="#!">Transactions</a></li>
-					<li><a id="inSession" href="/logout">Sign out</a></li>
 					<li>
-					<a id="inSession" href="#!">
+					<a id="inSession" href="javascript:clickLogout()">Sign out</a>
+					</li>
+					<li>
+					<a id="inSession" href="/profile">
 					<img src="assets/backgrounds/profile.jpg" alt="Profile" class="circle responsive-img">
 					</a>
-					</li>
-				</ul>
-				<ul id="nav-mobile" class="sidenav">
-					<!--   User not in session   -->
-					<li><a id="notInSession" href="/sign-in">Sign in</a></li>
-					<li><a id="notInSession" href="/sign-up">Register</a></li>
-					<!--   User in session   -->
-					<li>
-					<a id="inSession" href="#!">
-						<img src="assets/backgrounds/profile.jpg" alt="Profile" class="circle responsive-img" style="padding-top: 5%;">
-						My Profile
-					</a>
-					</li>
-					<li><a id="inSession" href="#!">Dashboard</a></li>
-					<li><a id="inSession" href="#!">Transactions</a></li>
-					<li><a id="inSession" href="#!">Sign out</a></li>
-				</ul>
-				<a href="#" data-target="nav-mobile" class="sidenav-trigger">
-					<i class="material-icons">menu</i>
-				</a>
-			</div>
-		</nav>
-	</div>
+					{% endif %}
+				</div>
+			</nav>
+			<form id="logout-form" hidden action="{{ url_for('logout') }}" method="POST">
+				<input="submit">
+			</form>
+		</div>
 
-	
 		{% block content %}{% endblock %}
 		{% block scripts %}
 			<script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/init.js"></script>
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.js"></script>
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.min.js"></script>
+			<script type="text/javascript">
+  				function clickLogout() {
+				  document.getElementById("logout-form").submit();
+				}
+			</script>
 		{% endblock %}
-	
-	<footer class="page-footer teal"> 				<!--   Footer   -->
-		<div class="container">
-			<div class="row">
-				<div class="col l2 s12 center">
-					<a class="white-text" href="#!">Help & Contact</a>
-				</div>
-				<div class="col l2 s12 center">
-					<a class="white-text" href="#!">About PwPay</a>
-				</div>
-				<div class="col l2 s12 center">
-					<a class="white-text" href="#!">Privacy</a>
-				</div>
-				<div class="col l2 s12 center">
-					<a class="white-text" href="#!">Legal</a>
-				</div>
-				<div class="col l2 s12 center">
-					<a class="white-text" href="#!">Feedback</a>
-				</div>
-			</div>
-		</div>
-		<div class="footer-copyright">
+
+		<footer
+			class="page-footer teal">
+			<!--   Footer   -->
 			<div class="container">
-				©2020 PW II - Grup 16
+				<div class="row">
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">Help & Contact</a>
+					</div>
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">About PwPay</a>
+					</div>
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">Privacy</a>
+					</div>
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">Legal</a>
+					</div>
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">Feedback</a>
+					</div>
+				</div>
 			</div>
-		</div>
-	</footer>
+			<div class="footer-copyright">
+				<div class="container">
+					©2020 PW II - Grup 16
+				</div>
+			</div>
+		</footer>
 	</body>
 </html>
