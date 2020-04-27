@@ -21,7 +21,7 @@ html {
     #e20b0bab;
 }
 #inSession {
-    display: none;
+    display: block;
 }
 .login{
     margin-top: 15%;
