@@ -23,7 +23,7 @@
 							<div class="form-field">
 								<label> 
                                     Email 
-                                    <input type="text" name="email" required {% if form_errors['activation_link'] is empty %}
+                                    <input type="text" name="email" {% if form_errors['activation_link'] is empty %}
                                             value={{data['email']}}
                                         {% elseif form_errors['activation_link'] is not empty %}
                                             value=""
@@ -40,7 +40,7 @@
 							<div class="form-field">
 								 <label> 
                                     Password 
-                                    <input type="password" name="password" required {% if form_errors['activation_link'] is empty %}
+                                    <input type="password" name="password" {% if form_errors['activation_link'] is empty %}
                                             value={{data['password']}}
                                         {% elseif form_errors['activation_link'] is not empty %}
                                             value=""
@@ -54,7 +54,7 @@
                             <div class="form-field">
                                 <label> 
                                     Birthday 
-                                    <input type="date" name="birthday" required {% if form_errors['activation_link'] is empty %}
+                                    <input type="date" name="birthday" {% if form_errors['activation_link'] is empty %}
                                             value={{data['birthday']}}
                                         {% elseif form_errors['activation_link'] is not empty %}
                                             value=""
