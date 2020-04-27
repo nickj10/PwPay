@@ -53,7 +53,7 @@ $app->post(
 $app->get('/sign-in', LoginController::class . ':showLoginFormAction');
 $app->post('/sign-in', LoginController::class . ':loginAction')->setName('login');
 
-$app->get('/id={id}', ValidationController::class . ':showLoginFormAction');
+$app->get('/activate-token={id}', ValidationController::class . ':showLoginFormAction');
 
 $app->get('/sign-up', RegisterController::class . ':showRegisterFormAction');
 $app->post('/sign-up', RegisterController::class . ':registerAction')->setName('register');

@@ -6,7 +6,11 @@
           method="POST">
         <label>
             Email
-            <input type="text" name="email">
+            <input type="text" name="email" {% if form_errors['activation_link'] is empty %}
+                                                value={{data['email']}}
+                                            {% elseif form_errors['activation_link'] is not empty %}
+                                                value=""
+                                            {% endif %}>
         </label>
         {% if form_errors['email'] is not empty %}
             <p> {{ form_errors['email'] }} </p>
@@ -16,21 +20,33 @@
         {% endif %}
         <label>
             Password
-            <input type="password" name="password">
+            <input type="password" name="password" {% if form_errors['activation_link'] is empty %}
+                                                        value={{data['password']}}
+                                                    {% elseif form_errors['activation_link'] is not empty %}
+                                                        value=""
+                                                    {% endif %}>
         </label>
         {% if form_errors['password'] is not empty %}
             <p> {{ form_errors['password'] }} </p>
         {% endif %}
         <label>
             Birthday
-            <input type="date" name="birthday">
+            <input type="date" name="birthday" {% if form_errors['activation_link'] is empty %}
+                                                    value={{data['birthday']}}
+                                                {% elseif form_errors['activation_link'] is not empty %}
+                                                    value=""
+                                                {% endif %}>
         </label>
         {% if form_errors['birthday'] is not empty %}
             <p> {{ form_errors['birthday'] }} </p>
         {% endif %}
         <label>
             Phone
-            <input type="number" name="phone">
+            <input type="number" name="phone" {% if form_errors['activation_link'] is empty %}
+                                                value={{data['phone']}}
+                                              {% elseif form_errors['activation_link'] is not empty %}
+                                                 value=""
+                                              {% endif %}>
         </label>
         {% if form_errors['phone'] is not empty %}
             <p> {{ form_errors['phone'] }} </p>
