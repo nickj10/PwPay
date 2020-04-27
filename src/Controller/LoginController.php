@@ -41,6 +41,7 @@ final class LoginController
                 if ($this->container->get('user_repository')->isEmailTaken($email)) {
                     $userInfo = $this->container->get('user_repository')->getUserByEmail($email);
                     if ($userInfo['password'] == md5($password) && $userInfo['status'] == 'active') {
+                        $_SESSION['user_id'] = $userInfo['user_id'];
                         return $response->withHeader('Location', '/account/summary')->withStatus(302);
                     } else {
                         if ($userInfo['password'] != md5($password)) {
@@ -118,9 +119,10 @@ final class LoginController
 
     public function logoutAction(Request $request, Response $response): Response
     {
+        unset($_SESSION['user_id']);
         return $this->container->get('view')->render(
             $response,
-            'hello.twig',
+            'home.twig',
             []
         );
     }
