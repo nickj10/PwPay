@@ -23,7 +23,7 @@ final class ValidationController
         //If it's already active, show home page with flash message.
         $id = $request->getAttribute('id');
         if ($this->container->get('user_repository')->getUserById($id)) {
-            return $response->withHeader('Location', '/login')->withStatus(302);
+            return $response->withHeader('Location', '/sign-in')->withStatus(302);
         }
         else {
             return $this->container->get('view')->render($response, 'pageNotFound.twig',[]);
