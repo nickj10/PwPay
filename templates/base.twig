@@ -26,9 +26,12 @@
 			
 				<ul class="right hide-on-med-and-down">
 					<!--   User not in session   -->
+					{% if session is empty %}
 					<li><a id="notInSession" href="/sign-in">Sign in</a></li>
 					<li><a id="notInSession" href="/sign-up">Register</a></li>
+					{% endif %}
 					<!--   User in session   -->
+					{% if session is not empty %}
 					<li><a id="inSession" href="/account/summary">Dashboard</a></li>
 					<li><a id="inSession" href="#!">Transactions</a></li>
 					<li><a id="inSession" href="/logout">Sign out</a></li>
@@ -36,6 +39,7 @@
 					<a id="inSession" href="/profile">
 					<img src="assets/backgrounds/profile.jpg" alt="Profile" class="circle responsive-img">
 					</a>
+					{% endif %}
 				</div>
 			</nav>
 		</div>
