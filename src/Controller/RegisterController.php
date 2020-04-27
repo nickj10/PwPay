@@ -37,14 +37,18 @@ final class RegisterController
             }
             if (count($errors) == 0) {
                 //$birthdate = date_create($data['birthday']);
-                
-                $user = new User ($data['email'], $data['password'], $data['birthday'], intval($data['phone']));
+                $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $password = filter_var($data['password'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $user = new User ($email, $password, $data['birthday'], intval($data['phone']));
                 $this->container->get('user_repository')->save($user);
                 //We have to retreive its id for the activation link
-                $user = $this->container->get('user_repository')->getUserByEmail($data['email']);
+                $user = $this->container->get('user_repository')->getUserByEmail($email);
                 $mail = new Mailer();
                 if (($mail->sendEmail($user['user_id'], $user['email']))) {
-                    $errors['activation_link'] = "Message was sent to your email to activate your account.";
+                    $errors['activation_link'] = "Great! Don't forget to check your email to validate your account.";
+                }
+                else {
+                    $errors['activation_link'] = "Something wrong happened. Please try again.";
                 }
             }
             
@@ -77,27 +81,32 @@ final class RegisterController
     }
 
     private function validateEmail ($errors, $data) : array {
-        $email = $data['email'];
+        $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($email)) {
             $errors['email'] = 'The email cannot be empty';
         }
         else {
-            $email_aux = explode ('@', $email);
-            $domain = array_pop($email_aux);
-            if ($domain != 'salle.url.edu') {
+            if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'Email is not valid';
+            }
+            else {
+                $email_aux = explode ('@', $email);
+                $domain = array_pop($email_aux);
+                if ($domain != 'salle.url.edu') {
+                    $errors['email'] = 'We only accept emails with domain salle.url.edu';
+                }
             }
         }
         return $errors;
     }
 
     private function validatePassword ($errors, $data) : array {
-        $password = $data['password'];
+        $password = filter_var($data['password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($password)) {
             $errors['password'] = 'The password cannot be empty';
         }
         else {
-            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/",$password)) {
+            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/",$password)) {
                 $errors['password'] = 'The password must contain both letters and numbers with more than 5 characters.';
             }
         }
@@ -113,7 +122,7 @@ final class RegisterController
             $bday_aux = explode('-', $bday);
             $year = $bday_aux[0];
             if ((date('Y')-$year) <= 18) {
-                $errors['birthday'] = 'Sorry, you are underage';
+                $errors['birthday'] = 'Sorry, you are underage.';
             }
         }
         return $errors;

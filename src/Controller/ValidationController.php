@@ -17,24 +17,16 @@ final class ValidationController
         $this->container = $container;
     }
 
-    public function showLoginFormAction(Request $request, Response $response): Response
+    public function showLoginFormAction(Request $request, Response $response, $args): Response
     {
         //If the id is still inactive = change status
         //If it's already active, show home page with flash message.
         $id = $request->getAttribute('id');
         if ($this->container->get('user_repository')->getUserById($id)) {
-            return $response->withHeader('Location', '/login')->withStatus(302);
+            return $response->withHeader('Location', '/sign-in')->withStatus(302);
         }
         else {
-            //return $response->withHeader('Location', '/')->withStatus(302);
-            $warning = "Link is not valid anymore.";
-            return $this->container->get('view')->render(
-                $response, 
-                'hello.twig', 
-                [
-                    'warning' => $warning
-                ]);
-
+            return $this->container->get('view')->render($response, 'pageNotFound.twig',[]);
         }
     }
 }
