@@ -17,7 +17,7 @@ final class ProfileController
         $this->container = $container;
     }
 
-    public function showProfile(Request $request, Response $response, $args): Response
+    public function showProfile(Request $request, Response $response): Response
     {
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
