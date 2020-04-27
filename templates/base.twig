@@ -35,9 +35,7 @@
 					<li><a id="inSession" href="/account/summary">Dashboard</a></li>
 					<li><a id="inSession" href="#!">Transactions</a></li>
 					<li>
-					<form id="logout_form" action="{{ url_for('logout') }}" method="POST">
-					<a id="inSession" href="/logout">Sign out</a>
-					</form>
+					<a id="inSession" href="javascript:clickLogout()">Sign out</a>
 					</li>
 					<li>
 					<a id="inSession" href="/profile">
@@ -46,8 +44,10 @@
 					{% endif %}
 				</div>
 			</nav>
+			<form id="logout-form" hidden action="{{ url_for('logout') }}" method="POST">
+				<input="submit">
+			</form>
 		</div>
-
 
 		{% block content %}{% endblock %}
 		{% block scripts %}
@@ -55,6 +55,11 @@
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/init.js"></script>
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.js"></script>
 			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.min.js"></script>
+			<script type="text/javascript">
+  				function clickLogout() {
+				  document.getElementById("logout-form").submit();
+				}
+			</script>
 		{% endblock %}
 
 		<footer
