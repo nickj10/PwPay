@@ -115,6 +115,10 @@ final class LoginController
     public function logoutAction(Request $request, Response $response): Response
     {
         unset($_SESSION['user_id']);
-        return $response->withHeader('Location', '/')->withStatus(201);
+        return $this->container->get('view')->render(
+            $response,
+            'logout.twig',
+            []
+        );
     }
 }
