@@ -8,7 +8,7 @@
 }
 .teal {
     background-color: 
-    #e20b0bab !important;
+    #b80808 !important;
 }
 html {
     line-height: 1.5;
@@ -23,3 +23,10 @@ html {
 #inSession {
     display: none;
 }
+.login{
+    margin-top: 100px;
+    margin-left: 25%;
+    margin-right: 25%;
+  }
+
+

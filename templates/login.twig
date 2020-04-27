@@ -6,42 +6,55 @@
 	<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/login.css"/>
 {% endblock %}
 {% block content %}
-	<div class="login-container">
-		<div class="row">
-			<div class="col">
-				<div class="card small-margin">
-					<h4>
-						Sign in
-					</h4>
-					<form id="login-form" action="{{ url_for('login', {"id": id})}}" method="POST">
-						<label>
-							Email
-							<input type="text" name="email">
-						</label>
-						{% if errors['email'] is not empty %}
-							<p>
-								{{ errors['email'] }}
-							</p>
-						{% endif %}
-						<label>
-							Password
-							<input type="password" name="password">
-						</label>
-						{% if errors['password'] is not empty %}
-							<p>
-								{{ errors['password'] }}
-							</p>
-						{% endif %}
-						<input class="btn waves-effect waves-light" type="submit" value="Login">
-						<a class="waves-effect waves-light btn red" href="/">Back</a>
-					</form>
-					{% if errors['nonexistingUser'] is not empty %}
-						<p>
-							{{ errors['nonexistingUser'] }}
-						</p>
-					{% endif %}
+	<style>
+		body {
+			background-image: url('assets/backgrounds/fondo4.jpg');
+			background-size: auto;
+		}
+	</style>
+	<div class="container">
+		<form id="login-form" action="{{ url_for('login', {"id": id})}}" method="POST">
+			<div class="row login">
+				<div class="col s12 14 offset-14">
+					<div class="card">
+						<div class="card-action center red-text text-darken-4">
+							<img src="assets/backgrounds/logo-simple.png" alt="logo" style="padding-top: 5%;">
+						</div>
+						<div class="card-content">
+							<div class="form-field">
+								<label for="email">Email</label>
+								<input type="text" id="email" name="email" required>
+								{% if errors['email'] is not empty %}
+									<p>
+										{{ errors['email'] }}
+									</p>
+								{% endif %}
+							</div>
+							<br>
+							<div class="form-field">
+								<label for="password">Password</label>
+								<input type="password" id="password" name="password" required>
+								{% if errors['password'] is not empty %}
+									<p>
+										{{ errors['password'] }}
+									</p>
+								{% endif %}
+							</div>
+							<br>
+							<div class="form-field center-align">
+								<button type="submit" value="Login" class="btn-large waves-effect waves-light teal lighten-1">Login</button>
+							</div><br>
+							{% if errors['nonexistingUser'] is not empty %}
+								<p>
+									{{ errors['nonexistingUser'] }}
+								</p>
+							{% endif %}
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
+
+
 {% endblock %}
