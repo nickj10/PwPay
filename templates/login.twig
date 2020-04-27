@@ -12,7 +12,7 @@
 			background-size: auto;
 		}
 	</style>
-	<div class="container">
+	<div id="index-banner" class="empty-container">
 		<form id="login-form" action="{{ url_for('login', {"id": id})}}" method="POST">
 			<div class="row login">
 				<div class="col s12 14 offset-14">
@@ -40,6 +40,8 @@
 									</p>
 								{% endif %}
 							</div>
+							<br>
+							<br>
 							<br>
 							<div class="form-field center-align">
 								<button type="submit" value="Login" class="btn-large waves-effect waves-light teal lighten-1">Login</button>
