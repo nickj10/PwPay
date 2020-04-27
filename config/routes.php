@@ -1,5 +1,6 @@
 <?php
 
+use SallePW\SlimApp\Controller\AccountController;
 use \SallePW\SlimApp\Controller\HomeController;
 use \SallePW\SlimApp\Controller\VisitsController;
 use \SallePW\SlimApp\Middleware\StartSessionMiddleware;
@@ -58,3 +59,5 @@ $app->get('/sign-up', RegisterController::class . ':showRegisterFormAction');
 $app->post('/sign-up', RegisterController::class . ':registerAction')->setName('register');
 
 $app->get('/logout', LoginController::class . ':logoutAction');
+
+$app->get('/account/summary', AccountController::class . ':showDashboard');
