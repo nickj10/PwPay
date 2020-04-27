@@ -1,23 +1,75 @@
 {% extends "base.twig" %}
-{% block title %} Login {% endblock %}
-{% block content %}
-    <form id="login-form"
-          action="{{ url_for('login') }}"
-          method="POST">
-        <label>
-            Username
-            <input type="text" name="username">
-        </label>
-        <label>
-            Password
-            <input type="password" name="password">
-        </label>
-        <input type="submit" value="Login">
-    </form>
+{% block title %}
+	Sign in
 {% endblock %}
-{% block scripts %}
-    {{ parent() }}
-    <script
-            type="application/javascript"
-            src="{{ full_url_for('home') }}assets/js/ajax.js"></script>
+{% block extracss %}
+	<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/login.css"/>
+{% endblock %}
+{% block content %}
+	<style>
+		body {
+			background-image: url('assets/backgrounds/fondo4.jpg');
+			background-size: auto;
+		}
+		p.error-msg {
+			color: black !important;
+		}
+	</style>
+	<div id="index-banner" class="empty-container">
+		<form id="login-form" action="{{ url_for('login', {"id": id})}}" method="POST">
+			<div class="row login">
+				<div class="col s12 14 offset-14">
+					<div class="card">
+						<div class="card-action center red-text text-darken-4">
+							<img src="assets/backgrounds/logo-simple.png" alt="logo" style="padding-top: 5%;">
+						</div>
+						<div class="card-content">
+							<div class="form-field">
+								<label for="email">Email</label>
+								<input type="text" id="email" name="email" value={{data['email']}}>
+								{% if errors['email'] is not empty %}
+									<p class="error-msg">
+										{{ errors['email'] }}
+									</p>
+								{% endif %}
+							</div>
+							<br>
+							<div class="form-field">
+								<label for="password">Password</label>
+								<input type="password" id="password" name="password" value={{data['password']}}>
+								{% if errors['password'] is not empty %}
+									<p class="error-msg">
+										{{ errors['password'] }}
+									</p>
+								{% endif %}
+							</div>
+							<br>
+							<br>
+							<br>
+							{% if errors['nonexistingUser'] is not empty %}
+								<p class="error-msg">
+									{{ errors['nonexistingUser'] }}
+								</p>
+							{% endif %}
+							{% if errors['passwordIncorrect'] is not empty %}
+								<p class="error-msg">
+									{{ errors['passwordIncorrect'] }}
+								</p>
+							{% endif %}
+							{% if errors['not_active'] is not empty %}
+								<p class="error-msg">
+									{{ errors['not_active'] }}
+								</p>
+							{% endif %}
+							<br>
+							<div class="form-field center-align">
+								<button type="submit" value="Login" class="btn-large waves-effect waves-light teal lighten-1">Login</button>
+							</div><br>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
 {% endblock %}

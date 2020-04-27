@@ -1,0 +1,96 @@
+{% extends "base.twig" %}
+{% block title %} Register {% endblock %}
+{% block content %}
+<style>
+		body {
+			background-image: url('assets/backgrounds/background3.jpg');
+			background-size: cover;
+		}
+        p.error-msg {
+			color: black !important;
+		}
+	</style>
+<div id="index-banner" class="empty-container">
+		<form id="register-form" action="{{ url_for('register') }}" method="POST">
+			<div class="row login">
+				<div class="col s12 14 offset-14">
+					<div class="card">
+						<div class="card-action center black-text">
+							<img src="assets/backgrounds/logo-simple.png" alt="logo" style="padding-top: 5%;">
+                            <h6>Join hundreds of La Salle students around the world who receive and send money with PwPay</h6>
+						</div>
+						<div class="card-content">
+							<div class="form-field">
+								<label> 
+                                    Email 
+                                    <input type="text" name="email" {% if form_errors['activation_link'] is empty %}
+                                            value={{data['email']}}
+                                        {% elseif form_errors['activation_link'] is not empty %}
+                                            value=""
+                                        {% endif %}>
+                                </label>
+                                {% if form_errors['email'] is not empty %}
+                                    <p class="error-msg"> {{ form_errors['email'] }} </p>
+                                {% endif %}
+                                {% if form_errors['emailTaken'] is not empty %}
+                                    <p class="error-msg"> {{ form_errors['emailTaken'] }} </p>
+                                 {% endif %}
+							</div>
+							<br>
+							<div class="form-field">
+								 <label> 
+                                    Password 
+                                    <input type="password" name="password" {% if form_errors['activation_link'] is empty %}
+                                            value={{data['password']}}
+                                        {% elseif form_errors['activation_link'] is not empty %}
+                                            value=""
+                                        {% endif %}>
+                                </label>
+                                {% if form_errors['password'] is not empty %}
+                                    <p class="error-msg"> {{ form_errors['password'] }} </p>
+                                {% endif %}
+							</div>
+							<br>
+                            <div class="form-field">
+                                <label> 
+                                    Birthday 
+                                    <input type="date" name="birthday" {% if form_errors['activation_link'] is empty %}
+                                            value={{data['birthday']}}
+                                        {% elseif form_errors['activation_link'] is not empty %}
+                                            value=""
+                                        {% endif %}>
+                                </label>
+                                {% if form_errors['birthday'] is not empty %}
+                                    <p class="error-msg"> {{ form_errors['birthday'] }} </p>
+                                {% endif %}
+                            </div>
+							<br>
+                            <div class="form-field">
+                                <label>
+                                    Phone
+                                    <input type="number" name="phone" {% if form_errors['activation_link'] is empty %}
+                                                value={{data['phone']}}
+                                              {% elseif form_errors['activation_link'] is not empty %}
+                                                 value=""
+                                              {% endif %}>
+                                </label>
+                                {% if form_errors['phone'] is not empty %}
+                                    <p class="error-msg"> {{ form_errors['phone'] }} </p>
+                                {% endif %}
+                            </div>
+							<br>
+                            <br>
+							<div class="form-field center-align">
+								<button type="submit" value="Register" class="btn-large waves-effect waves-light teal lighten-1">Register</button>
+							</div><br>
+							{% if form_errors['activation_link'] is not empty %}
+                                <p class="error-msg"> {{ form_errors['activation_link'] }} </p>
+                            {% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}

@@ -19,39 +19,96 @@ final class LoginController
 
     public function showLoginFormAction(Request $request, Response $response): Response
     {
-        return $this->container->get('view')->render($response, 'login.twig', []);
+        return $this->container->get('view')->render(
+            $response,
+            'login.twig',
+            [
+                "id" => $request->getAttribute('id')
+            ]
+        );
     }
 
     public function loginAction(Request $request, Response $response): Response
     {
-
-
         // This method decodes the received json
         $data = $request->getParsedBody();
-
+        $errors = [];
         $errors = $this->validate($data);
-
-        if (count($errors) > 0) {
-            $response->getBody()->write(json_encode(['errors' => $errors]));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+        try {
+            if (count($errors) == 0) {
+                $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $password = filter_var($data['password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                if ($this->container->get('user_repository')->isEmailTaken($email)) {
+                    $userInfo = $this->container->get('user_repository')->getUserByEmail($email);
+                    if ($userInfo['password'] == md5($password) && $userInfo['status'] == 'active') {
+                        $_SESSION['user_id'] = $userInfo['user_id'];
+                        return $response->withHeader('Location', '/account/summary')->withStatus(302);
+                    } else {
+                        if ($userInfo['password'] != md5($password)) {
+                            $errors['passwordIncorrect'] = 'Password incorrect.';
+                        } else {
+                            if ($userInfo['status'] == 'inactive') {
+                                $errors['not_active'] = 'Check your mail to activate your account.';
+                            }
+                        }
+                    }
+                } else {
+                    $errors['nonexistingUser'] = 'This email is not associated to any user.';
+                }
+            }
+            return $this->container->get('view')->render(
+                $response,
+                'login.twig',
+                [
+                    'errors' => $errors,
+                    'data' => $data
+                ]
+            );
+        } catch (Exception $e) {
+            $response->getBody()->write('Unexpected error: ' . $e->getMessage());
+            return $response->withStatus(500);
         }
 
-        $response->getBody()->write(json_encode([]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 
     private function validate(array $data): array
     {
         $errors = [];
+        $errors = $this->validateEmail($errors, $data);
+        $errors = $this->validatePassword($errors, $data);
+        return $errors;
+    }
 
-        if (empty($data['username'])) {
-            $errors['username'] = 'The username cannot be empty.';
+    private function validateEmail($errors, $data): array
+    {
+        $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($email)) {
+            $errors['email'] = 'The email cannot be empty';
+        } else {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Email is not valid';
+            } else {
+                $email_aux = explode('@', $email);
+                $domain = array_pop($email_aux);
+                if ($domain != 'salle.url.edu') {
+                    $errors['email'] = 'We only accept emails with domain salle.url.edu';
+                }
+            }
         }
+        return $errors;
+    }
 
-        if (empty($data['password']) || strlen($data['password']) < 6) {
-            $errors['password'] = 'The password must contain at least 6 characters.';
+    private function validatePassword($errors, $data): array
+    {
+        $password = filter_var($data['password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($password)) {
+            $errors['password'] = 'The password cannot be empty';
+        } else {
+            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/", $password)) {
+                $errors['password'] = 'The password must contain both letters and numbers with more than 5 characters.';
+            }
         }
-
         return $errors;
     }
 }

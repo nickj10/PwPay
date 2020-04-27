@@ -11,20 +11,16 @@ final class User
     private int $id;
     private string $email;
     private string $password;
-    private DateTime $createdAt;
-    private DateTime $updatedAt;
+    private string $birthday;
+    private int $phone;
 
-    public function __construct(
-        string $email,
-        string $password,
-        DateTime $createdAt,
-        DateTime $updatedAt
-    ) {
+    public function __construct($email, $password, $birthday, $phone = 0) 
+    {
         $this->email = $email;
         $this->password = $password;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
-    }
+        $this->birthday = $birthday;
+        $this->phone = $phone;   
+    }     
 
     public function id(): int
     {
@@ -47,13 +43,24 @@ final class User
         return $this->password;
     }
 
-    public function createdAt(): DateTime
+    public function birthday(): string
     {
-        return $this->createdAt;
+        return $this->birthday;
+    }
+    
+    public function phone(): int
+    {
+        return $this->phone;
     }
 
-    public function updatedAt(): DateTime
-    {
-        return $this->updatedAt;
+    public function showInfo() {
+        $info = "<h1>User information:</h1>";
+        $info.= "Email: ".$this->email;
+        $info.= "<br/> Password: ".$this->password;
+        $info.= "<br/> Birthday: ".$this->birthday->format('y-m-d');
+        $info.= "<br/> Phone: ".$this->phone;
+         
+        return $info;
+
     }
 }

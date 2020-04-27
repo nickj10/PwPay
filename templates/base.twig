@@ -1,21 +1,94 @@
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}{% endblock %}</title>
-    {% block head %}
-        <link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/styles.css"/>
-    {% endblock %}
-</head>
-<body>
-{% block content %}{% endblock %}
-{% block scripts %}
-    <script
-            src="https://code.jquery.com/jquery-3.4.0.min.js"
-            integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
-            crossorigin="anonymous"></script>
-{% endblock %}
-</body>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>
+			{% block title %}{% endblock %}
+		</title>
+		{% block head %}
+			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/materialize.css"/>
+			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/materialize.min.css"/>
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/style.css"/>
+			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/pagenotfound.css"/>
+			<link rel="stylesheet" href="{{ full_url_for('home') }}assets/css/theme.css"/>
+		{% endblock %}
+		{% block extracss %}{% endblock %}
+	</head>
+	<body>
+		<div> 											<!--   Navbar   -->
+		<nav class="white" role="navigation">
+			<div class="nav-wrapper container">
+				<a id="logo-container" href="/" class="brand-logo">
+				<img class="responsive-img" src="assets/backgrounds/logo.png" alt="logo"></a>
+			
+				<ul class="right hide-on-med-and-down">
+					<!--   User not in session   -->
+					{% if session is empty %}
+					<li><a id="notInSession" href="/sign-in">Sign in</a></li>
+					<li><a id="notInSession" href="/sign-up">Register</a></li>
+					{% endif %}
+					<!--   User in session   -->
+					{% if session is not empty %}
+					<li><a id="inSession" href="/account/summary">Dashboard</a></li>
+					<li><a id="inSession" href="#!">Transactions</a></li>
+					<li>
+					<a id="inSession" href="javascript:clickLogout()">Sign out</a>
+					</li>
+					<li>
+					<a id="inSession" href="/profile">
+					<img src="assets/backgrounds/profile.jpg" alt="Profile" class="circle responsive-img">
+					</a>
+					{% endif %}
+				</div>
+			</nav>
+			<form id="logout-form" hidden action="{{ url_for('logout') }}" method="POST">
+				<input="submit">
+			</form>
+		</div>
+
+		{% block content %}{% endblock %}
+		{% block scripts %}
+			<script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/init.js"></script>
+			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.js"></script>
+			<script type="application/javascript" src="{{ full_url_for('home') }}assets/js/materialize.min.js"></script>
+			<script type="text/javascript">
+  				function clickLogout() {
+				  document.getElementById("logout-form").submit();
+				}
+			</script>
+		{% endblock %}
+
+		<footer
+			class="page-footer teal">
+			<!--   Footer   -->
+			<div class="container">
+				<div class="row">
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">Help & Contact</a>
+					</div>
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">About PwPay</a>
+					</div>
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">Privacy</a>
+					</div>
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">Legal</a>
+					</div>
+					<div class="col l2 s12 center">
+						<a class="white-text" href="#!">Feedback</a>
+					</div>
+				</div>
+			</div>
+			<div class="footer-copyright">
+				<div class="container">
+					©2020 PW II - Grup 16
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,9 @@
+{% extends "base.twig" %}
+{% block title %}
+	Logout
+{% endblock %}
+{% block content %}
+	<form hidden action="{{ url_for('logout') }}" method="POST">
+		<input="submit">
+	</form>
+{% endblock %}
