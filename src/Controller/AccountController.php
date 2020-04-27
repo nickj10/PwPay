@@ -25,7 +25,9 @@ final class AccountController
         return $this->container->get('view')->render(
             $response,
             'dashboard.twig',
-            []
+            [
+                'session' => $_SESSION['user_id']
+            ]
         );
     }
 }
