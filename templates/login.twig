@@ -50,6 +50,11 @@
 									{{ errors['passwordIncorrect'] }}
 								</p>
 							{% endif %}
+							{% if errors['not_active'] is not empty %}
+								<p>
+									{{ errors['not_active'] }}
+								</p>
+							{% endif %}
 							<br>
 							<div class="form-field center-align">
 								<button type="submit" value="Login" class="btn-large waves-effect waves-light teal lighten-1">Login</button>

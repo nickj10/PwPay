@@ -36,14 +36,22 @@ final class LoginController
         $errors = $this->validate($data);
         try {
             if (count($errors) == 0) {
-                $response->getBody()->write(json_encode([]));
-                // If there are no errors, we check the user 
-                if ($this->container->get('user_repository')->isEmailTaken($data['email'])) {
-                    $userInfo = $this->container->get('user_repository')->getUserByEmail($data['email']);
-                    if ($userInfo['password'] == $data['password']) {
+                $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $password = filter_var($data['password'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                if ($this->container->get('user_repository')->isEmailTaken($email)) {
+                    $userInfo = $this->container->get('user_repository')->getUserByEmail($email);
+                    if ($userInfo['password'] == md5($password) && $userInfo['status'] == 'active') {
                         return $response->withHeader('Location', '/account/summary')->withStatus(302);
                     } else {
-                        $errors['passwordIncorrect'] = 'Password incorrect.';
+                        if ($userInfo['password'] != md5($password)) {
+                            $errors['passwordIncorrect'] = 'Password incorrect.';
+                        }
+                        else {
+                            if ($userInfo['status'] == 'inactive') {
+                                $errors['not_active'] = 'Check your mail to activate your account.';
+                            }
+                        }
+                        
                     }
                 } else {
                     $errors['nonexistingUser'] = 'This email is not associated to any user.';
@@ -75,28 +83,33 @@ final class LoginController
 
     private function validateEmail($errors, $data): array
     {
-        $email = $data['email'];
-
-        if (empty($data['email'])) {
-            $errors['email'] = 'The email cannot be empty.';
-        } else {
-            $email_aux = explode('@', $email);
-            $domain = array_pop($email_aux);
-            if ($domain != 'salle.url.edu') {
-                $errors['email'] = 'Email is not valid.';
+        $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($email)) {
+            $errors['email'] = 'The email cannot be empty';
+        }
+        else {
+            if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Email is not valid';
+            }
+            else {
+                $email_aux = explode ('@', $email);
+                $domain = array_pop($email_aux);
+                if ($domain != 'salle.url.edu') {
+                    $errors['email'] = 'We only accept emails with domain salle.url.edu';
+                }
             }
         }
-
         return $errors;
     }
 
     private function validatePassword($errors, $data): array
     {
-        $password = $data['password'];
+        $password = filter_var($data['password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($password)) {
-            $errors['password'] = 'The password cannot be empty.';
-        } else {
-            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/", $password)) {
+            $errors['password'] = 'The password cannot be empty';
+        }
+        else {
+            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/",$password)) {
                 $errors['password'] = 'The password must contain both letters and numbers with more than 5 characters.';
             }
         }
