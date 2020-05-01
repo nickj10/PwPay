@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SallePW\SlimApp\Model;
+namespace SallePW\SlimApp\Service;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 class Mailer {
-    public function sendEmail($id, $to) {
+    public function sendEmail($id, $to, $token) {
 
         $mail = new PHPMailer(true);
         try {
@@ -22,9 +22,10 @@ class Mailer {
             $mail->Port = 587;
             $mail->isHTML(true);
             $mail->setFrom('kayeann.ignacio@students.salle.url.edu', 'Pwpay');
-            $mail->addAddress($to);
+            //$mail->addAddress($to);
+            $mail->addAddress('kayeann.sn@gmail.com');
             $mail->Subject = 'Activation Link';
-            $mail->Body = 'Welcome to Pwpay! Click the following link to activate your account: http://' . $_SERVER['HTTP_HOST'] . '/activate-token=' . $id;
+            $mail->Body = 'Welcome to Pwpay! Click the following link to activate your account: http://' . $_SERVER['HTTP_HOST'] . '/activate?token=' . $token;
             $mail->send();
             return true;
         } catch (Exception $e) {
