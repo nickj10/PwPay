@@ -11,13 +11,19 @@ class FieldsValidator {
     private $errors = array();
 
     public function validateRegister(array $data): array {
-        $this->errors[] = $this->validateEmail($data);
-        $this->errors[] = $this->validatePassword($data);
-        $this->errors[] = $this->validateBirthday($data);
+        $this->validateEmail($data);
+        $this->validatePassword($data);
+        $this->validateBirthday($data);
         if (!empty($data['phone'])) {
-            $this->errors[] = $this->validatePhone($data);
+            $this->validatePhone($data);
 
         }
+        return $this->errors;
+    }
+
+    public function validateLogin (array $data) {
+        $this->validateEmail($data);
+        $this->validatePassword($data);
         return $this->errors;
     }
 
