@@ -3,9 +3,10 @@
 use DI\Container;
 use Slim\Views\Twig;
 use Slim\Flash\Messages;
+use Psr\Container\ContainerInterface;
 use SallePW\SlimApp\Repository\MySQLUserRepository;
 use SallePW\SlimApp\Repository\PDOSingleton;
-use Psr\Container\ContainerInterface;
+use SallePW\SlimApp\Service\Mailer;
 
 $container = new Container();
 
@@ -35,4 +36,8 @@ $container->set('db', function () {
 
 $container->set('user_repository', function (ContainerInterface $container) {
     return new MySQLUserRepository($container->get('db'));
+});
+
+$container->set('mailer', function (ContainerInterface $container) {
+    return new Mailer();
 });

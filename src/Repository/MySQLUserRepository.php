@@ -7,6 +7,8 @@ namespace SallePW\SlimApp\Repository;
 use PDO;
 use SallePW\SlimApp\Model\User;
 use SallePW\SlimApp\Model\UserRepository;
+use Ramsey\Uuid\Uuid;
+
 
 final class MySQLUserRepository implements UserRepository
 {
@@ -89,6 +91,36 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
-    
+    public function generateUuid($user_id) {
+        $query = "INSERT INTO AuthToken(uuid, user_id) VALUES (:uuid, :user_id);";
+        $statement = $this->database->connection()->prepare($query);
+        $uuid = Uuid::uuid4();
+        $statement->bindParam(':uuid', $uuid);
+        $statement->bindParam(':user_id', $user_id);
+        $statement->execute();
+        return $uuid;
+    }
 
+    public function updateAuthToken ($token) {
+        $query = "UPDATE AuthToken SET used = true WHERE uuid = :token;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':token', $token);
+
+        $statement->execute();
+    }
+
+    public function isTokenValid($token) {
+        $query = "SELECT * FROM AuthToken WHERE uuid = :token;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':token', $token);
+
+        $statement->execute();
+        $row = $statement->fetch();
+        if ($row['used'] == 0) {
+            $this->updateActivatingUser($row['user_id']);
+            $this->updateAuthToken($token);
+            return true;
+        }
+        return false;
+    }
 }

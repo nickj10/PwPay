@@ -11,7 +11,6 @@ use SallePW\SlimApp\model\User;
 use SallePW\SlimApp\model\Mailer;
 
 
-
 final class RegisterController
 {
     private ContainerInterface $container;
@@ -43,8 +42,9 @@ final class RegisterController
                 $this->container->get('user_repository')->save($user);
                 //We have to retreive its id for the activation link
                 $user = $this->container->get('user_repository')->getUserByEmail($email);
-                $mail = new Mailer();
-                if (($mail->sendEmail($user['user_id'], $user['email']))) {
+                $uuid = $this->container->get('user_repository')->generateUuid($user['user_id']);
+                $emailSent = $this->container->get('mailer')->sendEmail($user['user_id'], $user['email'], $uuid);
+                if ($emailSent) {
                     $errors['activation_link'] = "Great! Don't forget to check your email to validate your account.";
                 }
                 else {
