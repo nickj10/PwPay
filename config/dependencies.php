@@ -7,6 +7,8 @@ use Psr\Container\ContainerInterface;
 use SallePW\SlimApp\Repository\MySQLUserRepository;
 use SallePW\SlimApp\Repository\PDOSingleton;
 use SallePW\SlimApp\Service\Mailer;
+use SallePW\SlimApp\Service\FieldsValidator;
+
 
 $container = new Container();
 
@@ -38,6 +40,10 @@ $container->set('user_repository', function (ContainerInterface $container) {
     return new MySQLUserRepository($container->get('db'));
 });
 
-$container->set('mailer', function (ContainerInterface $container) {
+$container->set('mailer', function () {
     return new Mailer();
+});
+
+$container->set('validator', function () {
+    return new FieldsValidator();
 });
