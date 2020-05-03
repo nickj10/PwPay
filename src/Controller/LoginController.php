@@ -11,6 +11,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 final class LoginController
 {
     private ContainerInterface $container;
+    private $errors = array();
+    private const WRONG_PASSWORD_MESSAGE = "Password incorrect.";
+    private const NOT_ACTIVE_MESSAGE = "Check you email and activate your account!";
+    private const WRONG_CREDENTIALS_MESSAGE = "This email is not associated to any user";
 
     public function __construct(ContainerInterface $container)
     {
@@ -32,10 +36,10 @@ final class LoginController
     {
         // This method decodes the received json
         $data = $request->getParsedBody();
-        $errors = [];
-        $errors = $this->validate($data);
+        //$errors = $this->validate($data);
+        $this->errors = $this->container->get('validator')->validateLogin($data);
         try {
-            if (count($errors) == 0) {
+            if (count($this->errors) == 0) {
                 $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $password = filter_var($data['password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 if ($this->container->get('user_repository')->isEmailTaken($email)) {
@@ -45,22 +49,22 @@ final class LoginController
                         return $response->withHeader('Location', '/account/summary')->withStatus(302);
                     } else {
                         if ($userInfo['password'] != md5($password)) {
-                            $errors['passwordIncorrect'] = 'Password incorrect.';
+                            $this->errors['passwordIncorrect'] = self::WRONG_PASSWORD_MESSAGE;
                         } else {
                             if ($userInfo['status'] == 'inactive') {
-                                $errors['not_active'] = 'Check your mail to activate your account.';
+                                $this->errors['not_active'] = self::NOT_ACTIVE_MESSAGE;
                             }
                         }
                     }
                 } else {
-                    $errors['nonexistingUser'] = 'This email is not associated to any user.';
+                    $this->errors['nonexistingUser'] = self::WRONG_CREDENTIALS_MESSAGE;
                 }
             }
             return $this->container->get('view')->render(
                 $response,
                 'login.twig',
                 [
-                    'errors' => $errors,
+                    'errors' => $this->errors,
                     'data' => $data
                 ]
             );
@@ -70,45 +74,5 @@ final class LoginController
         }
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
-    }
-
-    private function validate(array $data): array
-    {
-        $errors = [];
-        $errors = $this->validateEmail($errors, $data);
-        $errors = $this->validatePassword($errors, $data);
-        return $errors;
-    }
-
-    private function validateEmail($errors, $data): array
-    {
-        $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($email)) {
-            $errors['email'] = 'The email cannot be empty';
-        } else {
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = 'Email is not valid';
-            } else {
-                $email_aux = explode('@', $email);
-                $domain = array_pop($email_aux);
-                if ($domain != 'salle.url.edu') {
-                    $errors['email'] = 'We only accept emails with domain salle.url.edu';
-                }
-            }
-        }
-        return $errors;
-    }
-
-    private function validatePassword($errors, $data): array
-    {
-        $password = filter_var($data['password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($password)) {
-            $errors['password'] = 'The password cannot be empty';
-        } else {
-            if (!preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/", $password)) {
-                $errors['password'] = 'The password must contain both letters and numbers with more than 5 characters.';
-            }
-        }
-        return $errors;
     }
 }
