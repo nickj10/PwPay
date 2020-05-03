@@ -12,18 +12,21 @@
 			<p></p>
 		    <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
     		<input type="file" name="files"/>
-			{% if errors['extension'] is not empty %}
-				<p class="error-msg"> {{ errors['extension'] }} </p>
+			{% if image_errors['extension'] is not empty %}
+				<p class="error-msg"> {{ image_errors['extension'] }} </p>
 			{% endif %}
-			{% if errors['size'] is not empty %}
-				<p class="error-msg"> {{ errors['size'] }} </p>
+			{% if image_errors['size'] is not empty %}
+				<p class="error-msg"> {{ image_errors['size'] }} </p>
 			{% endif %}
-			{% if errors['dimension'] is not empty %}
-				<p class="error-msg"> {{ errors['dimension'] }} </p>
+			{% if image_errors['dimension'] is not empty %}
+				<p class="error-msg"> {{ image_errors['dimension'] }} </p>
 			{% endif %}
 			<input type="text" name="email" placeholder="Email" readonly/>
 			<input type="text" name="birthday" placeholder="YYYY/MM/DD" readonly/>
 			<input type="number" name="phone" placeholder="Phone" />
+			{% if form_errors['phone'] is not empty %}
+				<p class="error-msg"> {{ form_errors['phone'] }} </p>
+			{% endif %}
     		<input type="submit" value="Save" />
 			<p> <a href="http://pwpay.grup16:8030/profile/security" style="text-decoration:underline;"> Change password </a></p>
 		</form>

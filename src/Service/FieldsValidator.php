@@ -27,6 +27,11 @@ class FieldsValidator {
         return $this->errors;
     }
 
+    public function validateProfile (array $data) {
+        $this->validatePhone($data);
+        return $this->errors;
+    }
+
     private function validateEmail ($data) {
         $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($email)) {

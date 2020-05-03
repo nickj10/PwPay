@@ -6,9 +6,9 @@ use Slim\Flash\Messages;
 use Psr\Container\ContainerInterface;
 use SallePW\SlimApp\Repository\MySQLUserRepository;
 use SallePW\SlimApp\Repository\PDOSingleton;
+use SallePW\SlimApp\Service\FieldsValidator;
 use SallePW\SlimApp\Service\Mailer;
 use SallePW\SlimApp\Service\ImageHandler;
-use SallePW\SlimApp\Service\FieldsValidator;
 
 
 $container = new Container();
@@ -41,12 +41,16 @@ $container->set('user_repository', function (ContainerInterface $container) {
     return new MySQLUserRepository($container->get('db'));
 });
 
+$container->set('validator', function () {
+    return new FieldsValidator();
+});
+
 $container->set('mailer', function () {
     return new Mailer();
 });
 
 $container->set('image_handler', function () {
     return new ImageHandler();
-$container->set('validator', function () {
-    return new FieldsValidator();
 });
+
+
