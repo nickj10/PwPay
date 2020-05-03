@@ -7,7 +7,7 @@
 		<h3>Security</h3>
 	</div>
 	<div>
-		<form enctype="multipart/form-data" action="{{ url_for('security_action') }}" method="POST">
+		<form enctype="multipart/form-data" action="{{ url_for('security_form') }}" method="POST">
 			<input type="password" name="old_password" placeholder="Old password" />
 			<input type="password" name="new_password" placeholder="New password" />
 			<input type="password" name="repeat_password" placeholder="Repeat new password"/>
