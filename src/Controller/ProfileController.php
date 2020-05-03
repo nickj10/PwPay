@@ -23,27 +23,35 @@ final class ProfileController
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
+        $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
         return $this->container->get('view')->render(
             $response,
             'profile.twig',
             [
-                'session' => $_SESSION['user_id']
+                'session' => $_SESSION['user_id'],
+                'user' => $user
             ]
         );
     }
     public function profileAction(Request $request, Response $response): Response
     {
-        $uploadedFile = $request->getUploadedFiles();
-        $data = $request->getParsedBody();
-        $image_errors = [];
-        $form_errors = [];
-        //TODO: controlar si no ha puesto ninguna foto
-        $image_errors = $this->container->get('image_handler')->validateImage($uploadedFile);
-        $form_errors = $this->container->get('validator')->validateProfile($data);
-
-        return $this->container->get('view')->render($response, 'profile.twig', [
-            'image_errors' => $image_errors,
-            'form_errors' => $form_errors
-        ]);
+        if (empty($_SESSION['user_id'])) {
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
+        }
+        else {
+            $uploadedFile = $request->getUploadedFiles();
+            $data = $request->getParsedBody();
+            $image_errors = [];
+            $form_errors = [];
+            //TODO: controlar si no ha puesto ninguna foto
+            $image_errors = $this->container->get('image_handler')->validateImage($uploadedFile);
+            $form_errors = $this->container->get('validator')->validateProfile($data);
+            $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
+            return $this->container->get('view')->render($response, 'profile.twig', [
+                'image_errors' => $image_errors,
+                'form_errors' => $form_errors,
+                'user' => $user
+            ]);
+        }
     }
 }

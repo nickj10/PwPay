@@ -21,9 +21,16 @@
 			{% if image_errors['dimension'] is not empty %}
 				<p class="error-msg"> {{ image_errors['dimension'] }} </p>
 			{% endif %}
-			<input type="text" name="email" placeholder="Email" readonly/>
-			<input type="text" name="birthday" placeholder="YYYY/MM/DD" readonly/>
-			<input type="number" name="phone" placeholder="Phone" />
+			<input type="text" name="email" {% if user is not empty %}
+												value= {{user['email']}}
+											{% endif %}	
+											readonly/>
+			<input type="text" name="birthday" {% if user is not empty %}
+													value= {{user['birthday']}}
+												{% endif %}	
+												readonly/>
+			<input type="number" name="phone" placeholder="Phone" 
+																		/>
 			{% if form_errors['phone'] is not empty %}
 				<p class="error-msg"> {{ form_errors['phone'] }} </p>
 			{% endif %}

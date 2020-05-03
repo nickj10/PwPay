@@ -84,6 +84,19 @@ final class MySQLUserRepository implements UserRepository
         return false;
     }
 
+    public function getUserInformationById($id) {
+        $query = "SELECT * FROM user WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':id', $id);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+        }
+        return $row;
+    }
+
     public function updateActivatingUser($id) {
         $query = "UPDATE user SET status = 'active', balance=20.00 WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
