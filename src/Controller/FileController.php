@@ -17,7 +17,11 @@ final class FileController
     private const INVALID_EXTENSION_ERROR = "The received file extension '%s' is not valid";
 
     // We use this const to define the extensions that we are going to allow
-    private const ALLOWED_EXTENSIONS = ['jpg', 'png', 'pdf'];
+    private const ALLOWED_EXTENSION = 'png';
+
+    private const ALLOWED_DIMENSION = '400';
+
+    private const ALLOWED_SIZE = '1000000';
 
     private ContainerInterface $container;
 
@@ -55,23 +59,23 @@ final class FileController
             $fileInfo = pathinfo($name);
 
             $format = $fileInfo['extension'];
+            $size = $uploadedFile->getSize();
 
-            if (!$this->isValidFormat($format)) {
+            if ($format == self::ALLOWED_EXTENSION) {
                 $errors[] = sprintf(self::INVALID_EXTENSION_ERROR, $format);
                 continue;
             }
 
+            if ($size >= self::ALLOWED_SIZE) {
+                echo "Size is too big";
+            }
+
             // We generate a custom name here instead of using the one coming form the form
-            $uploadedFile->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $name);
+            //$uploadedFile->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $name);
         }
 
         return $this->container->get('view')->render($response, 'upload.twig', [
             'errors' => $errors,
         ]);
-    }
-
-    private function isValidFormat(string $extension): bool
-    {
-        return in_array($extension, self::ALLOWED_EXTENSIONS, true);
     }
 }
