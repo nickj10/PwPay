@@ -11,7 +11,16 @@
 			<img src="/assets/pictures/default.png" alt="default_image" width="200" height="200">
 			<p></p>
 		    <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
-    		<input type="file" name="userfile"/>
+    		<input type="file" name="files"/>
+			{% if errors['extension'] is not empty %}
+				<p class="error-msg"> {{ errors['extension'] }} </p>
+			{% endif %}
+			{% if errors['size'] is not empty %}
+				<p class="error-msg"> {{ errors['size'] }} </p>
+			{% endif %}
+			{% if errors['dimension'] is not empty %}
+				<p class="error-msg"> {{ errors['dimension'] }} </p>
+			{% endif %}
 			<input type="text" name="email" placeholder="Email" readonly/>
 			<input type="text" name="birthday" placeholder="YYYY/MM/DD" readonly/>
 			<input type="number" name="phone" placeholder="Phone" />

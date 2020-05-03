@@ -7,6 +7,8 @@ use Psr\Container\ContainerInterface;
 use SallePW\SlimApp\Repository\MySQLUserRepository;
 use SallePW\SlimApp\Repository\PDOSingleton;
 use SallePW\SlimApp\Service\Mailer;
+use SallePW\SlimApp\Service\ImageHandler;
+
 
 $container = new Container();
 
@@ -40,4 +42,8 @@ $container->set('user_repository', function (ContainerInterface $container) {
 
 $container->set('mailer', function (ContainerInterface $container) {
     return new Mailer();
+});
+
+$container->set('image_handler', function () {
+    return new ImageHandler();
 });
