@@ -30,4 +30,9 @@ final class ProfileController
             ]
         );
     }
+
+    public function profileAction (Request $request, Response $response): Response 
+    {
+        return $this->container->get('view')->render($response, 'profile.twig', []);
+    }
 }

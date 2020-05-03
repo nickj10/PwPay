@@ -65,3 +65,4 @@ $app->post('/logout', LogoutController::class . ':logoutAction')->setName('logou
 $app->get('/account/summary', AccountController::class . ':showDashboard');
 
 $app->get('/profile', ProfileController::class . ':showProfile');
+$app->post('/profile', ProfileController::class . ':profileAction')->setName('profile_action');

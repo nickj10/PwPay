@@ -4,6 +4,20 @@
 {% endblock %}
 {% block content %}
 	<div class="profile">
-		<h3>User Profile Page</h3>
+		<h3>My Profile</h3>
+	</div>
+	<div>
+		<form enctype="multipart/form-data" action="{{ url_for('profile_action') }}" method="POST">
+			<img src="/assets/pictures/default.png" alt="default_image" width="200" height="200">
+			<p></p>
+		    <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+    		<input type="file" name="userfile"/>
+			<input type="text" name="email" placeholder="Email" readonly/>
+			<input type="text" name="birthday" placeholder="YYYY/MM/DD" readonly/>
+			<input type="number" name="phone" placeholder="Phone" />
+    		<input type="submit" value="Save" />
+			<p> <a href="#" style="text-decoration:underline;"> Change password </a></p>
+		</form>
+
 	</div>
 {% endblock %}
