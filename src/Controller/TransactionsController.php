@@ -35,6 +35,23 @@ final class TransactionsController
     {
         $data = $request->getParsedBody();
         //$errors = $this->validate($data);
-        $this->errors = $this->container->get('validator')->validateLogin($data);
+        $this->errors = $this->container->get('validator')->validateBankAssociation($data);
+        try {
+            if (count($this->errors) > 0) {
+                return $this->container->get('view')->render(
+                    $response,
+                    'associateAccount.twig',
+                    [
+                        'errors' => $this->errors,
+                        'data' => $data
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+            $response->getBody()->write('Unexpected error: ' . $e->getMessage());
+            return $response->withStatus(500);
+        }
+
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 }
