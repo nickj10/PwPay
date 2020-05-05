@@ -13,7 +13,7 @@ use \SallePW\SlimApp\Controller\LogoutController;
 use \SallePW\SlimApp\Controller\RegisterController;
 use \SallePW\SlimApp\Controller\ActivationController;
 use SallePW\SlimApp\Controller\ProfileController;
-
+use SallePW\SlimApp\Controller\TransactionsController;
 
 $app->add(StartSessionMiddleware::class);
 
@@ -65,3 +65,5 @@ $app->post('/logout', LogoutController::class . ':logoutAction')->setName('logou
 $app->get('/account/summary', AccountController::class . ':showDashboard');
 
 $app->get('/profile', ProfileController::class . ':showProfile');
+
+$app->get('/account/bank-account', TransactionsController::class . ':showAssociateAccount')->setName('associate-account');
