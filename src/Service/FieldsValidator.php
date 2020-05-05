@@ -111,7 +111,6 @@ class FieldsValidator
         if (empty($iban)) {
             $this->errors['iban'] = 'The IBAN cannot be empty';
         } else {
-
             if (!$validator->validate($iban)) {
                 foreach ($validator->getViolations() as $violation) {
                     $this->errors['iban'] = $violation;

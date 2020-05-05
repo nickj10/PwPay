@@ -37,16 +37,20 @@ final class TransactionsController
         //$errors = $this->validate($data);
         $this->errors = $this->container->get('validator')->validateBankAssociation($data);
         try {
-            if (count($this->errors) > 0) {
-                return $this->container->get('view')->render(
-                    $response,
-                    'associateAccount.twig',
-                    [
-                        'errors' => $this->errors,
-                        'data' => $data
-                    ]
-                );
+            if (count($this->errors) == 0) {
+                $owner = filter_var($data['owner'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $iban = filter_var($data['iban'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $userId = $_SESSION['user_id'];
+                $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
             }
+            return $this->container->get('view')->render(
+                $response,
+                'associateAccount.twig',
+                [
+                    'errors' => $this->errors,
+                    'data' => $data
+                ]
+            );
         } catch (Exception $e) {
             $response->getBody()->write('Unexpected error: ' . $e->getMessage());
             return $response->withStatus(500);
