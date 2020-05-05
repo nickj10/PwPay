@@ -1,6 +1,9 @@
 CREATE TABLE IF NOT EXISTS Accounts (
     account_id bigint NOT NULL, 
     user_id bigint,
+    owner_name VARCHAR(255),
+    iban VARCHAR(50),
+    balance FLOAT DEFAULT 0.0,
     activity_status BOOLEAN DEFAULT false,
     FOREIGN KEY (user_id) REFERENCES user(user_id),
     PRIMARY KEY (account_id)
