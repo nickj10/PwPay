@@ -40,6 +40,32 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
+    public function saveAccount($id, $owner, $iban): void
+    {
+        $query = "INSERT INTO Accounts(user_id, owner_name, iban)
+        values (:userId, :ownerName, :iban);";
+        $statement = $this->database->connection()->prepare($query);
+
+        $statement->bindParam(':userId', $id, PDO::PARAM_STR);
+        $statement->bindParam(':ownerName', $owner, PDO::PARAM_STR);
+        $statement->bindParam(':iban', $iban, PDO::PARAM_STR);
+
+        $statement->execute();
+    }
+
+    public function userHasAssociatedAccount($id) {
+        $query = "SELECT * FROM Accounts WHERE user_id = :userId;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $id, PDO::PARAM_STR);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count>0) {
+            return true;
+        }
+        return false;
+    }
+
     public function isEmailTaken($email) {
         $query = "SELECT * FROM user WHERE email = :email;";
         $statement = $this->database->connection()->prepare($query);
@@ -51,7 +77,6 @@ final class MySQLUserRepository implements UserRepository
             return true;
         }
         return false;
-
     }
 
     public function getUserByEmail($email) {
