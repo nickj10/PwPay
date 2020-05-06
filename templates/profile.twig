@@ -3,14 +3,25 @@
 	My Profile
 {% endblock %}
 {% block content %}
-	<div class="profile">
-		<h3>My Profile</h3>
-	</div>
-	<div>
+	<style>
+        p.error-msg {
+			color: black !important;
+		}
+	</style>
+	<div id="index-banner" class="empty-container">
 		<form enctype="multipart/form-data" action="{{ url_for('profile_form') }}" method="POST">
+			<div class="row login">
+				<div class="card">
+					<div class="card-action center">
+						<h3 class="red-text text-darken-4">My Profile</h3>
+					</div>
+					<--! Linia 26 de login.twig-->
+				</div>
+			</div>
+			<h3>My Profile</h3>
 			<img src="/assets/pictures/default.png" alt="default_image" width="200" height="200">
 			<p></p>
-		    <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+			<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
     		<input type="file" name="files"/>
 			{% if image_errors['extension'] is not empty %}
 				<p class="error-msg"> {{ image_errors['extension'] }} </p>
@@ -29,14 +40,12 @@
 													value= {{user['birthday']}}
 												{% endif %}	
 												readonly/>
-			<input type="number" name="phone" placeholder="Phone" 
-																		/>
+			<input type="number" name="phone" placeholder="Phone"/>
 			{% if form_errors['phone'] is not empty %}
 				<p class="error-msg"> {{ form_errors['phone'] }} </p>
 			{% endif %}
     		<input type="submit" value="Save" />
 			<p> <a href="http://pwpay.grup16:8030/profile/security" style="text-decoration:underline;"> Change password </a></p>
 		</form>
-
 	</div>
 {% endblock %}
