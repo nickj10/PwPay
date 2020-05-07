@@ -66,5 +66,5 @@ $app->get('/account/summary', AccountController::class . ':showDashboard');
 
 $app->get('/profile', ProfileController::class . ':showProfile');
 
-$app->get('/account/bank-account', TransactionsController::class . ':showAssociateAccount')->setName('associate-account');
+$app->get('/account/bank-account', TransactionsController::class . ':showLoadMoney')->setName('associate-account');
 $app->post('/account/bank-account', TransactionsController::class . ':associateAccountAction');

@@ -65,4 +65,28 @@ final class TransactionsController
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
+
+    public function showLoadMoney(Request $request, Response $response): Response
+    {
+        if (empty($_SESSION['user_id'])) {
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
+        } else {
+            if ($this->container->get('user_repository')->userHasAssociatedAccount($_SESSION['user_id'])) {
+                return $this->container->get('view')->render(
+                    $response,
+                    'associateAccount.twig',
+                    [
+                        'session' => $_SESSION['user_id']
+                    ]
+                );
+            }
+        }
+        return $this->container->get('view')->render(
+            $response,
+            'loadMoney.twig',
+            [
+                'session' => $_SESSION['user_id']
+            ]
+        );
+    }
 }
