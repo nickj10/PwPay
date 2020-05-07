@@ -108,7 +108,7 @@ class FieldsValidator
             'violation.invalid_checksum' => 'The checksum of the given Iban is not valid!',
         ]);
 
-        if (empty($iban)) {
+        if (empty($data['iban'])) {
             $this->errors['iban'] = 'The IBAN cannot be empty';
         } else {
             if (!$validator->validate($iban)) {
