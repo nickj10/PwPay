@@ -71,7 +71,7 @@ final class TransactionsController
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         } else {
-            if ($this->container->get('user_repository')->userHasAssociatedAccount($_SESSION['user_id'])) {
+            if (!($this->container->get('user_repository')->userHasAssociatedAccount($_SESSION['user_id']))) {
                 return $this->container->get('view')->render(
                     $response,
                     'associateAccount.twig',
@@ -88,5 +88,37 @@ final class TransactionsController
                 'session' => $_SESSION['user_id']
             ]
         );
+    }
+
+    public function loadMoneyAction(Request $request, Response $response): Response
+    {
+        $data = $request->getParsedBody();
+        try {
+            if (count($this->errors) == 0) {
+                $amount = filter_var($data['amount']);
+                $userId = $_SESSION['user_id'];
+                $this->container->get('user_repository')->updateAccountBalance($userId, $amount);
+                return $this->container->get('view')->render(
+                    $response,
+                    'loadMoney.twig',
+                    [
+                        'session' => $_SESSION['user_id']
+                    ]
+                );
+            }
+            return $this->container->get('view')->render(
+                $response,
+                'associateAccount.twig',
+                [
+                    'errors' => $this->errors,
+                    'data' => $data
+                ]
+            );
+        } catch (Exception $e) {
+            $response->getBody()->write('Unexpected error: ' . $e->getMessage());
+            return $response->withStatus(500);
+        }
+
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 }
