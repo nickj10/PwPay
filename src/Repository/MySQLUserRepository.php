@@ -6,6 +6,7 @@ namespace SallePW\SlimApp\Repository;
 
 use PDO;
 use SallePW\SlimApp\Model\User;
+use SallePW\SlimApp\Model\UserAccount;
 use SallePW\SlimApp\Model\UserRepository;
 use Ramsey\Uuid\Uuid;
 
@@ -53,37 +54,67 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
-    public function userHasAssociatedAccount($id) {
+    public function userHasAssociatedAccount($id)
+    {
         $query = "SELECT * FROM Accounts WHERE user_id = :userId;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $id, PDO::PARAM_STR);
-        
+
         $statement->execute();
         $count = $statement->rowCount();
-        if ($count>0) {
+        if ($count > 0) {
             return true;
         }
         return false;
     }
 
-    public function isEmailTaken($email) {
+    public function getBankAccountInformation($userId)
+    {
+        $query = "SELECT * FROM ACCOUNTS WHERE user_id = :userId AND activity_status = 1;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $id, PDO::PARAM_STR);
+
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+            $userInfo = new UserAccount($row['account_id'], $row['user_id'], $row['owner_id'], $row['iban'], $row['balance']);
+        }
+        return $userInfo;
+    }
+
+    public function updateAccountBalance($id, $amount)
+    {
+        $userAccountInfo = $this->getBankAccountInformation($id);
+
+        $new_amount = $userAccountInfo['balance'] + $amount;
+        $query = "UPDATE Accounts SET balance = :amount WHERE user_id = :userId;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $id, PDO::PARAM_STR);
+        $statement->bindParam(':amount', $new_amount, PDO::PARAM_STR);
+        $statement->execute();
+    }
+
+    public function isEmailTaken($email)
+    {
         $query = "SELECT * FROM user WHERE email = :email;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':email', $email, PDO::PARAM_STR);
-        
+
         $statement->execute();
         $count = $statement->rowCount();
-        if ($count>0) {
+        if ($count > 0) {
             return true;
         }
         return false;
     }
 
-    public function getUserByEmail($email) {
+    public function getUserByEmail($email)
+    {
         $query = "SELECT * FROM user WHERE email = :email;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':email', $email, PDO::PARAM_STR);
-        
+
         $statement->execute();
         $count = $statement->rowCount();
         if ($count > 0) {
@@ -92,11 +123,12 @@ final class MySQLUserRepository implements UserRepository
         return $row;
     }
 
-    public function getUserById($id) {
+    public function getUserById($id)
+    {
         $query = "SELECT * FROM user WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':id', $id, PDO::PARAM_STR);
-        
+
         $statement->execute();
         $count = $statement->rowCount();
         if ($count > 0) {
@@ -109,14 +141,16 @@ final class MySQLUserRepository implements UserRepository
         return false;
     }
 
-    public function updateActivatingUser($id) {
+    public function updateActivatingUser($id)
+    {
         $query = "UPDATE user SET status = 'active', balance=20.00 WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':id', $id, PDO::PARAM_STR);
         $statement->execute();
     }
 
-    public function generateUuid($user_id) {
+    public function generateUuid($user_id)
+    {
         $query = "INSERT INTO AuthToken(uuid, user_id) VALUES (:uuid, :user_id);";
         $statement = $this->database->connection()->prepare($query);
         $uuid = Uuid::uuid4();
@@ -126,7 +160,8 @@ final class MySQLUserRepository implements UserRepository
         return $uuid;
     }
 
-    public function updateAuthToken ($token) {
+    public function updateAuthToken($token)
+    {
         $query = "UPDATE AuthToken SET used = true WHERE uuid = :token;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':token', $token);
@@ -134,7 +169,8 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
-    public function isTokenValid($token) {
+    public function isTokenValid($token)
+    {
         $query = "SELECT * FROM AuthToken WHERE uuid = :token;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':token', $token);
