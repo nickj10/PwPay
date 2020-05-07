@@ -3,10 +3,16 @@
 	Security
 {% endblock %}
 {% block content %}
-	<div class="">
-		<h3>Security</h3>
-	</div>
-	<div>
+	<style>
+		body {
+			background-image: url('assets/backgrounds/profile_background2.jpg');
+			background-size: cover;
+		}
+        p.error-msg {
+			color: black !important;
+		}
+	</style>
+	<div id="index-banner" class="empty-container">
 		<form enctype="multipart/form-data" action="{{ url_for('security_form') }}" method="POST">
 			<input type="password" name="old_password" placeholder="Old password" />
 			<input type="password" name="new_password" placeholder="New password" />
