@@ -24,8 +24,14 @@
 						
 					</div>
 						
+					<div class="card-content">
+					<br>
+					<br>
+						<br>
 						<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
-    					<input type="file" name="files"/>
+						<br>
+    					<input id="examina" class="black-text" type="file" name="files"/>
+						
 						{% if image_errors['extension'] is not empty %}
 							<p class="error-msg"> {{ image_errors['extension'] }} </p>
 						{% endif %}
@@ -35,9 +41,10 @@
 						{% if image_errors['dimension'] is not empty %}
 							<p class="error-msg"> {{ image_errors['dimension'] }} </p>
 						{% endif %}
-					</div>
-					<div class="card-content">
+						
 						<div class="form-field">
+						<br>
+						
 							<input type="text" name="email" {% if user is not empty %}
 												value= {{user['email']}}
 											{% endif %}	

@@ -42,3 +42,6 @@ html {
       transform: translate(0px, 50px);
   }
 
+  #examina{
+    transform: translate(70%, 10px);
+  }
