@@ -17,11 +17,13 @@
 			<div class="row profile">
 			<div class="col s12 14 offset-14">
 				<div class="card">
-					<div class="card-action center">
-						<h3 class="black-text">My Profile</h3>
-						<p></p>
-						<img src="/assets/pictures/default.png" alt="default_image" class="circle responsive-img" width="200" height="200">
-						<p></p>
+					<div class="card-action center red darken-4 ">
+						
+						<h3 class="white-text">My Profile</h3>
+						<img src="/assets/pictures/default.png" alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
+						
+					</div>
+						
 						<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
     					<input type="file" name="files"/>
 						{% if image_errors['extension'] is not empty %}

@@ -34,3 +34,8 @@ html {
     margin-right: 25%;
   }
 
+
+  #image_profile{
+      transform: translate(0px, 50px);
+  }
+
