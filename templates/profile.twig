@@ -3,40 +3,77 @@
 	My Profile
 {% endblock %}
 {% block content %}
-	<div class="profile">
-		<h3>My Profile</h3>
-	</div>
-	<div>
+	<style>
+		body {
+			background-image: url('assets/backgrounds/profile_background2.jpg');
+			background-size: cover;
+		}
+        p.error-msg {
+			color: black !important;
+		}
+	</style>
+	<div id="index-banner" class="empty-container">
 		<form enctype="multipart/form-data" action="{{ url_for('profile_form') }}" method="POST">
-			<img src="/assets/pictures/default.png" alt="default_image" width="200" height="200">
-			<p></p>
-		    <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
-    		<input type="file" name="files"/>
-			{% if image_errors['extension'] is not empty %}
-				<p class="error-msg"> {{ image_errors['extension'] }} </p>
-			{% endif %}
-			{% if image_errors['size'] is not empty %}
-				<p class="error-msg"> {{ image_errors['size'] }} </p>
-			{% endif %}
-			{% if image_errors['dimension'] is not empty %}
-				<p class="error-msg"> {{ image_errors['dimension'] }} </p>
-			{% endif %}
-			<input type="text" name="email" {% if user is not empty %}
+			<div class="row profile">
+			<div class="col s12 14 offset-14">
+				<div class="card">
+					<div class="card-action center red darken-4 ">
+						
+						<h3 class="white-text" style="margin-top=75%">My Profile</h3>
+						<img src="/assets/pictures/default.png" alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
+						
+					</div>
+						
+					<div class="card-content">
+					<br>
+					<br>
+						<br>
+						<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+						<br>
+    					<input id="examina" class="black-text" type="file" name="files"/>
+						
+						{% if image_errors['extension'] is not empty %}
+							<p class="error-msg"> {{ image_errors['extension'] }} </p>
+						{% endif %}
+						{% if image_errors['size'] is not empty %}
+							<p class="error-msg"> {{ image_errors['size'] }} </p>
+						{% endif %}
+						{% if image_errors['dimension'] is not empty %}
+							<p class="error-msg"> {{ image_errors['dimension'] }} </p>
+						{% endif %}
+						
+						<div class="form-field">
+						<br>
+						
+							<input type="text" name="email" {% if user is not empty %}
 												value= {{user['email']}}
 											{% endif %}	
 											readonly/>
-			<input type="text" name="birthday" {% if user is not empty %}
+						</div>
+						<div class="form-field">
+							<input type="text" name="birthday" {% if user is not empty %}
 													value= {{user['birthday']}}
 												{% endif %}	
 												readonly/>
-			<input type="number" name="phone" placeholder="Phone" 
-																		/>
-			{% if form_errors['phone'] is not empty %}
-				<p class="error-msg"> {{ form_errors['phone'] }} </p>
-			{% endif %}
-    		<input type="submit" value="Save" />
-			<p> <a href="http://pwpay.grup16:8030/profile/security" style="text-decoration:underline;"> Change password </a></p>
+						</div>
+						<div class="form-field">
+							<input type="number" name="phone" placeholder="Phone"/>
+							{% if form_errors['phone'] is not empty %}
+								<p class="error-msg"> {{ form_errors['phone'] }} </p>
+							{% endif %}
+						</div>
+						<br>
+						<br>
+						<div class="form-field center-align">
+								<button type="submit" value="Save" class="btn-large waves-effect waves-light teal lighten-1">Save</button>
+								<p> <a href="http://pwpay.grup16:8030/profile/security" class="grey-text text-darken-1" style="text-decoration:underline;"> 
+									Change password </a>
+								</p>
+						</div><br>
+					</div>
+				</div>
+			</div>
+			</div>
 		</form>
-
 	</div>
 {% endblock %}

@@ -13,4 +13,3 @@ RUN apk --update upgrade \
     && apk del .phpize-deps
 
 COPY etc/php/ /usr/local/etc/php/
-
