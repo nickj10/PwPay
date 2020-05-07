@@ -37,11 +37,14 @@ class ImageHandler {
             }
             if ($width > self::ALLOWED_DIMENSION || $height > self::ALLOWED_DIMENSION) {
                 $this->errors['dimension'] = self::INVALID_DIMENSION_ERROR;
-
+                $cropImage = new Imagick($tmpName);
+                $image->thumbnailImage(400,400);
+                $image->writeImage("test");
+                $uploadedFile->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $name);
             }
-            //TODO: Crop part, upload, and file name
-            // We generate a custom name here instead of using the one coming form the form
-            //$uploadedFile->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $name);
+            else {
+                $uploadedFile->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $name);
+            }
         }
         return $this->errors;
 
