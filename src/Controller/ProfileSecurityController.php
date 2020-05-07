@@ -33,6 +33,14 @@ final class ProfileSecurityController
 
     public function profileSecurityAction (Request $request, Response $response): Response 
     {
-        return $this->container->get('view')->render($response, 'profile_security.twig', []);
+        $data = $request->getParsedBody();
+        if (!empty($data['save_button'])) {
+            $errors = [];
+
+            return $this->container->get('view')->render($response, 'profile_security.twig', []);
+        }
+        if (!empty($data['cancel_button'])) {
+            return $response->withHeader('Location', '/profile')->withStatus(403);
+        }
     }
 }
