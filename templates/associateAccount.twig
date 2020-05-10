@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block content %}
+	<div id="index-banner" class="empty-container associate-bank-account">
 		<form id="associate-bank-account" action="{{ url_for('associate-account')}}" method="POST">
 								<label for="owner">Owner name:</label>
 								<input type="text" id="owner" name="owner" value={{data['owner']}}>
