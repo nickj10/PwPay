@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-final class ValidationController
+final class ActivationController
 {
     private ContainerInterface $container;
 
@@ -19,10 +19,10 @@ final class ValidationController
 
     public function showLoginFormAction(Request $request, Response $response, $args): Response
     {
-        //If the id is still inactive = change status
-        //If it's already active, show home page with flash message.
-        $id = $request->getAttribute('id');
-        if ($this->container->get('user_repository')->getUserById($id)) {
+        $token = $_GET['token'];
+        $valid = $this->container->get('user_repository')->isTokenValid($token);
+        
+        if ($valid) {
             return $response->withHeader('Location', '/sign-in')->withStatus(302);
         }
         else {

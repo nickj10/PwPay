@@ -1,0 +1,63 @@
+{% extends "base.twig" %}
+
+{% block title %}Load money
+{% endblock %}
+
+{% block content %}
+	<style>
+        p.error-msg {
+			color: black !important;
+		}
+	</style>
+	<div class="container loadMoney"> 	
+		<br></br>	
+		<div class="row">
+			<div class="col s12 ">
+				<h4>Load Money</h4>
+			</div>
+		</div>
+	<form id="associate-bank-account" action="{{ url_for('load-money')}}" method="POST">
+		<div class="card">
+			<div class="card-content">
+				<div class="form-field">
+					<label for="owner">Owner name:</label>
+					<input type="text" id="owner" name="owner" {% if account is not empty %}
+															value= "{{ account.owner_name }}"
+														{% endif %} readonly/>
+				</div>
+				<br>
+				<div class="form-field">
+					<label for="iban">IBAN:</label>
+						<input type="text" id="iban" name="iban" {% if account is not empty %}
+															value= "{{ account.iban }}"
+														{% endif %} readonly/>
+				</div>
+				<br>
+				<div class="form-field">
+					<label for="amount">Amount:</label>
+						<input type="number" id="amount" name="amount" placeholder="Introduce amount" value={{data['amount']}}>
+				</div>
+				{% if errors['amount_error'] is not empty %}
+					<p class="error-msg">
+						{{ errors['amount_error'] }}
+					</p>
+				{% endif %}
+				{% if errors['amount_negative'] is not empty %}
+					<p class="error-msg">
+						{{ errors['amount_negative'] }}
+					</p>
+				{% endif %}
+				{% if info is not empty %}
+					{{ info }}
+				{% endif %}	
+				<br>
+				<br>
+				<div class="form-field center-align">
+					<button type="submit" value="Load" class="btn-large waves-effect waves-light teal lighten-1">Load to account</button>
+				</div><br>
+			</div>
+		</div>		
+
+	</form>
+	</div>
+{% endblock %}

@@ -22,7 +22,7 @@
 		<nav class="white" role="navigation">
 			<div class="nav-wrapper container">
 				<a id="logo-container" href="/" class="brand-logo">
-				<img class="responsive-img" src="assets/backgrounds/logo.png" alt="logo"></a>
+				<img class="responsive-img" src="/assets/backgrounds/logo.png" alt="logo"></a>
 			
 				<ul class="right hide-on-med-and-down">
 					<!--   User not in session   -->
@@ -33,14 +33,15 @@
 					<!--   User in session   -->
 					{% if session is not empty %}
 					<li><a id="inSession" href="/account/summary">Dashboard</a></li>
-					<li><a id="inSession" href="#!">Transactions</a></li>
-					<li>
-					<a id="inSession" href="javascript:clickLogout()">Sign out</a>
-					</li>
+					<li><a id="inSession" href="/account/bank-account">Transactions</a></li>
 					<li>
 					<a id="inSession" href="/profile">
-					<img src="assets/backgrounds/profile.jpg" alt="Profile" class="circle responsive-img">
+						<img src="/assets/pictures/default.png" alt="Profile" class="circle responsive-img" width=25 height=25>
 					</a>
+					<li>
+					<a id="inSession" href="javascript:clickLogout()"><i class="material-icons">exit_to_app</i></a>
+					</li>
+					
 					{% endif %}
 				</div>
 			</nav>

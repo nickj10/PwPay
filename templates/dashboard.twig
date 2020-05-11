@@ -1,9 +1,76 @@
 {% extends "base.twig" %}
 
-{% block title %}My Dashboard{% endblock %}
+{% block title %}My Dashboard
+{% endblock %}
 
 {% block content %}
-    <div class="dashboard">
-		<h3>Welcome to dashboard!</h3>
-	</div>	
-{% endblock %}
+	<div class="container dashboard">
+		<br></br>
+	<div class="row">
+		<div class="col s12 ">
+			<h4>Hello USER,</h4>
+		</div>
+		<div class="row">
+			<div class="col s12 m6">
+				<span class="flow-text">
+					<p class="">My Wallet</p>
+				</span>
+			</div>
+			<div class="col s12 m6">
+				<span class="flow-text">
+					<p class="right-align">
+						{% if user is not empty %}
+							{{user['balance']}}
+							€
+						{% endif %}
+					</p>
+				</span>
+			</div>
+		</div>
+		<div class="divider"></div>
+	</div>
+
+	<div class="section row">
+		<div class="col s12 center">
+			<h5>TRANSACTIONS</h5>
+		</div>
+		<br></br>
+	<br></br>
+<table class="striped responsive-table">
+	<tbody>
+		{% if transactions is not empty %}
+			{% for transaction in transactions %}
+				<tr>
+					<td class="light concepto">{{transaction.description}}</td>
+					<td class="right-align light importe">
+						{% if transaction.action == 'send' %}
+							-{{transaction.amount}}€
+						{% else %}
+							+{{transaction.amount}}€
+						{% endif %}
+					</td>
+				</tr>
+			</td>
+		</tr>
+	{% endfor %}
+{% endif %}
+</tbody>
+</table>
+</div>
+<div class="section row">
+<div class="col s6">
+<div class="icon-block">
+<h2 class="center">
+	<a href="#!" style="color:
+																													    					rgb(151, 10, 10) !important;">
+		<i class="material-icons">file_upload</i>
+	</a>
+</h2>
+<h5 class="center black-text">Send Money</h></div></div><div class="col s6"><div class="icon-block">
+<h2 class="center">
+	<a href="#!" style="color:
+																													    					rgb(151, 10, 10) !important;">
+		<i class="material-icons">file_download</i>
+	</a>
+</h2>
+<h5 class="center black-text">Request Money</h></div></div></div></div>{% endblock %}

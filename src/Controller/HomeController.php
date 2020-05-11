@@ -20,11 +20,14 @@ final class HomeController
         $messages = $this->container->get('flash')->getMessages();
         //If there's something in the notifications envialo sino nada
         $notifications = $messages['notifications'] ?? [];
-
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['user_id'] = [];
+        }
         return $this->container->get('view')->render(
             $response,
             'home.twig',
             [
+                'session' => $_SESSION['user_id'],
                 'notifications' => $notifications
             ]
         );
