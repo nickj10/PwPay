@@ -28,6 +28,13 @@ html {
     margin-left: 25%;
     margin-right: 25%;
   }
+.concepto{
+    font-size: medium;
+}
+
+.importe{
+    font-size: medium;
+}
   .profile{
     margin-top: 5%;
     margin-left: 25%;

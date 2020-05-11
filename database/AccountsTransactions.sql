@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS Transactions (
     transactions_id BIGINT AUTO_INCREMENT, 
     user_id bigint,
     account_id bigint,
+    description VARCHAR(255),
     amount FLOAT DEFAULT 0.0,
     action VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

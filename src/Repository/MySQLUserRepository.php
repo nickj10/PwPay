@@ -9,7 +9,7 @@ use SallePW\SlimApp\Model\User;
 use SallePW\SlimApp\Model\UserAccount;
 use SallePW\SlimApp\Model\UserRepository;
 use Ramsey\Uuid\Uuid;
-
+use SallePW\SlimApp\Model\UserTransaction;
 
 final class MySQLUserRepository implements UserRepository
 {
@@ -224,4 +224,24 @@ final class MySQLUserRepository implements UserRepository
         $statement->bindParam(':id', $user_id);
         $statement->execute();
     }
+
+    public function getAccountTransactions($userId) {
+        $query = "SELECT * FROM Transactions WHERE user_id = :userId ORDER BY created_at DESC LIMIT 5;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $userId);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $rows = $statement->fetchAll();
+            $transactions = [];
+            for ($i = 0; $i < $count; $i++) {
+                $transaction = new UserTransaction($rows[$i]['description'], $rows[$i]['action'], floatval($rows[$i]['amount']));
+                array_push($transactions, $transaction);
+            }
+        }
+        return $transactions;
+    }
+    
 }
+
