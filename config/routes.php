@@ -1,9 +1,9 @@
 <?php
 
-use SallePW\SlimApp\Controller\AccountController;
+use \SallePW\SlimApp\Middleware\StartSessionMiddleware;
+use \SallePW\SlimApp\Controller\AccountController;
 use \SallePW\SlimApp\Controller\HomeController;
 use \SallePW\SlimApp\Controller\VisitsController;
-use \SallePW\SlimApp\Middleware\StartSessionMiddleware;
 use \SallePW\SlimApp\Controller\CookieMonsterController;
 use \SallePW\SlimApp\Controller\FlashController;
 use \SallePW\SlimApp\Controller\PostUserController;
@@ -12,9 +12,9 @@ use \SallePW\SlimApp\Controller\LoginController;
 use \SallePW\SlimApp\Controller\LogoutController;
 use \SallePW\SlimApp\Controller\RegisterController;
 use \SallePW\SlimApp\Controller\ActivationController;
-use SallePW\SlimApp\Controller\ProfileController;
-use SallePW\SlimApp\Controller\TransactionsController;
-use SallePW\SlimApp\Controller\ProfileSecurityController;
+use \SallePW\SlimApp\Controller\ProfileController;
+use \SallePW\SlimApp\Controller\TransactionsController;
+use \SallePW\SlimApp\Controller\ProfileSecurityController;
 
 
 $app->add(StartSessionMiddleware::class);
