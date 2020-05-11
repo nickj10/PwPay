@@ -84,7 +84,10 @@ final class TransactionsController
                 );
             }
         }
-        $userAccount = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+        $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+        $userAccount['owner_name'] = $user->owner_name();
+        $newIban = substr($user->iban(),0,6);
+        $userAccount['iban'] = $newIban;
         // Show Load Money page
         return $this->container->get('view')->render(
             $response,
@@ -109,8 +112,10 @@ final class TransactionsController
                     $userId = $_SESSION['user_id'];
                     $amount = $data['amount'];
                     $this->container->get('user_repository')->updateAccountBalance($userId, $amount);
-                    $userAccount = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
-                    $userAccount->iban() = "hola";
+                    $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+                    $userAccount['owner_name'] = $user->owner_name();
+                    $newIban = substr($user->iban(),0,6);
+                    $userAccount['iban'] = $newIban;
                     $info['success'] = "Money has been loaded to your wallet.";
                     return $this->container->get('view')->render(
                         $response,
