@@ -43,21 +43,23 @@
 						
 						<div class="form-field">
 						<br>
-						
+							<label for="email">Email: </label>
 							<input type="text" name="email" {% if user is not empty %}
 												value= {{user['email']}}
 											{% endif %}	
 											readonly/>
 						</div>
 						<div class="form-field">
+							<label for="email">Birthday: </label>
 							<input type="text" name="birthday" {% if user is not empty %}
 													value= {{user['birthday']}}
 												{% endif %}	
 												readonly/>
 						</div>
 						<div class="form-field">
+							<label for="email">Phone number: </label>
 							<input type="number" name="phone" {% if user['phone'] == 0 %}
-																placeholder= "Phone"
+																placeholder= "Introduce your phone number"
 															  {% endif %}
 															  {% if user['phone'] != 0 %}
 																value = {{ user['phone'] }}

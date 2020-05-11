@@ -60,6 +60,7 @@ final class ProfileController
                     }
                     $updatedUser = $this->container->get('user_repository')->getUserInformationById($user_id);
                     return $this->container->get('view')->render($response, 'profile.twig', [
+                        'session' => $_SESSION['user_id'],
                         'image_errors' => $image_response,
                         'form_errors' => $form_errors,
                         'info' => $info,
@@ -67,12 +68,14 @@ final class ProfileController
                     ]);
                 }
                 return $this->container->get('view')->render($response, 'profile.twig', [
+                    'session' => $_SESSION['user_id'],
                     'form_errors' => $form_errors,
                     'user' => $user
                 ]);
             }
             $error['form_error'] = self::FORM_ERROR;
             return $this->container->get('view')->render($response, 'profile.twig', [
+                'session' => $_SESSION['user_id'],
                 'form_error' => $error['form_error'],
                 'user' => $user
             ]);
