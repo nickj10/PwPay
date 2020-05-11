@@ -9,7 +9,7 @@ use SallePW\SlimApp\Model\User;
 use SallePW\SlimApp\Model\UserAccount;
 use SallePW\SlimApp\Model\UserRepository;
 use Ramsey\Uuid\Uuid;
-
+use SallePW\SlimApp\Model\UserTransaction;
 
 final class MySQLUserRepository implements UserRepository
 {
@@ -235,8 +235,13 @@ final class MySQLUserRepository implements UserRepository
         $count = $statement->rowCount();
         if ($count > 0) {
             $rows = $statement->fetch();
+            $transactions = [];
+            for ($i = 1; $i <= $count; $i++) {
+                $transaction = new UserTransaction($rows[$i]['description'], $rows[$i]['action'], $rows[$i]['amount']);
+                array_push($transactions, $transaction);
+            }
         }
-        return $rows;
+        return $transactions;
     }
     
 }
