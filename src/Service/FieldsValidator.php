@@ -47,17 +47,7 @@ class FieldsValidator {
             }
         }
         else {
-            if (!empty($data['old_password']) && empty($data['new_password'] && empty($data['repeat_password']))) {
-                $this->errors['new_pass'] = "Introduce your new password";
-            }
-            else {
-                if (empty($data['old_password']) && !empty($data['new_password'] && empty($data['repeat_password']))) {
-                    $this->errors['empty_fields'] = "All fields are requiered if you want to change your password";
-                }
-                if (empty($data['old_password']) && empty($data['new_password'] && !empty($data['repeat_password']))) {
-                    $this->errors['empty_fields'] = "All fields are requiered if you want to change your password";
-                }
-            }
+            $this->errors['empty_fields'] = "All fields are requiered if you want to change your password";
         }
         return $this->errors;
     }

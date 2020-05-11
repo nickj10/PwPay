@@ -154,4 +154,12 @@ final class MySQLUserRepository implements UserRepository
 
         $statement->execute();
     }
+
+    public function updatePassword ($password, $user_id) {
+        $query = "UPDATE user SET password = :pass WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':pass', $password);
+        $statement->bindParam(':id', $user_id);
+        $statement->execute();
+    }
 }
