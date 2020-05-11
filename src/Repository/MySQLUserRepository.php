@@ -84,6 +84,19 @@ final class MySQLUserRepository implements UserRepository
         return false;
     }
 
+    public function getUserInformationById($id) {
+        $query = "SELECT * FROM user WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':id', $id);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+        }
+        return $row;
+    }
+
     public function updateActivatingUser($id) {
         $query = "UPDATE user SET status = 'active', balance=20.00 WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
@@ -122,5 +135,31 @@ final class MySQLUserRepository implements UserRepository
             return true;
         }
         return false;
+    }
+
+    public function insertImage($file, $user_id) {
+        $query = "UPDATE user SET profile_picture = :file WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':file', $file);
+        $statement->bindParam(':id', $user_id);
+
+        $statement->execute();
+    }
+
+    public function updatePhone ($phone, $user_id) {
+        $query = "UPDATE user SET phone = :phone WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':phone', $phone, PDO::PARAM_INT);
+        $statement->bindParam(':id', $user_id);
+
+        $statement->execute();
+    }
+
+    public function updatePassword ($password, $user_id) {
+        $query = "UPDATE user SET password = :pass WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':pass', $password);
+        $statement->bindParam(':id', $user_id);
+        $statement->execute();
     }
 }

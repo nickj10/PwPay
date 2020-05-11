@@ -1,0 +1,67 @@
+{% extends "base.twig" %}
+{% block title %}
+	Security
+{% endblock %}
+{% block content %}
+	<style>
+		body {
+			background-image: url('/assets/backgrounds/profile_sec_background.jpg');
+			background-size: cover;
+		}
+        p.error-msg {
+			color: black !important;
+		}
+	</style>
+	<div id="index-banner" class="empty-container">
+		<form enctype="multipart/form-data" action="{{ url_for('security_form') }}" method="POST">
+			<div class="row profile">
+				<div class="col s12 14 offset-14">
+					<div class="card">
+						<div class="card-action center">
+							<h3 class="black-text">Security</h3>
+							<p></p>
+						</div>
+						<div class="card-content">
+							<div class="form-field">
+								<input type="password" name="old_password" placeholder="Old password" />
+								{% if errors is not empty %}
+									<p class="error-msg"> {{ errors['old_pass'] }} </p>
+								{% endif %}
+							</div>
+							<div class="form-field">
+								<input type="password" name="new_password" placeholder="New password" />
+							</div>
+							<div class="form-field">
+								<input type="password" name="repeat_password" placeholder="Repeat new password"/>
+								{% if errors['pass_match'] is not empty %}
+									<p class="error-msg"> {{ errors['pass_match'] }} </p>
+								{% endif %}
+								{% if errors['pass_pattern'] is not empty %}
+									<p class="error-msg"> {{ errors['pass_pattern'] }} </p>
+								{% endif %}
+								{% if errors['empty_fields'] is not empty %}
+									<p class="error-msg"> {{ errors['empty_fields'] }} </p>
+								{% endif %}
+								{% if errors['same_pass'] is not empty %}
+									<p class="error-msg"> {{ errors['same_pass'] }} </p>
+								{% endif %}
+								{% if info['success'] is not empty %}
+									<p class="error-msg"> {{ info['success'] }} </p>
+								{% endif %}
+							</div>
+							<br>
+							<br>
+							<div class="form-field center-align">
+								<button type="submit" name="save_button" value="Save" class="btn-large waves-effect waves-light teal lighten-1">Save</button>
+								<button type="submit" name="cancel_button" value="Cancel" class="btn-large waves-effect waves-light teal lighten-1">Cancel</button>
+							</div><br>
+							<br>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}
+			

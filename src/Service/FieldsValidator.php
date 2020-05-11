@@ -27,6 +27,31 @@ class FieldsValidator {
         return $this->errors;
     }
 
+    public function validateProfile (array $data) {
+        $this->validatePhone($data);
+        return $this->errors;
+    }
+
+    public function validateSecurityPassword (array $data) {
+        $this->errors = [];
+        $new_password1 = filter_var($data['new_password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $new_password2 = filter_var($data['repeat_password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!empty($data['old_password']) && !empty($data['new_password'] && !empty($data['repeat_password']))) {
+            if ($new_password1 != $new_password2) {
+                $this->errors['pass_match'] = "Passwords don't match";
+            }
+            else {
+                if (!preg_match(self::REGEX_PASSWORD,$new_password1)) {
+                    $this->errors['pass_pattern'] = 'The password must contain both letters and numbers with more than 5 characters.';
+                }
+            }
+        }
+        else {
+            $this->errors['empty_fields'] = "All fields are requiered if you want to change your password";
+        }
+        return $this->errors;
+    }
+
     private function validateEmail ($data) {
         $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($email)) {

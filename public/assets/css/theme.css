@@ -28,5 +28,20 @@ html {
     margin-left: 25%;
     margin-right: 25%;
   }
+  .profile{
+    margin-top: 5%;
+    margin-left: 25%;
+    margin-right: 25%;
+  }
 
+  h3{
+      font-weight: bold;
+  }
 
+  #image_profile{
+      transform: translate(0px, 50px);
+  }
+
+  #examina{
+    transform: translate(70%, 10px);
+  }
