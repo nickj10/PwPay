@@ -145,4 +145,13 @@ final class MySQLUserRepository implements UserRepository
 
         $statement->execute();
     }
+
+    public function updatePhone ($phone, $user_id) {
+        $query = "UPDATE user SET phone = :phone WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':phone', $phone, PDO::PARAM_INT);
+        $statement->bindParam(':id', $user_id);
+
+        $statement->execute();
+    }
 }
