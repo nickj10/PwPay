@@ -14,6 +14,8 @@ use \SallePW\SlimApp\Controller\RegisterController;
 use \SallePW\SlimApp\Controller\ActivationController;
 use SallePW\SlimApp\Controller\ProfileController;
 use SallePW\SlimApp\Controller\TransactionsController;
+use SallePW\SlimApp\Controller\ProfileSecurityController;
+
 
 $app->add(StartSessionMiddleware::class);
 
@@ -65,6 +67,10 @@ $app->post('/logout', LogoutController::class . ':logoutAction')->setName('logou
 $app->get('/account/summary', AccountController::class . ':showDashboard');
 
 $app->get('/profile', ProfileController::class . ':showProfile');
+$app->post('/profile', ProfileController::class . ':profileAction')->setName('profile_form');
+
+$app->get('/profile/security', ProfileSecurityController::class . ':showProfileSecurity');
+$app->post('/profile/security', ProfileSecurityController::class . ':profileSecurityAction')->setName('security_form');
 
 $app->get('/account/bank-account', TransactionsController::class . ':showLoadMoney')->setName('associate-account');
 $app->post('/account/bank-account', TransactionsController::class . ':associateAccountAction');

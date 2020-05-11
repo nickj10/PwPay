@@ -8,5 +8,6 @@ CREATE TABLE IF NOT EXISTS user(
     phone INTEGER,
     balance FLOAT DEFAULT 0.0,
     status VARCHAR(255) DEFAULT 'inactive',
+    profile_picture VARCHAR(255),
     PRIMARY KEY (user_id)
 );
