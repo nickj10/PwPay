@@ -56,6 +56,7 @@ final class TransactionsController
                 $response,
                 'associateAccount.twig',
                 [
+                    'session' => $_SESSION['user_id'],
                     'errors' => $this->errors,
                     'data' => $data
                 ]
@@ -137,6 +138,7 @@ final class TransactionsController
                 'loadMoney.twig',
                 [
                     'errors' => $errors,
+                    'session' => $_SESSION['user_id'],
                     'data' => $data
                 ]
             );
