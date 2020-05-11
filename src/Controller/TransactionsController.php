@@ -38,7 +38,7 @@ final class TransactionsController
         try {
             if (count($errors) == 0) {
                 $owner = filter_var($data['owner'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $iban = filter_var($data['iban'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $iban = str_replace(' ', '', filter_var($data['iban'], FILTER_SANITIZE_FULL_SPECIAL_CHARS));
                 $userId = $_SESSION['user_id'];
                 $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
                 $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
