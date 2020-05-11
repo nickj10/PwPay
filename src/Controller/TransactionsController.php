@@ -104,17 +104,22 @@ final class TransactionsController
                 $amount = filter_var($data['amount']);
                 $userId = $_SESSION['user_id'];
                 $this->container->get('user_repository')->updateAccountBalance($userId, $amount);
+                $userAccount = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+
                 return $this->container->get('view')->render(
                     $response,
                     'loadMoney.twig',
                     [
-                        'session' => $_SESSION['user_id']
+                        'account' => $userAccount,
+                        'session' => $userId
                     ]
                 );
             }
+
+            // Return errors for validations
             return $this->container->get('view')->render(
                 $response,
-                'associateAccount.twig',
+                'loadMoney.twig',
                 [
                     'errors' => $this->errors,
                     'data' => $data
