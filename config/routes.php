@@ -7,7 +7,6 @@ use \SallePW\SlimApp\Controller\VisitsController;
 use \SallePW\SlimApp\Controller\CookieMonsterController;
 use \SallePW\SlimApp\Controller\FlashController;
 use \SallePW\SlimApp\Controller\PostUserController;
-use \SallePW\SlimApp\Controller\FileController;
 use \SallePW\SlimApp\Controller\LoginController;
 use \SallePW\SlimApp\Controller\LogoutController;
 use \SallePW\SlimApp\Controller\RegisterController;
@@ -43,16 +42,6 @@ $app->post(
     '/users',
     PostUserController::class . ":create"
 )->setName('create_user');
-
-$app->get(
-    '/files',
-    FileController::class . ':showFileFormAction'
-)->setName('file_form');
-
-$app->post(
-    '/files',
-    FileController::class . ':uploadFileAction'
-)->setName('upload');
 
 $app->get('/sign-in', LoginController::class . ':showLoginFormAction');
 $app->post('/sign-in', LoginController::class . ':loginAction')->setName('login');
