@@ -74,4 +74,4 @@ $app->post('/profile/security', ProfileSecurityController::class . ':profileSecu
 
 $app->get('/account/bank-account', TransactionsController::class . ':showLoadMoney')->setName('associate-account');
 $app->post('/account/bank-account', TransactionsController::class . ':associateAccountAction');
-$app->post('/account/bank-account/load', TransactionsController::class . ':showLoadMoney')->setName('associate-account');
+$app->post('/account/bank-account/load', TransactionsController::class . ':loadMoneyAction')->setName('load-money');

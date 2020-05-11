@@ -4,6 +4,11 @@
 {% endblock %}
 
 {% block content %}
+	<style>
+		p.error-msg {
+			color: black !important;
+		}
+	</style>
 	<div id="index-banner" class="empty-container associate-bank-account">
 		<form id="associate-bank-account" action="{{ url_for('associate-account')}}" method="POST">
 			<div class="row profile">
