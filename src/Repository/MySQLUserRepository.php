@@ -162,4 +162,19 @@ final class MySQLUserRepository implements UserRepository
         $statement->bindParam(':id', $user_id);
         $statement->execute();
     }
+
+    public function getAccountTransactions($userId, $accountId) {
+        $query = "SELECT * FROM Transactions WHERE user_id = :iuserId AND account_id = :accountId ORDER BY created_at DESC LIMIT 5;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $userId);
+        $statement->bindParam(':accountId', $accountId);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $rows = $statement->fetch();
+        }
+        return $rows;
+    }
+    
 }
