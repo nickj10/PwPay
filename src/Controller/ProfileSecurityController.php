@@ -10,6 +10,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 final class ProfileSecurityController
 {
+    private const SAME_PASSWORD_ERR = "Your new password can't be same as the old one.";
+    private const OLD_PASSWORD_ERR = "Your old password is wrong.";
+    private const SUCCESS = "Your password has been udpated.";
     private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
@@ -43,17 +46,17 @@ final class ProfileSecurityController
                 $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
                 //If users current password doesn't match
                 if (md5($password) != $user['password']) {
-                    $errors['old_pass'] = "Your old password is wrong.";
+                    $errors['old_pass'] = self::OLD_PASSWORD_ERR;
                 }
                 else {
                     //Check if the new password is the same
                     if (md5($new_password) == $user['password']) {
-                        $errors['same_pass'] = "Your new password can't be same as the old one.";
+                        $errors['same_pass'] = self::SAME_PASSWORD_ERR;
                     }
                     //Update user password
                     else {
                         $this->container->get('user_repository')->updatePassword(md5($new_password), $_SESSION['user_id']);
-                        $info['success'] = "Your password has been udpated.";
+                        $info['success'] = self::SUCCESS;
                         return $this->container->get('view')->render($response, 
                         'profile_security.twig', 
                         [
