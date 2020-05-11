@@ -43,47 +43,33 @@
 				<tr>
 					<td class="light concepto">{{transaction.description}}</td>
 					<td class="right-align light importe">
-						{% if transaction['action'] == 'load' | transaction['action'] == 'receive' %}
-							+
+						{% if transaction.action == 'send' %}
+							-{{transaction.amount}}€
 						{% else %}
-							-
+							+{{transaction.amount}}€
 						{% endif %}
-						{{transaction['amount']}}</td>
+					</td>
 				</tr>
 			</td>
 		</tr>
 	{% endfor %}
 {% endif %}
-<tr>
-	<td class="light concepto">Hipoteca</td>
-	<td class="right-align light importe">-800€</td>
-</tr>
-<tr>
-	<td class="light concepto">Ingreso Cajero</td>
-	<td class="right-align light importe">+200€</td>
-</tr>
-<tr>
-	<td class="light concepto">Burger King</td>
-	<td class="right-align light importe">-39,95€</td>
-</tr>
-<tr>
-	<td class="light concepto">Ingreso Cajero</td>
-	<td class="right-align light importe">+50€</td>
-</tr>
-<tr>
-	<td class="light concepto">McDonald's</td>
-	<td class="right-align light importe">-3,95€</td>
-</tr></tbody></table></div><div class="section row"><div class="col s6"><div class="icon-block">
+</tbody>
+</table>
+</div>
+<div class="section row">
+<div class="col s6">
+<div class="icon-block">
 <h2 class="center">
 	<a href="#!" style="color:
-																							    					rgb(151, 10, 10) !important;">
+																													    					rgb(151, 10, 10) !important;">
 		<i class="material-icons">file_upload</i>
 	</a>
 </h2>
 <h5 class="center black-text">Send Money</h></div></div><div class="col s6"><div class="icon-block">
 <h2 class="center">
 	<a href="#!" style="color:
-																							    					rgb(151, 10, 10) !important;">
+																													    					rgb(151, 10, 10) !important;">
 		<i class="material-icons">file_download</i>
 	</a>
 </h2>
