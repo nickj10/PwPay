@@ -107,15 +107,17 @@ final class TransactionsController
         else {
             $data = $request->getParsedBody();
             $errors = $this->container->get('validator')->validateAmount($data);
+            $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+            $userAccount['owner_name'] = $user->owner_name();
+            $newIban = substr($user->iban(),0,6);
+            $userAccount['iban'] = $newIban;
             if (count($errors) == 0) {
                 try {
                     $userId = $_SESSION['user_id'];
                     $amount = $data['amount'];
+                    //Create transaction
                     $this->container->get('user_repository')->updateAccountBalance($userId, $amount);
-                    $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
-                    $userAccount['owner_name'] = $user->owner_name();
-                    $newIban = substr($user->iban(),0,6);
-                    $userAccount['iban'] = $newIban;
+                    $this->container->get('user_repository')->createTransaction(intval($userId), $user->account_id(), 'Load Money', intval($amount), 'load');
                     $info['success'] = "Money has been loaded to your wallet.";
                     return $this->container->get('view')->render(
                         $response,
@@ -137,6 +139,7 @@ final class TransactionsController
                 'loadMoney.twig',
                 [
                     'errors' => $errors,
+                    'account' =>$userAccount,
                     'session' => $_SESSION['user_id'],
                     'data' => $data
                 ]
