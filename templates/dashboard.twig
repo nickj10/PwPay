@@ -43,7 +43,7 @@
 				<tr>
 					<td class="light concepto">{{transaction.description}}</td>
 					<td class="right-align light importe">
-					{% if transaction.action == 'load' || transaction.action == 'receive' %}
+					{% if transaction.action == 'load' | transaction.action == 'receive' %}
 					+
 					{% else %}
 					-
