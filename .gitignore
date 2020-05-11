@@ -1,6 +1,6 @@
 /vendor/
 /var/
-/uploads/
+public/uploads/
 .DS_Store
 public/.DS_Store
 public/assets/.DS_Store
