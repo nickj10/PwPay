@@ -136,4 +136,13 @@ final class MySQLUserRepository implements UserRepository
         }
         return false;
     }
+
+    public function insertImage($file, $user_id) {
+        $query = "UPDATE user SET profile_picture = :file WHERE user_id = :id;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':file', $file);
+        $statement->bindParam(':id', $user_id);
+
+        $statement->execute();
+    }
 }

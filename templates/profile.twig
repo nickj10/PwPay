@@ -63,8 +63,11 @@
 							{% endif %}
 						</div>
 						{% if form_error is not empty %}
-								<p class="error-msg"> {{ form_error }} </p>
-							{% endif %}
+							<p class="error-msg"> {{ form_error }} </p>
+						{% endif %}
+						{% if info is not empty %}
+							<p class="error-msg"> {{ info }} </p>
+						{% endif %}
 						<br>
 						<br>
 						<div class="form-field center-align">

@@ -17,7 +17,7 @@ class ImageHandler {
 
     private $errors = array();
 
-    public function validateImage ($uploadedFile) {
+    public function manageImage ($uploadedFile, $user_id) {
         $file = $uploadedFile['files'];
         $name = $file->getClientFilename();
         $fileInfo = pathinfo($name);
@@ -47,10 +47,12 @@ class ImageHandler {
                     $cropImage = new Imagick($tmpName);
                     $cropImage->cropThumbnailImage(400,400);
                     $cropImage->writeImage(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $filename);
+                    return $filename;
                 }
                 else {
                     //If dimension is fine we generate a unique name and store it to a folder
                     $file->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $filename);
+                    return $filename;
                 }
             }
         }
