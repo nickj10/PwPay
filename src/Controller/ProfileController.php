@@ -12,6 +12,7 @@ final class ProfileController
 {
 
     private ContainerInterface $container;
+    private const FORM_ERROR = 'You have to upload a profile picture and a mobile number.';
 
     public function __construct(ContainerInterface $container)
     {
@@ -40,16 +41,23 @@ final class ProfileController
         }
         else {
             $uploadedFile = $request->getUploadedFiles();
+            $file = $uploadedFile['files'];
             $data = $request->getParsedBody();
             $image_errors = [];
             $form_errors = [];
-            //TODO: controlar si no ha puesto ninguna foto
-            $image_errors = $this->container->get('image_handler')->validateImage($uploadedFile);
-            $form_errors = $this->container->get('validator')->validateProfile($data);
             $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
+            if ($file->getError() === UPLOAD_ERR_OK) {
+                $image_errors = $this->container->get('image_handler')->validateImage($uploadedFile);
+                $form_errors = $this->container->get('validator')->validateProfile($data);
+                return $this->container->get('view')->render($response, 'profile.twig', [
+                    'image_errors' => $image_errors,
+                    'form_errors' => $form_errors,
+                    'user' => $user
+                ]);
+            }
+            $error['form_error'] = self::FORM_ERROR;
             return $this->container->get('view')->render($response, 'profile.twig', [
-                'image_errors' => $image_errors,
-                'form_errors' => $form_errors,
+                'form_error' => $error['form_error'],
                 'user' => $user
             ]);
         }
