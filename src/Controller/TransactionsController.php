@@ -34,10 +34,9 @@ final class TransactionsController
     public function associateAccountAction(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
-        //$errors = $this->validate($data);
-        $this->errors = $this->container->get('validator')->validateBankAssociation($data);
+        $errors = $this->container->get('validator')->validateBankAssociation($data);
         try {
-            if (count($this->errors) == 0) {
+            if (count($errors) == 0) {
                 $owner = filter_var($data['owner'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $iban = filter_var($data['iban'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $userId = $_SESSION['user_id'];
@@ -57,7 +56,7 @@ final class TransactionsController
                 'associateAccount.twig',
                 [
                     'session' => $_SESSION['user_id'],
-                    'errors' => $this->errors,
+                    'errors' => $errors,
                     'data' => $data
                 ]
             );
