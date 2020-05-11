@@ -89,7 +89,7 @@ final class MySQLUserRepository implements UserRepository
     {
         $userAccountInfo = $this->getBankAccountInformation($id);
 
-        $new_amount = $userAccountInfo['balance'] + $amount;
+        $new_amount = floatval($userAccountInfo->balance()) + $amount;
         $query = "UPDATE Accounts SET balance = :amount WHERE user_id = :userId;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $id, PDO::PARAM_STR);
@@ -225,6 +225,18 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
+    public function createTransaction($userId, $accountId, $type, $amount, $action) {
+        $query = "INSERT INTO Transactions (user_id, account_id, description, amount, action)
+                    VALUES (:userId, :accountId, :type, :amount, :action);"; 
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $userId);
+        $statement->bindParam(':accountId', $accountId);
+        $statement->bindParam(':amount', $amount);
+        $statement->bindParam(':type', $type);
+        $statement->bindParam(':action', $action);
+        $statement->execute();
+    }
+
     public function getAccountTransactions($userId) {
         $query = "SELECT * FROM Transactions WHERE user_id = :userId ORDER BY created_at DESC LIMIT 5;";
         $statement = $this->database->connection()->prepare($query);
@@ -239,8 +251,8 @@ final class MySQLUserRepository implements UserRepository
                 $transaction = new UserTransaction($rows[$i]['description'], $rows[$i]['action'], floatval($rows[$i]['amount']));
                 array_push($transactions, $transaction);
             }
+            return $transactions;
         }
-        return $transactions;
     }
     
 }

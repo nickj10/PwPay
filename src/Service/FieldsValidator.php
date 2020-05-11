@@ -57,6 +57,19 @@ class FieldsValidator
         return $this->errors;
     }
 
+    public function validateAmount(array $data) {
+        $this->errors = [];
+        if (empty($data['amount'])) {
+            $this->errors['amount_error'] = "Please indicate an amount to load.";
+        }
+        else {
+            if ($data['amount'] <= 0) {
+                $this->errors['amount_negative'] = "Please indicate a valid amount.";
+            }
+        }
+        return $this->errors;
+    }
+
     private function validateEmail ($data) {
         $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($email)) {
