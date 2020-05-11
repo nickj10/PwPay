@@ -25,6 +25,7 @@ final class HomeController
             $response,
             'home.twig',
             [
+                'session' => $_SESSION['user_id'],
                 'notifications' => $notifications
             ]
         );
