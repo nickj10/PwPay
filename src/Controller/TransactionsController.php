@@ -71,6 +71,7 @@ final class TransactionsController
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         } else {
+            // If user does not have an account, redirect to Associate Bank Account
             if (!($this->container->get('user_repository')->userHasAssociatedAccount($_SESSION['user_id']))) {
                 return $this->container->get('view')->render(
                     $response,
@@ -81,10 +82,13 @@ final class TransactionsController
                 );
             }
         }
+        $userAccount = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+        // Show Load Money page
         return $this->container->get('view')->render(
             $response,
             'loadMoney.twig',
             [
+                'accountInfo' => $userAccount,
                 'session' => $_SESSION['user_id']
             ]
         );

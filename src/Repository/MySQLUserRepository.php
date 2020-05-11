@@ -70,7 +70,7 @@ final class MySQLUserRepository implements UserRepository
 
     public function getBankAccountInformation($userId)
     {
-        $query = "SELECT * FROM ACCOUNTS WHERE user_id = :userId AND activity_status = 1;";
+        $query = "SELECT * FROM Accounts WHERE user_id = :userId AND activity_status = 1;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $id, PDO::PARAM_STR);
 
@@ -78,7 +78,9 @@ final class MySQLUserRepository implements UserRepository
         $count = $statement->rowCount();
         if ($count > 0) {
             $row = $statement->fetch();
-            $userInfo = new UserAccount($row['account_id'], $row['user_id'], $row['owner_id'], $row['iban'], $row['balance']);
+            if ($row['user_id'] == $userId) {
+                $userInfo = new UserAccount($row['account_id'], $row['user_id'], $row['owner_id'], $row['iban'], $row['balance']);
+            }
         }
         return $userInfo;
     }
