@@ -42,10 +42,12 @@ final class TransactionsController
                 $iban = filter_var($data['iban'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $userId = $_SESSION['user_id'];
                 $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
+                $userAccount = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
                 return $this->container->get('view')->render(
                     $response,
                     'loadMoney.twig',
                     [
+                        'account' => $userAccount,
                         'session' => $_SESSION['user_id']
                     ]
                 );
