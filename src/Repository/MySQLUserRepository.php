@@ -72,17 +72,17 @@ final class MySQLUserRepository implements UserRepository
     {
         $query = "SELECT * FROM Accounts WHERE user_id = :userId AND activity_status = 1;";
         $statement = $this->database->connection()->prepare($query);
-        $statement->bindParam(':userId', $id, PDO::PARAM_STR);
+        $statement->bindParam(':userId', $userId, PDO::PARAM_INT);
 
         $statement->execute();
         $count = $statement->rowCount();
         if ($count > 0) {
             $row = $statement->fetch();
             if ($row['user_id'] == $userId) {
-                $userInfo = new UserAccount($row['account_id'], $row['user_id'], $row['owner_id'], $row['iban'], $row['balance']);
+                $userInfo = new UserAccount(intval($row['account_id']), intval($row['user_id']), $row['owner_name'], $row['iban'], floatval($row['balance']));
+                return $userInfo;
             }
         }
-        return $userInfo;
     }
 
     public function updateAccountBalance($id, $amount)

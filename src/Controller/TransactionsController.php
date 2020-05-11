@@ -88,7 +88,7 @@ final class TransactionsController
             $response,
             'loadMoney.twig',
             [
-                'accountInfo' => $userAccount,
+                'account' => $userAccount,
                 'session' => $_SESSION['user_id']
             ]
         );

@@ -48,13 +48,11 @@ final class UserAccount
         return $this->balance;
     }
 
-    
-
     public function showAccountInfo() {
         $info = "<h1>Account information:</h1>";
         $info.= "Owner name: ".$this->owner_name;
         $info.= "<br/> IBAN: ".$this->iban;
-        $info.= "<br/> Balance: ".$this->balance
+        $info.= "<br/> Balance: ".$this->balance;
          
         return $info;
 
