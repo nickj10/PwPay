@@ -12,6 +12,8 @@ final class ProfileController
 {
 
     private ContainerInterface $container;
+    private const FORM_ERROR = 'You have to upload a profile picture and a mobile number.';
+    private const CHANGES_OK = 'Your user account has been updated.';
 
     public function __construct(ContainerInterface $container)
     {
@@ -40,16 +42,38 @@ final class ProfileController
         }
         else {
             $uploadedFile = $request->getUploadedFiles();
+            $file = $uploadedFile['files'];
             $data = $request->getParsedBody();
-            $image_errors = [];
+            $user_id = $_SESSION['user_id'];
             $form_errors = [];
-            //TODO: controlar si no ha puesto ninguna foto
-            $image_errors = $this->container->get('image_handler')->validateImage($uploadedFile);
-            $form_errors = $this->container->get('validator')->validateProfile($data);
-            $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
+            $user = $this->container->get('user_repository')->getUserInformationById($user_id);
+            //If a file and a mobile phone is provided
+            if ($file->getError() === UPLOAD_ERR_OK && !empty($data['phone'])) {
+                //Check if the provided mobile phone is valid
+                $form_errors = $this->container->get('validator')->validateProfile($data);
+                if (count($form_errors) == 0) {
+                    $this->container->get('user_repository')->updatePhone($data['phone'], $user_id);
+                    $image_response = $this->container->get('image_handler')->manageImage($uploadedFile, $user_id);
+                    if (!is_array($image_response)) {
+                        $this->container->get('user_repository')->insertImage($image_response, $user_id);
+                        $info = self::CHANGES_OK;
+                    }
+                    $updatedUser = $this->container->get('user_repository')->getUserInformationById($user_id);
+                    return $this->container->get('view')->render($response, 'profile.twig', [
+                        'image_errors' => $image_response,
+                        'form_errors' => $form_errors,
+                        'info' => $info,
+                        'user' => $updatedUser
+                    ]);
+                }
+                return $this->container->get('view')->render($response, 'profile.twig', [
+                    'form_errors' => $form_errors,
+                    'user' => $user
+                ]);
+            }
+            $error['form_error'] = self::FORM_ERROR;
             return $this->container->get('view')->render($response, 'profile.twig', [
-                'image_errors' => $image_errors,
-                'form_errors' => $form_errors,
+                'form_error' => $error['form_error'],
                 'user' => $user
             ]);
         }

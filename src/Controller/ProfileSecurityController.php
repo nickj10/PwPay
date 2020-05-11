@@ -36,8 +36,14 @@ final class ProfileSecurityController
         $data = $request->getParsedBody();
         if (!empty($data['save_button'])) {
             $errors = [];
+            $errors = $this->container->get('validator')->validateSecurityPassword($data);
 
-            return $this->container->get('view')->render($response, 'profile_security.twig', []);
+            return $this->container->get('view')->render($response, 
+                'profile_security.twig', 
+                [
+                    'errors' => $errors,
+                    'data' => $data
+                ]);
         }
         if (!empty($data['cancel_button'])) {
             return $response->withHeader('Location', '/profile')->withStatus(403);

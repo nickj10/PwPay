@@ -3,9 +3,10 @@
 declare(strict_types=1);
 
 namespace SallePW\SlimApp\Service;
+use Imagick;
 
 class ImageHandler {
-    private const UPLOADS_DIR = __DIR__ . '/../../uploads';
+    private const UPLOADS_DIR = '../public/uploads';
     private const UNEXPECTED_ERROR = "An unexpected error occurred uploading the file '%s'...";
     private const INVALID_EXTENSION_ERROR = "The received file extension '%s' is not valid (Only .png files)";
     private const INVALID_SIZE_ERROR = "Image size exceeds 1MB.";
@@ -16,7 +17,7 @@ class ImageHandler {
 
     private $errors = array();
 
-    public function validateImage ($uploadedFile) {
+    public function manageImage ($uploadedFile, $user_id) {
         $file = $uploadedFile['files'];
         $name = $file->getClientFilename();
         $fileInfo = pathinfo($name);
@@ -29,19 +30,31 @@ class ImageHandler {
             $this->errors['upload'] = sprintf(self::UNEXPECTED_ERROR, $name);
         }
         else {
+            $basename = bin2hex(random_bytes(8));
+            $filename = sprintf('%s.%0.8s', $basename, $format);
+            //Checks if extension is valid
             if ($format != self::ALLOWED_EXTENSION) {
                 $this->errors['extension'] = sprintf(self::INVALID_EXTENSION_ERROR, $format);
             }
+            //Checks if the size is valid
             if ($size >= self::ALLOWED_SIZE) {
                 $this->errors['size'] = self::INVALID_SIZE_ERROR;
             }
-            if ($width > self::ALLOWED_DIMENSION || $height > self::ALLOWED_DIMENSION) {
-                $this->errors['dimension'] = self::INVALID_DIMENSION_ERROR;
-
+            //If extension and size is valid, we check for the dimension
+            if ($format == self::ALLOWED_EXTENSION && $size <= self::ALLOWED_SIZE) {
+                //If dimension is too big, we crop the image to 400x400
+                if ($width > self::ALLOWED_DIMENSION || $height > self::ALLOWED_DIMENSION) {
+                    $cropImage = new Imagick($tmpName);
+                    $cropImage->cropThumbnailImage(400,400);
+                    $cropImage->writeImage(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $filename);
+                    return $filename;
+                }
+                else {
+                    //If dimension is fine we generate a unique name and store it to a folder
+                    $file->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $filename);
+                    return $filename;
+                }
             }
-            //TODO: Crop part, upload, and file name
-            // We generate a custom name here instead of using the one coming form the form
-            //$uploadedFile->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $name);
         }
         return $this->errors;
 

@@ -24,12 +24,33 @@
 						<div class="card-content">
 							<div class="form-field">
 								<input type="password" name="old_password" placeholder="Old password" />
+								{% if errors is not empty %}
+									<p class="error-msg"> {{ errors[''] }} </p>
+								{% endif %}
 							</div>
 							<div class="form-field">
 								<input type="password" name="new_password" placeholder="New password" />
+								{% if errors is not empty %}
+									<p class="error-msg"> {{ errors[''] }} </p>
+								{% endif %}
+								{% if errors['new_pass'] is not empty %}
+									<p class="error-msg"> {{ errors['new_pass'] }} </p>
+								{% endif %}
 							</div>
 							<div class="form-field">
 								<input type="password" name="repeat_password" placeholder="Repeat new password"/>
+								{% if errors['pass_match'] is not empty %}
+									<p class="error-msg"> {{ errors['pass_match'] }} </p>
+								{% endif %}
+								{% if errors['pass_pattern'] is not empty %}
+									<p class="error-msg"> {{ errors['pass_pattern'] }} </p>
+								{% endif %}
+								{% if errors['new_pass'] is not empty %}
+									<p class="error-msg"> {{ errors['new_pass'] }} </p>
+								{% endif %}
+								{% if errors['empty_fields'] is not empty %}
+									<p class="error-msg"> {{ errors['empty_fields'] }} </p>
+								{% endif %}
 							</div>
 							<br>
 							<br>

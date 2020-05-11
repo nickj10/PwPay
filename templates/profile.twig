@@ -21,7 +21,6 @@
 						
 						<h3 class="white-text" style="margin-top=75%">My Profile</h3>
 						<img src="/assets/pictures/default.png" alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
-						
 					</div>
 						
 					<div class="card-content">
@@ -57,11 +56,22 @@
 												readonly/>
 						</div>
 						<div class="form-field">
-							<input type="number" name="phone" placeholder="Phone"/>
+							<input type="number" name="phone" {% if user['phone'] == 0 %}
+																placeholder= "Phone"
+															  {% endif %}
+															  {% if user['phone'] != 0 %}
+																value = {{ user['phone'] }}
+															  {% endif %}/>
 							{% if form_errors['phone'] is not empty %}
 								<p class="error-msg"> {{ form_errors['phone'] }} </p>
 							{% endif %}
 						</div>
+						{% if form_error is not empty %}
+							<p class="error-msg"> {{ form_error }} </p>
+						{% endif %}
+						{% if info is not empty %}
+							<p class="error-msg"> {{ info }} </p>
+						{% endif %}
 						<br>
 						<br>
 						<div class="form-field center-align">
