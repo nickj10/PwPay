@@ -1,0 +1,48 @@
+{% extends "base.twig" %}
+
+{% block title %}Associate a bank account
+{% endblock %}
+
+{% block content %}
+	<div id="index-banner" class="empty-container associate-bank-account">
+		<form id="associate-bank-account" action="{{ url_for('associate-account')}}" method="POST">
+			<div class="row profile">
+				<div class="col s12 14 offset-14">
+					<div class="card">
+						<div class="card-action center red-text text-darken-4">
+							<h5>Associate a bank account</h5>
+						</div>
+						<div class="card-content">
+							<div class="form-field">
+								<label for="owner">Owner name:</label>
+								<input type="text" id="owner" name="owner" value={{data['owner']}}>
+								{% if errors['owner'] is not empty %}
+									<p class="error-msg">
+									{{ errors['owner'] }}
+									</p>
+								{% endif %}
+							</div>
+							<br>
+							<div class="form-field">
+								<label for="iban">IBAN:</label>
+								<input type="text" id="iban" name="iban" value={{data['iban']}}>
+								{% if errors['iban'] is not empty %}
+									<p class="error-msg">
+									{{ errors['iban'] }}
+									</p>
+								{% endif %}
+							</div>
+							<br>
+							<br>
+							<br>
+							<div class="form-field center-align">
+								<button type="submit" value="Save" class="btn-large waves-effect waves-light teal lighten-1">Save</button>
+							</div><br>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}
