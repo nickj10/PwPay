@@ -89,7 +89,7 @@ final class MySQLUserRepository implements UserRepository
     {
         $userAccountInfo = $this->getBankAccountInformation($id);
 
-        $new_amount = floatval($userAccountInfo['balance']) + $amount;
+        $new_amount = floatval($userAccountInfo->balance()) + $amount;
         $query = "UPDATE Accounts SET balance = :amount WHERE user_id = :userId;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $id, PDO::PARAM_STR);

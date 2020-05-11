@@ -98,38 +98,43 @@ final class TransactionsController
 
     public function loadMoneyAction(Request $request, Response $response): Response
     {
-        $data = $request->getParsedBody();
-        try {
-            if (count($this->errors) == 0) {
-                $amount = filter_var($data['amount']);
-                $userId = $_SESSION['user_id'];
-                $this->container->get('user_repository')->updateAccountBalance($userId, $amount);
-                $userAccount = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
-
-                return $this->container->get('view')->render(
-                    $response,
-                    'loadMoney.twig',
-                    [
-                        'account' => $userAccount,
-                        'session' => $userId
-                    ]
-                );
+        if (empty($_SESSION['user_id'])) {
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
+        }
+        else {
+            $data = $request->getParsedBody();
+            $errors = $this->container->get('validator')->validateAmount($data);
+            if (count($errors) == 0) {
+                try {
+                    $userId = $_SESSION['user_id'];
+                    $amount = $data['amount'];
+                    $this->container->get('user_repository')->updateAccountBalance($userId, $amount);
+                    $userAccount = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+                    $userAccount->iban() = "hola";
+                    $info['success'] = "Money has been loaded to your wallet.";
+                    return $this->container->get('view')->render(
+                        $response,
+                        'loadMoney.twig',
+                        [
+                            'account' => $userAccount,
+                            'info' => $info['success'],
+                            'session' => $userId
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $response->getBody()->write('Unexpected error: ' . $e->getMessage());
+                    return $response->withStatus(500);
+                }
             }
-
-            // Return errors for validations
-            return $this->container->get('view')->render(
+             // Return errors for validations
+             return $this->container->get('view')->render(
                 $response,
                 'loadMoney.twig',
                 [
-                    'errors' => $this->errors,
+                    'errors' => $errors,
                     'data' => $data
                 ]
             );
-        } catch (Exception $e) {
-            $response->getBody()->write('Unexpected error: ' . $e->getMessage());
-            return $response->withStatus(500);
-        }
-
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
+        }       
     }
 }
