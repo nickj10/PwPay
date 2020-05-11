@@ -3,7 +3,89 @@
 	My Profile
 {% endblock %}
 {% block content %}
-	<div class="profile">
-		<h3>User Profile Page</h3>
+	<style>
+		body {
+			background-image: url('assets/backgrounds/profile_background2.jpg');
+			background-size: cover;
+		}
+        p.error-msg {
+			color: black !important;
+		}
+	</style>
+	<div id="index-banner" class="empty-container">
+		<form enctype="multipart/form-data" action="{{ url_for('profile_form') }}" method="POST">
+			<div class="row profile">
+			<div class="col s12 14 offset-14">
+				<div class="card">
+					<div class="card-action center red darken-4 ">
+						
+						<h3 class="white-text" style="margin-top=75%">My Profile</h3>
+						<img src="/assets/pictures/default.png" alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
+					</div>
+						
+					<div class="card-content">
+					<br>
+					<br>
+						<br>
+						<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+						<br>
+    					<input id="examina" class="black-text" type="file" name="files"/>
+						
+						{% if image_errors['extension'] is not empty %}
+							<p class="error-msg"> {{ image_errors['extension'] }} </p>
+						{% endif %}
+						{% if image_errors['size'] is not empty %}
+							<p class="error-msg"> {{ image_errors['size'] }} </p>
+						{% endif %}
+						{% if image_errors['dimension'] is not empty %}
+							<p class="error-msg"> {{ image_errors['dimension'] }} </p>
+						{% endif %}
+						
+						<div class="form-field">
+						<br>
+							<label for="email">Email: </label>
+							<input type="text" name="email" {% if user is not empty %}
+												value= {{user['email']}}
+											{% endif %}	
+											readonly/>
+						</div>
+						<div class="form-field">
+							<label for="email">Birthday: </label>
+							<input type="text" name="birthday" {% if user is not empty %}
+													value= {{user['birthday']}}
+												{% endif %}	
+												readonly/>
+						</div>
+						<div class="form-field">
+							<label for="email">Phone number: </label>
+							<input type="number" name="phone" {% if user['phone'] == 0 %}
+																placeholder= "Introduce your phone number"
+															  {% endif %}
+															  {% if user['phone'] != 0 %}
+																value = {{ user['phone'] }}
+															  {% endif %}/>
+							{% if form_errors['phone'] is not empty %}
+								<p class="error-msg"> {{ form_errors['phone'] }} </p>
+							{% endif %}
+						</div>
+						{% if form_error is not empty %}
+							<p class="error-msg"> {{ form_error }} </p>
+						{% endif %}
+						{% if info is not empty %}
+							<p class="error-msg"> {{ info }} </p>
+						{% endif %}
+						<br>
+						<br>
+						<div class="form-field center-align">
+								<button type="submit" value="Save" class="btn-large waves-effect waves-light teal lighten-1">Save</button>
+								<p> <a href="http://pwpay.grup16:8030/profile/security" class="grey-text text-darken-1" style="text-decoration:underline;"> 
+									Change password </a>
+								</p>
+						</div><br>
+					</div>
+				</div>
+			</div>
+			</div>
+		</form>
 	</div>
 {% endblock %}
