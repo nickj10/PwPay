@@ -1,0 +1,10 @@
+{% extends "base.twig" %}
+{% block title %} Upload files {% endblock %}
+{% block content %}
+	<form id="send-form" action="{{ url_for('login', {"id": id})}}" method="POST">
+        <label for="email">Email</label>
+		<input type="text" id="send-to" name="send-to" placeholder="Send money to" value={{data['email']}}>     
+        <input type="text" id="amount" name="amount" placeholder="Indicate amount" value={{data['email']}}>        
+        <input type="submit" value="Send">
+    </form>
+{% endblock %}
