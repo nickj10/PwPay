@@ -40,19 +40,24 @@ final class TransactionsController
                 $owner = filter_var($data['owner'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $iban = str_replace(' ', '', filter_var($data['iban'], FILTER_SANITIZE_FULL_SPECIAL_CHARS));
                 $userId = $_SESSION['user_id'];
-                $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
-                $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
-                $userAccount['owner_name'] = $user->owner_name();
-                $newIban = substr($user->iban(),0,6);
-                $userAccount['iban'] = $newIban;
-                return $this->container->get('view')->render(
-                    $response,
-                    'loadMoney.twig',
-                    [
-                        'account' => $userAccount,
-                        'session' => $_SESSION['user_id']
-                    ]
-                );
+                //Check if account already exists
+                $exists = $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
+                if (!$exists) {
+                    $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
+                    $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+                    $userAccount['owner_name'] = $user->owner_name();
+                    $newIban = substr($user->iban(),0,6);
+                    $userAccount['iban'] = $newIban;
+                    return $this->container->get('view')->render(
+                        $response,
+                        'loadMoney.twig',
+                        [
+                            'account' => $userAccount,
+                            'session' => $_SESSION['user_id']
+                        ]
+                    );
+                }
+                $errors['account_exists'] = "This account already exists.";
             }
             return $this->container->get('view')->render(
                 $response,
