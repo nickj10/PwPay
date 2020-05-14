@@ -149,4 +149,20 @@ final class TransactionsController
             );
         }       
     }
+
+    public function showTransactions(Request $request, Response $response): Response
+    {
+        if (empty($_SESSION['user_id'])) {
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
+        }
+        $transactions = $this->container->get('user_repository')->getAllAccountTransactions($_SESSION['user_id']);
+        return $this->container->get('view')->render(
+            $response,
+            'transactions.twig',
+            [
+                'transactions' => $transactions,
+                'session' => $_SESSION['user_id']
+            ]
+        );
+    }
 }

@@ -68,3 +68,5 @@ $app->post('/account/bank-account/load', TransactionsController::class . ':loadM
 
 $app->get('/account/money/send', SendMoneyController::class . ':showSendMoneyForm');
 $app->post('/account/money/send', SendMoneyController::class . ':sendMoneyAction')->setName('send-money');
+
+$app->get('/account/transactions', TransactionsController::class . ':showTransactions');
