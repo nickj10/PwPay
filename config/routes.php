@@ -67,3 +67,4 @@ $app->post('/account/bank-account', TransactionsController::class . ':associateA
 $app->post('/account/bank-account/load', TransactionsController::class . ':loadMoneyAction')->setName('load-money');
 
 $app->get('/account/money/requests', RequestController::class . ':showRequest')->setName('request-money');
+$app->post('/account/money/requests', RequestController::class . ':requestAction');
