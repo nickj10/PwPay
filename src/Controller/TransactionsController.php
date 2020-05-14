@@ -109,7 +109,7 @@ final class TransactionsController
         }
         else {
             $data = $request->getParsedBody();
-            $errors = $this->container->get('validator')->validateAmount($data);
+            $errors = $this->container->get('validator')->validateLoadMoney($data);
             $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
             $userAccount['owner_name'] = $user->owner_name();
             $newIban = substr($user->iban(),0,6);
@@ -119,7 +119,7 @@ final class TransactionsController
                     $userId = $_SESSION['user_id'];
                     $amount = $data['amount'];
                     //Create transaction
-                    $this->container->get('user_repository')->updateAccountBalance($userId, $amount);
+                    $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "add");
                     $this->container->get('user_repository')->createTransaction(intval($userId), $user->account_id(), 'Load Money', intval($amount), 'load');
                     $info['success'] = "Money has been loaded to your wallet.";
                     return $this->container->get('view')->render(

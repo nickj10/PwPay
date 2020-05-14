@@ -1,10 +1,30 @@
 {% extends "base.twig" %}
 {% block title %} Upload files {% endblock %}
 {% block content %}
-	<form id="send-form" action="{{ url_for('login', {"id": id})}}" method="POST">
+	<form id="send-form" action="{{ url_for('send-money')}}" method="POST">
         <label for="email">Email</label>
-		<input type="text" id="send-to" name="send-to" placeholder="Send money to" value={{data['email']}}>     
-        <input type="text" id="amount" name="amount" placeholder="Indicate amount" value={{data['email']}}>        
+		<input type="text" id="email" name="email" placeholder="Send money to" {% if errors['email'] is empty %}
+                                                                                    value={{data['email']}}
+                                                                                {% endif %} >   
+        {% if errors['empty_email'] is not empty %}
+            <p> {{ errors['empty_email'] }} </p>
+        {% endif %}  
+        {% if errors['email'] is not empty %}
+            <p> {{ errors['email'] }} </p>
+        {% endif %}  
+        <label for="email">Amount</label> 
+        <input type="text" id="amount" name="amount" placeholder="Indicate amount" {% if errors['amount_negative'] is empty %}
+                                                                                        value={{data['amount']}}
+                                                                                    {% endif %} >   
+        {% if errors['empty_amount'] is not empty %}
+            <p> {{ errors['empty_amount'] }} </p>
+        {% endif %}    
+        {% if errors['amount_negative'] is not empty %}
+            <p> {{ errors['amount_negative'] }} </p>
+        {% endif %}  
+        {% if errors['empty_fields'] is not empty %}
+            <p> {{ errors['empty_fields'] }} </p>
+        {% endif %}    
         <input type="submit" value="Send">
     </form>
 {% endblock %}
