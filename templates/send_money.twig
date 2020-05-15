@@ -3,7 +3,7 @@
 {% block content %}
 	<form id="send-form" action="{{ url_for('send-money')}}" method="POST">
         <label for="email">Send money to</label>
-		<input type="text" id="email" name="email" placeholder="Introduce an email" {% if errors['email'] and errors['same_email'] is empty %}
+		<input type="text" id="email" name="email" placeholder="Introduce an email" {% if (errors['email']) and (errors['same_email']) and (errors['inactive_email']) and (errors['no_account']) is empty %}
                                                                                     value={{data['email']}}
                                                                                 {% endif %} >   
         {% if errors['empty_email'] is not empty %}
@@ -15,8 +15,14 @@
         {% if errors['same_email'] is not empty %}
             <p> {{ errors['same_email'] }} </p>
         {% endif %}  
+        {% if errors['inactive_email'] is not empty %}
+            <p> {{ errors['inactive_email'] }} </p>
+        {% endif %}  
+        {% if errors['no_account'] is not empty %}
+            <p> {{ errors['no_account'] }} </p>
+        {% endif %}  
         <label for="amount">Amount</label> 
-        <input type="text" id="amount" name="amount" placeholder="Indicate amount" {% if errors['amount_negative'] and errors['no_money'] is empty %}
+        <input type="text" id="amount" name="amount" placeholder="Indicate amount" {% if (errors['amount_negative']) and (errors['no_money']) is empty %}
                                                                                         value={{data['amount']}}
                                                                                     {% endif %} >   
         {% if errors['empty_amount'] is not empty %}

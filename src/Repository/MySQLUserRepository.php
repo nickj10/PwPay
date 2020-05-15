@@ -125,8 +125,8 @@ final class MySQLUserRepository implements UserRepository
         $count = $statement->rowCount();
         if ($count > 0) {
             $row = $statement->fetch();
+            return $row;
         }
-        return $row;
     }
 
     public function getUserById($id)

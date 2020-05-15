@@ -14,7 +14,8 @@ final class SendMoneyController
     private const SENT = 'SENT';
     private const NO_MONEY = "You don't have enough money. Current balance: %s €.";
     private const SAME_EMAIL = "You can't send money to your own self.";
-
+    private const INACTIVE_EMAIL = "You're trying to send money to an inactive account.";
+    private const NO_ACCOUNT = "The email you introduced doesn't have an account.";
 
     
     public function __construct(ContainerInterface $container)
@@ -60,6 +61,12 @@ final class SendMoneyController
                     //$this->container->get('user_repository')->createTransaction($userId, $accountId, 'Send Money', $amount, 'send');
                     //redirect to dashboard with Flash message
                 }
+                if ($result != null && $result['status'] != 'active') {
+                    $errors['inactive_email'] = self::INACTIVE_EMAIL;
+                }
+                if ($result == null) {
+                    $errors['no_account'] = self::NO_ACCOUNT;
+                }
             }
             else {
                 $errors['no_money'] = sprintf(self::NO_MONEY, $user['balance']);
@@ -68,6 +75,7 @@ final class SendMoneyController
                 }
             }
         }
+        var_dump($errors);
         return $this->container->get('view')->render(
             $response,
             'send_money.twig',
