@@ -75,7 +75,6 @@ final class SendMoneyController
                 }
             }
         }
-        var_dump($errors);
         return $this->container->get('view')->render(
             $response,
             'send_money.twig',
