@@ -12,6 +12,9 @@ final class SendMoneyController
 {
     private ContainerInterface $container;
     private const SENT = 'SENT';
+    private const NO_MONEY = "You don't have enough money. Current balance: %s €.";
+    private const SAME_EMAIL = "You can't send money to your own self.";
+
 
     
     public function __construct(ContainerInterface $container)
@@ -56,6 +59,12 @@ final class SendMoneyController
                     $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "sub");
                     //$this->container->get('user_repository')->createTransaction($userId, $accountId, 'Send Money', $amount, 'send');
                     //redirect to dashboard with Flash message
+                }
+            }
+            else {
+                $errors['no_money'] = sprintf(self::NO_MONEY, $user['balance']);
+                if ($user['email'] == $email) {
+                    $errors['same_email'] = self::SAME_EMAIL;
                 }
             }
         }
