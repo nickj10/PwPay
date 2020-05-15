@@ -16,7 +16,7 @@ final class SendMoneyController
     private const SAME_EMAIL = "You can't send money to your own self.";
     private const INACTIVE_EMAIL = "You're trying to send money to an inactive account.";
     private const NO_ACCOUNT = "The email you introduced doesn't have an account.";
-
+    private const SEND_OK = "You have successfully sent money to %s.";
     
     public function __construct(ContainerInterface $container)
     {
@@ -60,6 +60,8 @@ final class SendMoneyController
                     $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "sub");
                     //$this->container->get('user_repository')->createTransaction($userId, $accountId, 'Send Money', $amount, 'send');
                     //redirect to dashboard with Flash message
+                    $this->container->get('flash')->addMessage('notifications', sprintf(self::SEND_OK, $result['email']));
+                    return $response->withHeader('Location', '/account/summary')->withStatus(302);
                 }
                 if ($result != null && $result['status'] != 'active') {
                     $errors['inactive_email'] = self::INACTIVE_EMAIL;
