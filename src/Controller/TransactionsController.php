@@ -41,7 +41,7 @@ final class TransactionsController
                 $iban = str_replace(' ', '', filter_var($data['iban'], FILTER_SANITIZE_FULL_SPECIAL_CHARS));
                 $userId = $_SESSION['user_id'];
                 //Check if account already exists
-                $exists = $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
+                $exists = $this->container->get('user_repository')->accountExists($userId, $owner, $iban);
                 if (!$exists) {
                     $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
                     $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
