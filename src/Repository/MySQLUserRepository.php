@@ -236,6 +236,23 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
+    public function accountExists($userId, $owner, $iban) {
+        $query = "SELECT * FROM Accounts WHERE user_id = :userId;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $userId);
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $rows = $statement->fetchAll();
+            for ($i = 0; $i < $count; $i++) {
+                if ($row['owner_name'] == $owner && $row['iban'] == $iban) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public function getAccountTransactions($userId) {
         $query = "SELECT * FROM Transactions WHERE user_id = :userId ORDER BY created_at DESC LIMIT 5;";
         $statement = $this->database->connection()->prepare($query);
