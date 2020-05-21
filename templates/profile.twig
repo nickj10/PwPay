@@ -20,7 +20,11 @@
 					<div class="card-action center red darken-4 ">
 						
 						<h3 class="white-text" style="margin-top=75%">My Profile</h3>
-						<img src="/assets/pictures/default.png" alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
+						{% if profile_pic is not empty %}
+							<img src={{ '/uploads/' ~ profile_pic }} alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
+						{% else %}
+							<img src="/assets/pictures/default.png" alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
+						{% endif %}
 					</div>
 						
 					<div class="card-content">

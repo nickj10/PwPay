@@ -37,7 +37,11 @@
 					<li><a id="inSession" href="/account/transactions">Transactions</a></li>
 					<li>
 					<a id="inSession" href="/profile">
-						<img src="/assets/pictures/default.png" alt="Profile" class="circle responsive-img" width=25 height=25>
+						{% if profile_pic is not empty %}
+							<img src={{ '/uploads/' ~ profile_pic }} alt="Profile" class="circle responsive-img" width=25 height=25>
+						{% else %}
+							<img src="/assets/pictures/default.png" alt="Profile" class="circle responsive-img" width=25 height=25>
+						{% endif %}
 					</a>
 					<li>
 					<a id="inSession" href="javascript:clickLogout()"><i class="material-icons">exit_to_app</i></a>

@@ -22,11 +22,12 @@ final class TransactionsController
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
+        $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
         return $this->container->get('view')->render(
             $response,
             'associateAccount.twig',
             [
-                'session' => $_SESSION['user_id']
+                'session' => $_SESSION['user_id'],
             ]
         );
     }

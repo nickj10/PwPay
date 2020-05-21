@@ -33,6 +33,7 @@ final class AccountController
                 'notifications' => $notifications,
                 'transactions' => $transactions,
                 'session' => $_SESSION['user_id'],
+                'profile_pic' => $user['profile_picture'],
                 'user' => $user
             ]
         );
