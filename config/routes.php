@@ -68,6 +68,6 @@ $app->post('/account/bank-account/load', TransactionsController::class . ':loadM
 
 $app->get('/account/money/requests', RequestController::class . ':showRequest');
 $app->post('/account/money/requests', RequestController::class . ':requestAction')->setName('request-money');
-$app->get('/account/money/requests', RequestController::class . ':showRequestsPending');
+$app->get('/account/money/requests/pending', RequestController::class . ':showRequestsPending');
 $app->get('/account/money/requests/{id}/accept', RequestController::class . ':acceptRequest');
 
