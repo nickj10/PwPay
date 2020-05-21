@@ -85,10 +85,15 @@ final class MySQLUserRepository implements UserRepository
         }
     }
 
-    public function updateAccountBalance($id, $amount)
+    public function updateAccountBalance($id, $amount, $action)
     {
         $userAccountInfo = $this->getUserInformationById($id);
-        $new_amount = floatval($userAccountInfo['balance']) + $amount;
+        if ($action == "add") {
+            $new_amount = floatval($userAccountInfo['balance']) + $amount;
+        }
+        else {
+            $new_amount = floatval($userAccountInfo['balance']) - $amount;
+        }
         $query = "UPDATE user SET balance = :amount WHERE user_id = :userId;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $id, PDO::PARAM_STR);
@@ -120,8 +125,8 @@ final class MySQLUserRepository implements UserRepository
         $count = $statement->rowCount();
         if ($count > 0) {
             $row = $statement->fetch();
+            return $row;
         }
-        return $row;
     }
 
     public function getUserById($id)
@@ -269,6 +274,17 @@ final class MySQLUserRepository implements UserRepository
             }
             return $transactions;
         }
+    }
+
+    public function createRequest ($orgId, $destId, $amount, $status) {
+        $query = "INSERT INTO Requests (org_user_id, dest_user_id, amount, status)
+                    VALUES (:orgId, :destId, :amount, :status);";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':orgId', $orgId);
+        $statement->bindParam(':destId', $destId);
+        $statement->bindParam(':amount', $amount);
+        $statement->bindParam(':status', $status);
+        $statement->execute();
     }
     
     public function getAllAccountTransactions($userId) {

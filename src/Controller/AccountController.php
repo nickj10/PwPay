@@ -24,10 +24,13 @@ final class AccountController
         }
         $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
         $transactions = $this->container->get('user_repository')->getAccountTransactions($_SESSION['user_id']);
+        $messages = $this->container->get('flash')->getMessages();
+        $notifications = $messages['notifications'] ?? [];
         return $this->container->get('view')->render(
             $response,
             'dashboard.twig',
             [
+                'notifications' => $notifications,
                 'transactions' => $transactions,
                 'session' => $_SESSION['user_id'],
                 'user' => $user
