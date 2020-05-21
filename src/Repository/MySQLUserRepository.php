@@ -229,12 +229,11 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
-    public function createTransaction($userId, $accountId, $type, $amount, $action) {
-        $query = "INSERT INTO Transactions (user_id, account_id, description, amount, action)
-                    VALUES (:userId, :accountId, :type, :amount, :action);"; 
+    public function createTransaction($userId, $type, $amount, $action) {
+        $query = "INSERT INTO Transactions (user_id, description, amount, action)
+                    VALUES (:userId, :type, :amount, :action);"; 
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $userId);
-        $statement->bindParam(':accountId', $accountId);
         $statement->bindParam(':amount', $amount);
         $statement->bindParam(':type', $type);
         $statement->bindParam(':action', $action);
