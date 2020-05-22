@@ -2,8 +2,6 @@
 {% block title %} Upload files {% endblock %}
 {% block content %}
     <style>
-	<form id="send-form" action="{{ url_for('send-money')}}" method="POST">
-        <label for="email">Send money to</label>
 		<input type="text" id="email" name="email" placeholder="Introduce an email" {% if (errors['email']) and (errors['same_email']) and (errors['inactive_email']) and (errors['no_account']) is empty %}
                                                                                     value={{data['email']}}
                                                                                 {% endif %} >   
@@ -22,8 +20,6 @@
         {% if errors['no_account'] is not empty %}
             <p> {{ errors['no_account'] }} </p>
         {% endif %}  
-        <label for="amount">Amount</label> 
-        <input type="text" id="amount" name="amount" placeholder="Indicate amount" {% if (errors['amount_negative']) and (errors['no_money']) is empty %}
                                                                                         value={{data['amount']}}
                                                                                     {% endif %} >   
         {% if errors['empty_amount'] is not empty %}
@@ -38,6 +34,39 @@
         {% if errors['empty_fields'] is not empty %}
             <p> {{ errors['empty_fields'] }} </p>
         {% endif %}    
-        <input type="submit" value="Send">
-    </form>
+		p.error-msg {
+			color: black !important;
+		}
+	</style>
+	<div id="index-banner" class="empty-container send-money">
+		<form id="send-form" action="{{ url_for('send-money')}}" method="POST">
+			<div class="row profile">
+				<div class="col s12 14 offset-14">
+					<div class="card">
+						<div class="card-action center red-text text-darken-4">
+							<h5>Send Money</h5>
+						</div>
+						<div class="card-content">
+							<div class="form-field">
+								<label for="email">Send money to</label>
+		                            <input type="text" id="email" name="email" placeholder="Introduce an email" 
+							</div>
+							<br>
+							<div class="form-field">
+								<label for="amount">Amount</label> 
+                                <input type="text" id="amount" name="amount" placeholder="Indicate amount" 
+							</div>
+							<br>
+							<br>
+							<br>
+							<div class="form-field center-align">
+								<button type="submit" value="Send" class="btn-large waves-effect waves-light teal lighten-1">Send</button>
+							</div><br>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
 {% endblock %}
