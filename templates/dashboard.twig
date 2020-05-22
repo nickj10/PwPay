@@ -4,9 +4,9 @@
 {% endblock %}
 
 {% block content %}
-	<div class="container dashboard">
+	<div class="empty-container dashboard">
 		<br></br>
-	<div class="row">
+	<div class="row profile">
 		{% if notifications is not empty %}
 				{% for notification in notifications %}
                 <li>{{ notification }}</li>
@@ -66,14 +66,14 @@
 <div class="col s6">
 <div class="icon-block">
 <h2 class="center">
-	<a href="#!" style="color:
+	<a href="/account/money/send" style="color:
 																													    					rgb(151, 10, 10) !important;">
 		<i class="material-icons">file_upload</i>
 	</a>
 </h2>
 <h5 class="center black-text">Send Money</h></div></div><div class="col s6"><div class="icon-block">
 <h2 class="center">
-	<a href="/account/money/send" style="color:
+	<a href="#!" style="color:
 																													    					rgb(151, 10, 10) !important;">
 		<i class="material-icons">file_download</i>
 	</a>
