@@ -2,38 +2,6 @@
 {% block title %} Upload files {% endblock %}
 {% block content %}
     <style>
-		<input type="text" id="email" name="email" placeholder="Introduce an email" {% if (errors['email']) and (errors['same_email']) and (errors['inactive_email']) and (errors['no_account']) is empty %}
-                                                                                    value={{data['email']}}
-                                                                                {% endif %} >   
-        {% if errors['empty_email'] is not empty %}
-            <p> {{ errors['empty_email'] }} </p>
-        {% endif %}  
-        {% if errors['email'] is not empty %}
-            <p> {{ errors['email'] }} </p>
-        {% endif %}  
-        {% if errors['same_email'] is not empty %}
-            <p> {{ errors['same_email'] }} </p>
-        {% endif %}  
-        {% if errors['inactive_email'] is not empty %}
-            <p> {{ errors['inactive_email'] }} </p>
-        {% endif %}  
-        {% if errors['no_account'] is not empty %}
-            <p> {{ errors['no_account'] }} </p>
-        {% endif %}  
-                                                                                        value={{data['amount']}}
-                                                                                    {% endif %} >   
-        {% if errors['empty_amount'] is not empty %}
-            <p> {{ errors['empty_amount'] }} </p>
-        {% endif %}    
-        {% if errors['amount_negative'] is not empty %}
-            <p> {{ errors['amount_negative'] }} </p>
-        {% endif %}  
-        {% if errors['no_money'] is not empty %}
-            <p> {{ errors['no_money'] }} </p>
-        {% endif %} 
-        {% if errors['empty_fields'] is not empty %}
-            <p> {{ errors['empty_fields'] }} </p>
-        {% endif %}    
 		p.error-msg {
 			color: black !important;
 		}
@@ -50,11 +18,44 @@
 							<div class="form-field">
 								<label for="email">Send money to</label>
 		                            <input type="text" id="email" name="email" placeholder="Introduce an email" 
+                                        {% if (errors['email']) and (errors['same_email']) and (errors['inactive_email']) and (errors['no_account']) is empty %}
+                                            value={{data['email']}}
+                                        {% endif %} >   
+                                    {% if errors['empty_email'] is not empty %}
+                                        <p> {{ errors['empty_email'] }} </p>
+                                    {% endif %}  
+                                    {% if errors['email'] is not empty %}
+                                        <p> {{ errors['email'] }} </p>
+                                    {% endif %}  
+                                    {% if errors['same_email'] is not empty %}
+                                        <p> {{ errors['same_email'] }} </p>
+                                    {% endif %}  
+                                    {% if errors['inactive_email'] is not empty %}
+                                        <p> {{ errors['inactive_email'] }} </p>
+                                    {% endif %}  
+                                    {% if errors['no_account'] is not empty %}
+                                        <p> {{ errors['no_account'] }} </p>
+                                    {% endif %}  
 							</div>
 							<br>
 							<div class="form-field">
 								<label for="amount">Amount</label> 
                                 <input type="text" id="amount" name="amount" placeholder="Indicate amount" 
+                                    {% if (errors['amount_negative']) and (errors['no_money']) is empty %}
+                                        value={{data['amount']}}
+                                    {% endif %} >   
+                                    {% if errors['empty_amount'] is not empty %}
+                                        <p> {{ errors['empty_amount'] }} </p>
+                                    {% endif %}    
+                                    {% if errors['amount_negative'] is not empty %}
+                                        <p> {{ errors['amount_negative'] }} </p>
+                                    {% endif %}  
+                                    {% if errors['no_money'] is not empty %}
+                                        <p> {{ errors['no_money'] }} </p>
+                                    {% endif %} 
+                                    {% if errors['empty_fields'] is not empty %}
+                                        <p> {{ errors['empty_fields'] }} </p>
+                                    {% endif %} 
 							</div>
 							<br>
 							<br>
@@ -69,4 +70,5 @@
 			</div>
 		</form>
 	</div>
+
 {% endblock %}
