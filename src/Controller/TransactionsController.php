@@ -129,7 +129,7 @@ final class TransactionsController
                     $amount = $data['amount'];
                     //Create transaction
                     $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "add");
-                    $this->container->get('user_repository')->createTransaction(intval($userId), $user->account_id(), 'Load Money', intval($amount), 'load');
+                    $this->container->get('user_repository')->createTransaction(intval($userId), 'Load Money', intval($amount), 'load');
                     $info['success'] = "Money has been loaded to your wallet.";
                     return $this->container->get('view')->render(
                         $response,
