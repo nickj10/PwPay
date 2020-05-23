@@ -21,14 +21,23 @@ final class RequestController
         $this->container = $container;
     }
 
+    public function showRequestsPending(Request $request, Response $response): Response
+    {
+        if (empty($_SESSION['user_id'])) {
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
+        }
+        return $this->container->get('view')->render($response, 'pending_requests.twig', [
+            'session' => $_SESSION['user_id'],
+        ]);
+    }
+
     public function showRequest(Request $request, Response $response): Response
     {
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
         return $this->container->get('view')->render($response, 'request.twig', [
-            'session' => $_SESSION['user_id'],
-            'user' => $user
+            'session' => $_SESSION['user_id']
         ]);
     }
 
