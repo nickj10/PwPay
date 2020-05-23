@@ -40,19 +40,24 @@ final class TransactionsController
                 $owner = filter_var($data['owner'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $iban = str_replace(' ', '', filter_var($data['iban'], FILTER_SANITIZE_FULL_SPECIAL_CHARS));
                 $userId = $_SESSION['user_id'];
-                $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
-                $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
-                $userAccount['owner_name'] = $user->owner_name();
-                $newIban = substr($user->iban(),0,6);
-                $userAccount['iban'] = $newIban;
-                return $this->container->get('view')->render(
-                    $response,
-                    'loadMoney.twig',
-                    [
-                        'account' => $userAccount,
-                        'session' => $_SESSION['user_id']
-                    ]
-                );
+                //Check if account already exists
+                $exists = $this->container->get('user_repository')->accountExists($userId, $owner, $iban);
+                if (!$exists) {
+                    $this->container->get('user_repository')->saveAccount($userId, $owner, $iban);
+                    $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+                    $userAccount['owner_name'] = $user->owner_name();
+                    $newIban = substr($user->iban(),0,6);
+                    $userAccount['iban'] = $newIban;
+                    return $this->container->get('view')->render(
+                        $response,
+                        'loadMoney.twig',
+                        [
+                            'account' => $userAccount,
+                            'session' => $_SESSION['user_id']
+                        ]
+                    );
+                }
+                $errors['account_exists'] = "This account already exists.";
             }
             return $this->container->get('view')->render(
                 $response,
@@ -109,7 +114,7 @@ final class TransactionsController
         }
         else {
             $data = $request->getParsedBody();
-            $errors = $this->container->get('validator')->validateAmount($data);
+            $errors = $this->container->get('validator')->validateLoadMoney($data);
             $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
             $userAccount['owner_name'] = $user->owner_name();
             $newIban = substr($user->iban(),0,6);
@@ -119,7 +124,7 @@ final class TransactionsController
                     $userId = $_SESSION['user_id'];
                     $amount = $data['amount'];
                     //Create transaction
-                    $this->container->get('user_repository')->updateAccountBalance($userId, $amount);
+                    $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "add");
                     $this->container->get('user_repository')->createTransaction(intval($userId), $user->account_id(), 'Load Money', intval($amount), 'load');
                     $info['success'] = "Money has been loaded to your wallet.";
                     return $this->container->get('view')->render(
@@ -148,5 +153,21 @@ final class TransactionsController
                 ]
             );
         }       
+    }
+
+    public function showTransactions(Request $request, Response $response): Response
+    {
+        if (empty($_SESSION['user_id'])) {
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
+        }
+        $transactions = $this->container->get('user_repository')->getAllAccountTransactions($_SESSION['user_id']);
+        return $this->container->get('view')->render(
+            $response,
+            'transactions.twig',
+            [
+                'transactions' => $transactions,
+                'session' => $_SESSION['user_id']
+            ]
+        );
     }
 }

@@ -45,3 +45,14 @@ CREATE TABLE IF NOT EXISTS Transactions (
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id),
     PRIMARY KEY (transactions_id)
 );
+
+CREATE TABLE IF NOT EXISTS Requests (
+    request_id BIGINT AUTO_INCREMENT,
+    org_user_id BIGINT,
+    dest_user_id BIGINT,
+    amount FLOAT,
+    status VARCHAR(255) DEFAULT 'PENDING',
+    FOREIGN KEY (org_user_id) REFERENCES user(user_id),
+    FOREIGN KEY (dest_user_id) REFERENCES user(user_id),
+    PRIMARY KEY (request_id)
+);

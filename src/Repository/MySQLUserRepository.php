@@ -85,10 +85,15 @@ final class MySQLUserRepository implements UserRepository
         }
     }
 
-    public function updateAccountBalance($id, $amount)
+    public function updateAccountBalance($id, $amount, $action)
     {
         $userAccountInfo = $this->getUserInformationById($id);
-        $new_amount = floatval($userAccountInfo['balance']) + $amount;
+        if ($action == "add") {
+            $new_amount = floatval($userAccountInfo['balance']) + $amount;
+        }
+        else {
+            $new_amount = floatval($userAccountInfo['balance']) - $amount;
+        }
         $query = "UPDATE user SET balance = :amount WHERE user_id = :userId;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $id, PDO::PARAM_STR);
@@ -120,8 +125,8 @@ final class MySQLUserRepository implements UserRepository
         $count = $statement->rowCount();
         if ($count > 0) {
             $row = $statement->fetch();
+            return $row;
         }
-        return $row;
     }
 
     public function getUserById($id)
@@ -236,6 +241,23 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
+    public function accountExists($userId, $owner, $iban) {
+        $query = "SELECT * FROM Accounts WHERE user_id = :userId;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $userId);
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $rows = $statement->fetchAll();
+            for ($i = 0; $i < $count; $i++) {
+                if ($row['owner_name'] == $owner && $row['iban'] == $iban) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public function getAccountTransactions($userId) {
         $query = "SELECT * FROM Transactions WHERE user_id = :userId ORDER BY created_at DESC LIMIT 5;";
         $statement = $this->database->connection()->prepare($query);
@@ -253,6 +275,34 @@ final class MySQLUserRepository implements UserRepository
             return $transactions;
         }
     }
+
+    public function createRequest ($orgId, $destId, $amount, $status) {
+        $query = "INSERT INTO Requests (org_user_id, dest_user_id, amount, status)
+                    VALUES (:orgId, :destId, :amount, :status);";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':orgId', $orgId);
+        $statement->bindParam(':destId', $destId);
+        $statement->bindParam(':amount', $amount);
+        $statement->bindParam(':status', $status);
+        $statement->execute();
+    }
     
+    public function getAllAccountTransactions($userId) {
+        $query = "SELECT * FROM Transactions WHERE user_id = :userId ORDER BY created_at DESC;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $userId);
+        
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $rows = $statement->fetchAll();
+            $transactions = [];
+            for ($i = 0; $i < $count; $i++) {
+                $transaction = new UserTransaction($rows[$i]['description'], $rows[$i]['action'], floatval($rows[$i]['amount']));
+                array_push($transactions, $transaction);
+            }
+            return $transactions;
+        }
+    }
 }
 

@@ -15,7 +15,7 @@ use \SallePW\SlimApp\Controller\ProfileController;
 use \SallePW\SlimApp\Controller\TransactionsController;
 use \SallePW\SlimApp\Controller\ProfileSecurityController;
 use \SallePW\SlimApp\Controller\RequestController;
-
+use \SallePW\SlimApp\Controller\SendMoneyController;
 
 $app->add(StartSessionMiddleware::class);
 
@@ -66,5 +66,11 @@ $app->get('/account/bank-account', TransactionsController::class . ':showLoadMon
 $app->post('/account/bank-account', TransactionsController::class . ':associateAccountAction');
 $app->post('/account/bank-account/load', TransactionsController::class . ':loadMoneyAction')->setName('load-money');
 
+
 $app->get('/account/money/requests', RequestController::class . ':showRequest')->setName('request-money');
 $app->post('/account/money/requests', RequestController::class . ':requestAction');
+
+$app->get('/account/money/send', SendMoneyController::class . ':showSendMoneyForm');
+$app->post('/account/money/send', SendMoneyController::class . ':sendMoneyAction')->setName('send-money');
+
+$app->get('/account/transactions', TransactionsController::class . ':showTransactions');
