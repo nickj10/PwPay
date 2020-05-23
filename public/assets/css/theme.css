@@ -52,3 +52,33 @@ html {
   #examina{
     transform: translate(70%, 10px);
   }
+
+  .msg {
+    width:100%;
+    border: 1px solid;
+    padding:10px;
+    margin: 20px;
+    color: grey;
+  }
+  .msg-error {
+    border-color: #d32f2f;
+    background-color: #ef5350;
+    color: white;
+  }
+  .msg-alert {
+     border-color: #ef6c00;
+    background-color: #ff9800;
+    color: white;
+  }
+  
+  .msg-correct{
+    border-color: #1ea706;
+    background-color: #5db60a;
+    color: white;
+  }
+
+  .transactions-table{
+    margin-left: 15%;
+    margin-top: 5%;
+    width: 70%;
+  }

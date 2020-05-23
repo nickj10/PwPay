@@ -22,7 +22,7 @@ class Mailer {
             $mail->Port = 587;
             $mail->isHTML(true);
             $mail->setFrom('kayeann.ignacio@students.salle.url.edu', 'Pwpay');
-            $mail->addAddress($to);
+            $mail->addAddress('allneamtu@gmail.com');
             $mail->Subject = 'Activation Link';
             $mail->Body = 'Welcome to Pwpay! Click the following link to activate your account: http://' . $_SERVER['HTTP_HOST'] . '/activate?token=' . $token;
             $mail->send();
