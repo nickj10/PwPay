@@ -9,7 +9,7 @@
 	<div class="row profile">
 		{% if notifications is not empty %}
 			{% for notification in notifications %}
-				<li>{{ notification }}</li>
+				<div class="msg msg-correct z-depth-3">{{ notification }}</div>
 			{% endfor %}
 		{% endif %}
 		<div class="col s12 ">
@@ -39,9 +39,11 @@
 		<div class="col s12 center">
 			<h5>TRANSACTIONS</h5>
 		</div>
-		<br></br>
-	<br></br>
-<table class="striped responsive-table">
+		<br>
+	</br>
+	<br>
+</br>
+<table class="striped transactions-table">
 	<tbody>
 		{% if transactions is not empty %}
 			{% for transaction in transactions %}
