@@ -325,7 +325,7 @@ final class MySQLUserRepository implements UserRepository
             $requests = [];
             for ($i = 0; $i < $count; $i++) {
                 $user = $this->getUserInformationById(($rows[$i]['org_user_id']));
-                $request = new PendingRequest($user['email'], floatval($rows[$i]['amount']));
+                $request = new PendingRequest(intval($rows[$i]['request_id']), $user['email'], floatval($rows[$i]['amount']), $rows[$i]['status']);
                 array_push($requests, $request);
             }
             return $requests;
@@ -345,7 +345,7 @@ final class MySQLUserRepository implements UserRepository
             $requests = [];
             for ($i = 0; $i < $count; $i++) {
                 $user = $this->getUserInformationById(($rows[$i]['dest_user_id']));
-                $request = new PendingRequest($user['email'], floatval($rows[$i]['amount']));
+                $request = new PendingRequest(intval($rows[$i]['request_id']), $user['email'], floatval($rows[$i]['amount']), $rows[$i]['status']);
                 array_push($requests, $request);
             }
             return $requests;
