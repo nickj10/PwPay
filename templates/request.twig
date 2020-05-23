@@ -21,8 +21,7 @@
 			<div class="card-content">
 				<div class="form-field">
 					<label for="email">Request money from:</label>
-					<input type="text" id="email" name="email" 
-					{% if data is not empty %} value={{ data['email'] }} {% endif %}/>
+					<input type="text" id="email" name="email" {% if data is not empty %} value={{ data['email'] }} {% endif %}/>
 				</div>
 				<div class="form-field">
 					<label for="amount">Amount:</label>
@@ -46,6 +45,11 @@
 				{% if form_errors['emailInactive'] is not empty %}
 					<p class="error-msg">
 						{{ form_errors['emailInactive'] }}
+					</p>
+				{% endif %}
+				{% if form_errors['sameEmail'] is not empty %}
+					<p class="error-msg">
+						{{ form_errors['sameEmail'] }}
 					</p>
 				{% endif %}
 				<div class="form-field center-align">

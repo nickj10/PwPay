@@ -13,6 +13,7 @@ final class RequestController
     private ContainerInterface $container;
     private const REQUESTED = 'REQUESTED';
     private const NO_EMAIL_DDBB = 'This email is not in the ddbb';
+    private const SAME_EMAIL = 'You cannot request money from yourself';
     private const INACTIVE_USER = 'The user from whom you want to request money is inactive';
 
     public function __construct(ContainerInterface $container)
@@ -25,7 +26,10 @@ final class RequestController
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
-        return $this->container->get('view')->render($response, 'request.twig', []);
+        return $this->container->get('view')->render($response, 'request.twig', [
+            'session' => $_SESSION['user_id'],
+            'user' => $user
+        ]);
     }
 
     public function requestAction(Request $request, Response $response): Response
@@ -35,24 +39,32 @@ final class RequestController
         $errors = [];
         $errors = $this->container->get('validator')->validateMoneyRequest($data);
         try {
+            $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $amount = filter_var($data['amount'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
             //Check if user data already exists
             if (!($this->container->get('user_repository')->isEmailTaken($data['email']))) {
                 $errors['nonExistingEmail'] = self::NO_EMAIL_DDBB;
-            }
-            // Check if user is active
-            if (!($this->container->get('user_repository')->isUserActive($data['email']))) {
-                $errors['emailInactive'] = self::INACTIVE_USER;
+            } else {
+                // Get user dest id
+                $user = $this->container->get('user_repository')->getUserByEmail($email);
+                $destId = $user['user_id'];
+                if ($destId == $userId) {
+                    $errors['sameEmail'] = self::SAME_EMAIL;
+                } else {
+                    // Check if user is active
+                    if (!($this->container->get('user_repository')->isUserActive($data['email']))) {
+                        $errors['emailInactive'] = self::INACTIVE_USER;
+                    }
+                }
             }
             if (count($errors) == 0) {
-                $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $amount = filter_var($data['amount'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                
                 // Get user dest id
-                $user = $this->container->get('user_repository')->getUserByEmail($data['email']);
+                $user = $this->container->get('user_repository')->getUserByEmail($email);
                 $destId = $user['user_id'];
 
                 // Create the request for money
-                $this->container->get('user_repository')->createRequest($userId,$destId,$amount,self::REQUESTED);
+                $this->container->get('user_repository')->createRequest($userId, $destId, $amount, self::REQUESTED);
                 return $response->withHeader('Location', '/account/summary')->withStatus(302);
             }
 
