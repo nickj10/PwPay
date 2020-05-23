@@ -66,11 +66,13 @@ $app->get('/account/bank-account', TransactionsController::class . ':showLoadMon
 $app->post('/account/bank-account', TransactionsController::class . ':associateAccountAction');
 $app->post('/account/bank-account/load', TransactionsController::class . ':loadMoneyAction')->setName('load-money');
 
-
-$app->get('/account/money/requests', RequestController::class . ':showRequest')->setName('request-money');
-$app->post('/account/money/requests', RequestController::class . ':requestAction');
-
 $app->get('/account/money/send', SendMoneyController::class . ':showSendMoneyForm');
 $app->post('/account/money/send', SendMoneyController::class . ':sendMoneyAction')->setName('send-money');
 
 $app->get('/account/transactions', TransactionsController::class . ':showTransactions');
+
+$app->get('/account/money/requests', RequestController::class . ':showRequest');
+$app->post('/account/money/requests', RequestController::class . ':requestAction')->setName('request-money');
+$app->get('/account/money/requests/pending', RequestController::class . ':showRequestsPending');
+$app->get('/account/money/requests/{id}/accept', RequestController::class . ':acceptRequest');
+
