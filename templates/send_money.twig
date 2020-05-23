@@ -18,8 +18,10 @@
 							<div class="form-field">
 								<label for="email">Send money to</label>
 		                            <input type="text" id="email" name="email" placeholder="Introduce an email" 
-                                        {% if (errors['email']) and (errors['same_email']) and (errors['inactive_email']) and (errors['no_account']) is empty %}
-                                            value={{data['email']}}
+                                        {% if (errors['email']) or (errors['same_email']) or (errors['inactive_email']) or (errors['no_account']) is empty %}
+                                            {% if errors['amount_negative'] or errors['no_money'] or errors['empty_amount'] is empty %}
+                                                value={{data['email']}}
+                                            {% endif %}
                                         {% endif %} >   
                                     {% if errors['empty_email'] is not empty %}
                                         <p> {{ errors['empty_email'] }} </p>
@@ -42,6 +44,7 @@
 								<label for="amount">Amount</label> 
                                 <input type="text" id="amount" name="amount" placeholder="Indicate amount" 
                                     {% if (errors['amount_negative']) and (errors['no_money']) is empty %}
+                                        
                                         value={{data['amount']}}
                                     {% endif %} >   
                                     {% if errors['empty_amount'] is not empty %}

@@ -79,7 +79,7 @@ final class MySQLUserRepository implements UserRepository
         if ($count > 0) {
             $row = $statement->fetch();
             if ($row['user_id'] == $userId) {
-                $userInfo = new UserAccount(intval($row['account_id']), intval($row['user_id']), $row['owner_name'], $row['iban'], floatval($row['balance']));
+                $userInfo = new UserAccount(intval($row['account_id']), intval($row['user_id']), $row['owner_name'], $row['iban']);
                 return $userInfo;
             }
         }
