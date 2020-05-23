@@ -38,8 +38,16 @@
 						{{ errors['amount_negative'] }}
 					</p>
 				{% endif %}
-				<br>
-				<br>
+				{% if errors['nonExistingEmail'] is not empty %}
+					<p class="error-msg">
+						{{ errors['nonExistingEmail'] }}
+					</p>
+				{% endif %}
+				{% if errors['emailInactive'] is not empty %}
+					<p class="error-msg">
+						{{ errors['emailInactive'] }}
+					</p>
+				{% endif %}
 				<div class="form-field center-align">
 					<button type="submit" value="Request money" class="btn-large waves-effect waves-light teal lighten-1">Request money</button>
 				</div><br>
