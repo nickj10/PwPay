@@ -11,7 +11,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 final class RequestController
 {
     private ContainerInterface $container;
-    private const REQUESTED = 'REQUESTED';
+    private const REQUESTED = 'PENDING';
     private const NO_EMAIL_DDBB = 'This email is not in the ddbb';
     private const SAME_EMAIL = 'You cannot request money from yourself';
     private const INACTIVE_USER = 'The user from whom you want to request money is inactive';
