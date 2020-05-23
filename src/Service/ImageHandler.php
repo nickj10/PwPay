@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SallePW\SlimApp\Service;
 use Imagick;
+use ImagickDraw;
 
 class ImageHandler {
     private const UPLOADS_DIR = '../public/uploads';
@@ -44,8 +45,18 @@ class ImageHandler {
             if ($format == self::ALLOWED_EXTENSION && $size <= self::ALLOWED_SIZE) {
                 //If dimension is too big, we crop the image to 400x400
                 if ($width > self::ALLOWED_DIMENSION || $height > self::ALLOWED_DIMENSION) {
+                    $circle = new Imagick();
+                    $circle->newImage(400, 400, 'none');
+                    $circle->setimageformat('png');
+                    $circle->setimagematte(true);
+                    $draw = new ImagickDraw();
+                    $draw->setfillcolor('black');
+                    $draw->circle(400/2, 400/2, 400/2, 400);
+                    $circle->drawimage($draw);
+
                     $cropImage = new Imagick($tmpName);
                     $cropImage->cropThumbnailImage(400,400);
+                    $cropImage->compositeimage($circle, Imagick::COMPOSITE_DSTIN, 0, 0);
                     $cropImage->writeImage(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $filename);
                     return $filename;
                 }
