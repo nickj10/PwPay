@@ -10,6 +10,11 @@
 			<div class="col s12 center">
 				<h5>Pending Requests</h5>
 			</div>
+			{% if notifications is not empty %}
+				{% for notification in notifications %}
+					<li>{{ notification }}</li>
+				{% endfor %}
+			{% endif %}
 			<div class="incoming-request">
 				<div class="incoming-request__header">
 					<h6>Incoming Requests</h6>

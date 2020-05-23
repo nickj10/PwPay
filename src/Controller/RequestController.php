@@ -26,10 +26,14 @@ final class RequestController
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
+        $messages = $this->container->get('flash')->getMessages();
+        $notifications = $messages['notifications'] ?? [];
+
         $incoming_requests = $this->container->get('user_repository')->getPendingIncomingRequests($_SESSION['user_id']);
         $outgoing_requests = $this->container->get('user_repository')->getPendingOutgoingRequests($_SESSION['user_id']);
         return $this->container->get('view')->render($response, 'pending_requests.twig', [
             'session' => $_SESSION['user_id'],
+            'notifications' => $notifications,
             'incoming' => $incoming_requests,
             'outgoing' => $outgoing_requests
         ]);
@@ -57,13 +61,9 @@ final class RequestController
 
         // Return to pending requests page if there are errors
         if(count($errors) > 0) {
-            return $this->container->get('view')->render($response, 'pending_requests.twig', [
-                'session' => $_SESSION['user_id'],
-                'errors' => $errors
-            ]);
+            //$this->container->get('flash')->addMessage('notifications', sprintf(self::SEND_OK, $result['email']));
+            return $response->withHeader('Location', '/account/money/requests/pending')->withStatus(302);
         }
-        // Redirect to send money
-        return $response->withHeader('Location', '/account/money/send')->withStatus(302);
     }
 
     public function requestAction(Request $request, Response $response): Response
