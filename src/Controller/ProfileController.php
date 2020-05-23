@@ -31,6 +31,7 @@ final class ProfileController
             'profile.twig',
             [
                 'session' => $_SESSION['user_id'],
+                'profile_pic' => $user['profile_picture'],
                 'user' => $user
             ]
         );
@@ -61,6 +62,7 @@ final class ProfileController
                     $updatedUser = $this->container->get('user_repository')->getUserInformationById($user_id);
                     return $this->container->get('view')->render($response, 'profile.twig', [
                         'session' => $_SESSION['user_id'],
+                        'profile_pic' => $image_response,
                         'image_errors' => $image_response,
                         'form_errors' => $form_errors,
                         'info' => $info,

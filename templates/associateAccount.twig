@@ -40,6 +40,11 @@
 							<br>
 							<br>
 							<br>
+							{% if errors['account_exists'] is not empty %}
+									<p class="error-msg">
+									{{ errors['account_exists'] }}
+									</p>
+								{% endif %}
 							<div class="form-field center-align">
 								<button type="submit" value="Save" class="btn-large waves-effect waves-light teal lighten-1">Save</button>
 							</div><br>
