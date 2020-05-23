@@ -9,7 +9,7 @@
 	<div class="row profile">
 		{% if notifications is not empty %}
 				{% for notification in notifications %}
-                <li>{{ notification }}</li>
+				<div class="msg msg-correct z-depth-3">{{ notification }}</div>
             {% endfor %}
 		{% endif %}
 		<div class="col s12 ">
