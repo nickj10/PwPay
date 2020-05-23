@@ -26,10 +26,12 @@ final class RequestController
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
-        $requests = $this->container->get('user_repository')->getPendingRequests($_SESSION['user_id']);
+        $incoming_requests = $this->container->get('user_repository')->getPendingIncomingRequests($_SESSION['user_id']);
+        $outgoing_requests = $this->container->get('user_repository')->getPendingOutgoingRequests($_SESSION['user_id']);
         return $this->container->get('view')->render($response, 'pending_requests.twig', [
             'session' => $_SESSION['user_id'],
-            'requests' => $requests
+            'incoming' => $incoming_requests,
+            'outgoing' => $outgoing_requests
         ]);
     }
 

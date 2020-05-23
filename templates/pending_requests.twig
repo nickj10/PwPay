@@ -10,20 +10,44 @@
 			<div class="col s12 center">
 				<h5>Pending Requests</h5>
 			</div>
-			<table class="striped responsive-table">
-				<tbody>
-					{% if requests is not empty %}
-						{% for request in requests %}
-							<tr>
-								<td class="light concepto">{{request.org_email}}</td>
-								<td class="right-align light importe">
-									{{request.amount}}€
-								</td>
-							</tr>
-						{% endfor %}
-					{% endif %}
-				</tbody>
-			</table>
+			<div class="incoming-request">
+				<div class="incoming-request__header">
+					<h6>Incoming Requests</h6>
+				</div>
+				<table class="incoming-request__table striped responsive-table">
+					<tbody>
+						{% if incoming is not empty %}
+							{% for request in incoming %}
+								<tr>
+									<td class="light concepto">{{request.org_email}}</td>
+									<td class="right-align light importe">
+										{{request.amount}}€
+									</td>
+								</tr>
+							{% endfor %}
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+			<div class="outgoing-request">
+				<div class="outgoing-request__header">
+					<h6>Outgoing Requests</h6>
+				</div>
+				<table class="outgoing-request__table striped responsive-table">
+					<tbody>
+						{% if outgoing is not empty %}
+							{% for request in outgoing %}
+								<tr>
+									<td class="light concepto">{{request.org_email}}</td>
+									<td class="right-align light importe">
+										{{request.amount}}€
+									</td>
+								</tr>
+							{% endfor %}
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 {% endblock %}
