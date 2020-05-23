@@ -314,7 +314,7 @@ final class MySQLUserRepository implements UserRepository
 
     public function getPendingRequests($userId)
     {
-        $query = "SELECT * FROM Requests WHERE org_user_id = :userId && status = 'REQUESTED';";
+        $query = "SELECT * FROM Requests WHERE dest_user_id = :userId && status = 'PENDING';";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $userId);
 
@@ -324,8 +324,7 @@ final class MySQLUserRepository implements UserRepository
             $rows = $statement->fetchAll();
             $requests = [];
             for ($i = 0; $i < $count; $i++) {
-                $user = $this->getUserInformationById(($rows[$i]['dest_user_id']));
-                var_dump($user['email']);
+                $user = $this->getUserInformationById(($rows[$i]['org_user_id']));
                 $request = new PendingRequest($user['email'], floatval($rows[$i]['amount']));
                 array_push($requests, $request);
             }

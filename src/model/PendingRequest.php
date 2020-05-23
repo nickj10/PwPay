@@ -6,18 +6,18 @@ namespace SallePW\SlimApp\Model;
 
 final class PendingRequest
 {
-    private string $dest_email;
+    private string $org_email;
     private float $amount;
 
-    public function __construct($dest_email, $amount)
+    public function __construct($org_email, $amount)
     {
-        $this->dest_email = $dest_email;
+        $this->org_email = $org_email;
         $this->amount = $amount;
     }
 
-    public function dest_email(): string
+    public function org_email(): string
     {
-        return $this->dest_email;
+        return $this->org_email;
     }
 
     public function amount(): float
