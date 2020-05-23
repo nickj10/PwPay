@@ -53,6 +53,7 @@ final class RequestController
         // Check for errors
         $errors = [];
         // TODO: Do validations
+        $requestId = $request->getAttribute('id');
 
         // Return to pending requests page if there are errors
         if(count($errors) > 0) {
