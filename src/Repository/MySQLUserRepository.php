@@ -147,6 +147,22 @@ final class MySQLUserRepository implements UserRepository
         return false;
     }
 
+    public function isUserActive($email) {
+        $query = "SELECT * FROM user WHERE email = :email;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':email', $email, PDO::PARAM_STR);
+
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+            if ($row['status'] == 'active') {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getUserInformationById($id) {
         $query = "SELECT * FROM user WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
