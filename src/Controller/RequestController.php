@@ -48,7 +48,7 @@ final class RequestController
                 $amount = filter_var($data['amount'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 
                 // Get user dest id
-                $user = $this->container->get('user_repository')->isUserActive($data['email']);
+                $user = $this->container->get('user_repository')->getUserByEmail($data['email']);
                 $destId = $user['user_id'];
 
                 // Create the request for money
