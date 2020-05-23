@@ -11,6 +11,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 final class RequestController
 {
     private ContainerInterface $container;
+    private const REQUESTED = 'REQUESTED';
+    private const NO_EMAIL_DDBB = 'This email is not in the ddbb';
+    private const INACTIVE_USER = 'The user from whom you want to request money is inactive';
 
     public function __construct(ContainerInterface $container)
     {
@@ -28,31 +31,29 @@ final class RequestController
     public function requestAction(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
+        $userId = $_SESSION['user_id'];
         $errors = [];
         $errors = $this->container->get('validator')->validateMoneyRequest($data);
         try {
             //Check if user data already exists
             if (!($this->container->get('user_repository')->isEmailTaken($data['email']))) {
-                $errors['nonExistingEmail'] = 'This email is not in the ddbb';
+                $errors['nonExistingEmail'] = self::NO_EMAIL_DDBB;
             }
+            // Check if user is active
             if (!($this->container->get('user_repository')->isUserActive($data['email']))) {
-                $errors['emailInactive'] = 'The user from whom you want to request money is inactive';
+                $errors['emailInactive'] = self::INACTIVE_USER;
             }
             if (count($errors) == 0) {
                 $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $amount = filter_var($data['amount'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                
+                // Get user dest id
+                $user = $this->container->get('user_repository')->isUserActive($data['email']);
+                $destId = $user['user_id'];
 
-
-                //We have to retreive its id for the activation link
-                // $user = $this->container->get('user_repository')->getUserByEmail($email);
-                // $uuid = $this->container->get('user_repository')->generateUuid($user['user_id']);
-                // $emailSent = $this->container->get('mailer')->sendEmail($user['user_id'], $user['email'], $uuid);
-                // if ($emailSent) {
-                //     $errors['activation_link'] = "Great! Don't forget to check your email to validate your account.";
-                // }
-                // else {
-                //     $errors['activation_link'] = "Something wrong happened. Please try again.";
-                // }
+                // Create the request for money
+                $this->container->get('user_repository')->createRequest($userId,$destId,$amount,self::REQUESTED);
+                return $response->withHeader('Location', '/account/summary')->withStatus(302);
             }
 
             return $this->container->get('view')->render(
