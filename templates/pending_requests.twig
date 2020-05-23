@@ -4,6 +4,17 @@
 {% endblock %}
 
 {% block content %}
+	<style>
+		.incoming-request,
+		.outgoing-request {
+			margin-bottom: 24px;
+		}
+
+		.incoming-request__empty,
+		.outgoing-request__empty {
+			margin-top: 16px;
+		}
+	</style>
 	<div class="container transactions">
 
 		<div class="section row">
@@ -19,16 +30,16 @@
 				<div class="incoming-request__header">
 					<h6>Incoming Requests</h6>
 				</div>
-				<table class="incoming-request__table highlight responsive-table">
-					<thead>
-						<tr>
-							<th>Email</th>
-							<th>Amount</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						{% if incoming is not empty %}
+				{% if incoming is not empty %}
+					<table class="incoming-request__table highlight responsive-table">
+						<thead>
+							<tr>
+								<th>Email</th>
+								<th>Amount</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
 							{% for request in incoming %}
 								<tr>
 									<td class="light concepto">{{request.org_email}}</td>
@@ -40,24 +51,29 @@
 									</td>
 								</tr>
 							{% endfor %}
-						{% endif %}
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				{% else %}
+					<div class="incoming-request__empty">
+						You do not have incoming requests yet.
+					</div>
+				{% endif %}
 			</div>
 			<div class="outgoing-request">
 				<div class="outgoing-request__header">
 					<h6>Outgoing Requests</h6>
 				</div>
-				<table class="outgoing-request__table highlight responsive-table">
-					<thead>
-						<tr>
-							<th>Email</th>
-							<th>Amount</th>
-							<th>Status</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% if outgoing is not empty %}
+				{% if outgoing is not empty %}
+					<table class="outgoing-request__table highlight responsive-table">
+						<thead>
+							<tr>
+								<th>Email</th>
+								<th>Amount</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+
 							{% for request in outgoing %}
 								<tr>
 									<td class="light concepto">{{request.org_email}}</td>
@@ -68,11 +84,13 @@
 										{{request.status}}
 									</td>
 								</tr>
-							</d>
-						</tr>
-					{% endfor %}
-				{% endif %}
-			</tbody>
-		</table>
+							{% endfor %}
+						</tbody>
+					</tr>
+				</tbody>
+			</table>
+		{% else %}
+			<div class="outgoing-request__empty">You do not have sent any requests yet.</div>
+		{% endif %}
 	</div>
 </div></div>{% endblock %}
