@@ -42,7 +42,7 @@
 							<br>
 							<div class="form-field">
 								<label for="amount">Amount</label> 
-                                <input type="text" id="amount" name="amount" placeholder="Indicate amount" 
+                                <input type="number" id="amount" name="amount" placeholder="Indicate amount" 
                                     {% if (errors['amount_negative']) and (errors['no_money']) is empty %}
                                         
                                         value={{data['amount']}}
