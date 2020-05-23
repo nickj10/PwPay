@@ -28,24 +28,24 @@
 					<label for="amount">Amount:</label>
 					<input type="number" step="0.01" id="amount" name="amount" placeholder="Introduce amount" value={{data['amount']}}>
 				</div>
-				{% if errors['amount_error'] is not empty %}
+				{% if form_errors['amount_error'] is not empty %}
 					<p class="error-msg">
-						{{ errors['amount_error'] }}
+						{{ form_errors['amount_error'] }}
 					</p>
 				{% endif %}
-				{% if errors['amount_negative'] is not empty %}
+				{% if form_errors['amount_negative'] is not empty %}
 					<p class="error-msg">
-						{{ errors['amount_negative'] }}
+						{{ form_errors['amount_negative'] }}
 					</p>
 				{% endif %}
-				{% if errors['nonExistingEmail'] is not empty %}
+				{% if form_errors['nonExistingEmail'] is not empty %}
 					<p class="error-msg">
-						{{ errors['nonExistingEmail'] }}
+						{{ form_errors['nonExistingEmail'] }}
 					</p>
 				{% endif %}
-				{% if errors['emailInactive'] is not empty %}
+				{% if form_errors['emailInactive'] is not empty %}
 					<p class="error-msg">
-						{{ errors['emailInactive'] }}
+						{{ form_errors['emailInactive'] }}
 					</p>
 				{% endif %}
 				<div class="form-field center-align">
