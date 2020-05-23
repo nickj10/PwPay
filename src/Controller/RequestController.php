@@ -45,6 +45,26 @@ final class RequestController
         ]);
     }
 
+    public function acceptRequest(Request $request, Response $response): Response
+    {
+        if (empty($_SESSION['user_id'])) {
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
+        }
+        // Check for errors
+        $errors = [];
+        // TODO: Do validations
+
+        // Return to pending requests page if there are errors
+        if(count($errors) > 0) {
+            return $this->container->get('view')->render($response, 'pending_requests.twig', [
+                'session' => $_SESSION['user_id'],
+                'errors' => $errors
+            ]);
+        }
+        // Redirect to send money
+        return $response->withHeader('Location', '/account/money/send')->withStatus(302);
+    }
+
     public function requestAction(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
