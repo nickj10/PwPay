@@ -22,11 +22,13 @@ final class TransactionsController
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
+        $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
         return $this->container->get('view')->render(
             $response,
             'associateAccount.twig',
             [
-                'session' => $_SESSION['user_id']
+                'session' => $_SESSION['user_id'],
+                'profile_pic' => $user['profile_picture']
             ]
         );
     }
@@ -80,21 +82,22 @@ final class TransactionsController
     {
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
-        } else {
-            // If user does not have an account, redirect to Associate Bank Account
-            if (!($this->container->get('user_repository')->userHasAssociatedAccount($_SESSION['user_id']))) {
-                return $this->container->get('view')->render(
-                    $response,
-                    'associateAccount.twig',
-                    [
-                        'session' => $_SESSION['user_id']
-                    ]
-                );
-            }
         }
-        $user = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
-        $userAccount['owner_name'] = $user->owner_name();
-        $newIban = substr($user->iban(),0,6);
+        // If user does not have an account, redirect to Associate Bank Account
+        $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
+        if (!($this->container->get('user_repository')->userHasAssociatedAccount($_SESSION['user_id']))) {
+            return $this->container->get('view')->render(
+                $response,
+                'associateAccount.twig',
+                [
+                    'session' => $_SESSION['user_id'],
+                    'profile_pic' => $user['profile_picture']
+                ]
+            );
+        }
+        $userInfo = $this->container->get('user_repository')->getBankAccountInformation($_SESSION['user_id']);
+        $userAccount['owner_name'] = $userInfo->owner_name();
+        $newIban = substr($userInfo->iban(),0,6);
         $userAccount['iban'] = $newIban;
         // Show Load Money page
         return $this->container->get('view')->render(
@@ -102,6 +105,7 @@ final class TransactionsController
             'loadMoney.twig',
             [
                 'account' => $userAccount,
+                'profile_pic' => $user['profile_picture'],
                 'session' => $_SESSION['user_id']
             ]
         );
@@ -125,7 +129,7 @@ final class TransactionsController
                     $amount = $data['amount'];
                     //Create transaction
                     $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "add");
-                    $this->container->get('user_repository')->createTransaction(intval($userId), $user->account_id(), 'Load Money', intval($amount), 'load');
+                    $this->container->get('user_repository')->createTransaction(intval($userId), 'Load Money', intval($amount), 'load');
                     $info['success'] = "Money has been loaded to your wallet.";
                     return $this->container->get('view')->render(
                         $response,
@@ -161,11 +165,13 @@ final class TransactionsController
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
         $transactions = $this->container->get('user_repository')->getAllAccountTransactions($_SESSION['user_id']);
+        $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
         return $this->container->get('view')->render(
             $response,
             'transactions.twig',
             [
                 'transactions' => $transactions,
+                'profile_pic' => $user['profile_picture'],
                 'session' => $_SESSION['user_id']
             ]
         );

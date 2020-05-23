@@ -4,9 +4,9 @@
 {% endblock %}
 
 {% block content %}
-	<div class="container dashboard">
+	<div class="empty-container dashboard">
 		<br></br>
-	<div class="row">
+	<div class="row profile">
 		{% if notifications is not empty %}
 			{% for notification in notifications %}
 				<li>{{ notification }}</li>

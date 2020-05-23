@@ -58,7 +58,7 @@ final class SendMoneyController
                     $this->container->get('user_repository')->updateAccountBalance($destId,$amount,"add");
                     //update user new balance & create transaction
                     $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "sub");
-                    //$this->container->get('user_repository')->createTransaction($userId, $accountId, 'Send Money', $amount, 'send');
+                    $this->container->get('user_repository')->createTransaction($userId, 'Send Money', $amount, 'send');
                     //redirect to dashboard with Flash message
                     $this->container->get('flash')->addMessage('notifications', sprintf(self::SEND_OK, $result['email']));
                     return $response->withHeader('Location', '/account/summary')->withStatus(302);

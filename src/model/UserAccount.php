@@ -12,15 +12,13 @@ final class UserAccount
     private int $user_id;
     private string $owner_name;
     private string $iban;
-    private float $balance;
 
-    public function __construct($account_id, $user_id, $owner_name, $iban, $balance) 
+    public function __construct($account_id, $user_id, $owner_name, $iban) 
     {
         $this->account_id = $account_id;
         $this->user_id = $user_id;
         $this->owner_name = $owner_name;
         $this->iban = $iban;   
-        $this->balance = $balance;   
     }     
 
     public function account_id(): int
@@ -42,17 +40,11 @@ final class UserAccount
     {
         return $this->iban;
     }
-    
-    public function balance(): float
-    {
-        return $this->balance;
-    }
 
     public function showAccountInfo() {
         $info = "<h1>Account information:</h1>";
         $info.= "Owner name: ".$this->owner_name;
         $info.= "<br/> IBAN: ".$this->iban;
-        $info.= "<br/> Balance: ".$this->balance;
          
         return $info;
 
