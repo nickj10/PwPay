@@ -26,18 +26,22 @@ final class RequestController
     }
 
     public function requestAction(Request $request, Response $response): Response
-    {        
+    {
         $data = $request->getParsedBody();
         $errors = [];
         $errors = $this->container->get('validator')->validateMoneyRequest($data);
         try {
             //Check if user data already exists
             if (!($this->container->get('user_repository')->isEmailTaken($data['email']))) {
-                $errors['emailTaken'] = 'This email is not in the ddbb';
+                $errors['nonExistingEmail'] = 'This email is not in the ddbb';
+            }
+            if (!($this->container->get('user_repository')->isUserActive($data['email']))) {
+                $errors['emailInactive'] = 'The user from whom you want to request money is inactive';
             }
             if (count($errors) == 0) {
-                $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $amount = filter_var($data['amount'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $amount = filter_var($data['amount'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
 
                 //We have to retreive its id for the activation link
                 // $user = $this->container->get('user_repository')->getUserByEmail($email);
@@ -50,8 +54,8 @@ final class RequestController
                 //     $errors['activation_link'] = "Something wrong happened. Please try again.";
                 // }
             }
-            
-            return $this->container->get('view')->render (
+
+            return $this->container->get('view')->render(
                 $response,
                 'request.twig',
                 [
