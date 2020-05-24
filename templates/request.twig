@@ -14,10 +14,28 @@
 			<div class="row profile">
 				<div class="col s12 14 offset-14">
 					<div class="card">
+						<div class="card-action center red-text text-darken-4">
+							<h5>Request Money</h5>
+						</div>
 						<div class="card-content">
 						<br>
 						<br>
 						<br>
+						<div class="form-field">
+							<label for="email">Request money from:</label>
+							<input type="text" id="email" name="email" 
+							{% if data is not empty %} value={{ data['email'] }} 
+							{% endif %}/>
+						</div>
+						<div class="form-field">
+							<label for="amount">Amount:</label>
+							<input type="number" step="0.01" 
+							id="amount" name="amount" 
+							placeholder="Introduce amount" 
+							value={{data['amount']}}>
+						</div>
+						{% if form_errors['amount_error'] is not empty %}
+							<p class="error-msg">
 						{{ form_errors['amount_error'] }}
 					</p>
 				{% endif %}
