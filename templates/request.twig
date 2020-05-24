@@ -37,31 +37,28 @@
 						{% if form_errors['amount_error'] is not empty %}
 							<p class="error-msg">
 						{{ form_errors['amount_error'] }}
-					</p>
-				{% endif %}
-				{% if form_errors['amount_negative'] is not empty %}
-					<p class="error-msg">
+							</p>
+						{% endif %}
+						{% if form_errors['amount_negative'] is not empty %}
+							<p class="error-msg">
 						{{ form_errors['amount_negative'] }}
-					</p>
-				{% endif %}
-				{% if form_errors['nonExistingEmail'] is not empty %}
-					<p class="error-msg">
+							</p>
+						{% endif %}
+						{% if form_errors['nonExistingEmail'] is not empty %}
+							<p class="error-msg">
 						{{ form_errors['nonExistingEmail'] }}
-					</p>
-				{% endif %}
-				{% if form_errors['emailInactive'] is not empty %}
-					<p class="error-msg">
+							</p>
+						{% endif %}
+						{% if form_errors['emailInactive'] is not empty %}
+							<p class="error-msg">
 						{{ form_errors['emailInactive'] }}
-					</p>
-				{% endif %}
-				{% if form_errors['sameEmail'] is not empty %}
-					<p class="error-msg">
+							</p>
+						{% endif %}
+						{% if form_errors['sameEmail'] is not empty %}
+							<p class="error-msg">
 						{{ form_errors['sameEmail'] }}
-					</p>
-				{% endif %}
-				<div class="form-field center-align">
-					<button type="submit" value="Request money" class="btn-large waves-effect waves-light teal lighten-1">Request money</button>
-				</div><br>
+							</p>
+						{% endif %}
 						<div class="form-field center-align">
 							<button type="submit" value="Request money" class="btn-large waves-effect waves-light teal lighten-1">Request money</button>
 						</div>
