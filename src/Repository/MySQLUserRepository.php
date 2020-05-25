@@ -312,9 +312,18 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
+    public function updateRequest($requestId, $status)
+    {
+        $query = "UPDATE Requests SET status = :stat WHERE request_id = :reqId ;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':reqId', $requestId);
+        $statement->bindParam(':stat', $status);
+        $statement->execute();
+    }
+
     public function getPendingIncomingRequests($userId)
     {
-        $query = "SELECT * FROM Requests WHERE dest_user_id = :userId && status = 'PENDING';";
+        $query = "SELECT * FROM Requests WHERE dest_user_id = :userId && (status = 'PENDING' OR status = 'PAID');";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $userId);
 
