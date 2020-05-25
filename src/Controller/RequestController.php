@@ -32,11 +32,12 @@ final class RequestController
         }
         $messages = $this->container->get('flash')->getMessages();
         $notifications = $messages['notifications'] ?? [];
-
+        $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
         $incoming_requests = $this->container->get('user_repository')->getPendingIncomingRequests($_SESSION['user_id']);
         $outgoing_requests = $this->container->get('user_repository')->getPendingOutgoingRequests($_SESSION['user_id']);
         return $this->container->get('view')->render($response, 'pending_requests.twig', [
             'session' => $_SESSION['user_id'],
+            'profile_pic' => $user['profile_picture'],
             'notifications' => $notifications,
             'incoming' => $incoming_requests,
             'outgoing' => $outgoing_requests
@@ -48,8 +49,10 @@ final class RequestController
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
+        $user = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
         return $this->container->get('view')->render($response, 'request.twig', [
-            'session' => $_SESSION['user_id']
+            'session' => $_SESSION['user_id'],
+            'profile_pic' => $user['profile_picture']
         ]);
     }
 
