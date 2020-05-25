@@ -16,7 +16,7 @@ final class RequestController
     private const SAME_EMAIL = 'You cannot request money from yourself';
     private const INACTIVE_USER = 'The user from whom you want to request money is inactive';
     private const INCORRECT_USER = 'You are not the one to whom the request is assigned to';
-    private const NOT_ENOUGH_MONEY = 'You do not have enough balance in your wallet';
+    private const NOT_ENOUGH_MONEY = 'You do not have enough balance in your wallet to send %.2f';
 
     public function __construct(ContainerInterface $container)
     {
@@ -63,26 +63,26 @@ final class RequestController
 
         // Get information from the ddbb
         $moneyRequest = $this->container->get('user_repository')->getRequestById($requestId);
-        $userInfo = $this->container->get('user_repository')->getUserById($_SESSION['user_id']);
+        $userInfo = $this->container->get('user_repository')->getUserInformationById($_SESSION['user_id']);
 
         // Check if the user is the one to whom the request is assigned to
-        if ($moneyRequest['dest_user_id'] == $_SESSION['user_id']) {
+        if ($moneyRequest['dest_user_id'] != $_SESSION['user_id']) {
             $errors['incorrectUser'] = self::INCORRECT_USER;
-        }
-
-        // Check if the user has enough money to fulfil the request
-        if ($userInfo['balance'] >= $moneyRequest['amount']) {
-            $errors['insuficientBalance'] = self::NOT_ENOUGH_MONEY;
+            $this->container->get('flash')->addMessage('notifications', self::INCORRECT_USER);
+        } else {
+            // Check if the user has enough money to fulfil the request
+            if (floatval($userInfo['balance']) >= floatval($moneyRequest['amount'])) {
+                $errors['insuficientBalance'] = self::NOT_ENOUGH_MONEY;
+                $this->container->get('flash')->addMessage('notifications', sprintf(self::NOT_ENOUGH_MONEY));
+            }
         }
 
         // Return to pending requests page if there are errors
-        if(count($errors) > 0) {
-            //$this->container->get('flash')->addMessage('notifications', sprintf(self::SEND_OK, $result['email']));
+        if (count($errors) > 0) {
+
             return $response->withHeader('Location', '/account/money/requests/pending')->withStatus(302);
         } else {
-            
         }
-
     }
 
     public function requestAction(Request $request, Response $response): Response
