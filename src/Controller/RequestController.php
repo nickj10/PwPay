@@ -13,7 +13,7 @@ final class RequestController
     private ContainerInterface $container;
     private const PAID = 'PAID';
     private const REQUESTED = 'PENDING';
-    private const NO_EMAIL_DDBB = 'This email is not in the ddbb';
+    private const NO_EMAIL_DDBB = 'This email is not registered in the database';
     private const SAME_EMAIL = 'You cannot request money from yourself';
     private const INACTIVE_USER = 'The user from whom you want to request money is inactive';
     private const INCORRECT_USER = 'You are not the one to whom the request is assigned to';
