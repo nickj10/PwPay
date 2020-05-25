@@ -1,0 +1,96 @@
+{% extends "base.twig" %}
+
+{% block title %}Request Money
+{% endblock %}
+
+{% block content %}
+	<style>
+		.incoming-request,
+		.outgoing-request {
+			margin-bottom: 24px;
+		}
+
+		.incoming-request__empty,
+		.outgoing-request__empty {
+			margin-top: 16px;
+		}
+	</style>
+	<div class="empty-container transactions">
+
+		<div class="section row profile">
+			<div class="col s12 center red-text text-darken-4">
+				<h5>Pending Requests</h5>
+			</div>
+			{% if notifications is not empty %}
+				{% for notification in notifications %}
+					<li>{{ notification }}</li>
+				{% endfor %}
+			{% endif %}
+			<div class="incoming-request">
+				<div class="incoming-request__header">
+					<h6>Incoming Requests</h6>
+				</div>
+				{% if incoming is not empty %}
+					<table class="incoming-request__table highlight responsive-table">
+						<thead>
+							<tr>
+								<th>Email</th>
+								<th>Amount</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for request in incoming %}
+								<tr>
+									<td class="light concepto">{{request.org_email}}</td>
+									<td class="light importe">
+										{{request.amount}}€
+									</td>
+									<td>
+										<a class="waves-effect waves-light btn" href="/account/money/requests/{{request.request_id}}/accept">Accept</a>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				{% else %}
+					<div class="incoming-request__empty">
+						You do not have incoming requests yet.
+					</div>
+				{% endif %}
+			</div>
+			<div class="outgoing-request">
+				<div class="outgoing-request__header">
+					<h6>Outgoing Requests</h6>
+				</div>
+				{% if outgoing is not empty %}
+					<table class="outgoing-request__table highlight responsive-table">
+						<thead>
+							<tr>
+								<th>Email</th>
+								<th>Amount</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							{% for request in outgoing %}
+								<tr>
+									<td class="light concepto">{{request.org_email}}</td>
+									<td class="light importe">
+										{{request.amount}}€
+									</td>
+									<td class="light status">
+										{{request.status}}
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</tr>
+				</tbody>
+			</table>
+		{% else %}
+			<div class="outgoing-request__empty">You do not have sent any requests yet.</div>
+		{% endif %}
+	</div>
+</div></div>{% endblock %}

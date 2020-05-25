@@ -32,6 +32,13 @@ class FieldsValidator
         return $this->errors;
     }
 
+    public function validateMoneyRequest(array $data)
+    {
+        $this->validateEmail($data);
+        $this->validateAmount($data);
+        return $this->errors;
+    }
+
     public function validateProfile (array $data) {
         $this->validatePhone($data);
         return $this->errors;

@@ -10,6 +10,7 @@ use SallePW\SlimApp\Model\UserAccount;
 use SallePW\SlimApp\Model\UserRepository;
 use Ramsey\Uuid\Uuid;
 use SallePW\SlimApp\Model\UserTransaction;
+use SallePW\SlimApp\Model\PendingRequest;
 
 final class MySQLUserRepository implements UserRepository
 {
@@ -90,8 +91,7 @@ final class MySQLUserRepository implements UserRepository
         $userAccountInfo = $this->getUserInformationById($id);
         if ($action == "add") {
             $new_amount = floatval($userAccountInfo['balance']) + $amount;
-        }
-        else {
+        } else {
             $new_amount = floatval($userAccountInfo['balance']) - $amount;
         }
         $query = "UPDATE user SET balance = :amount WHERE user_id = :userId;";
@@ -147,11 +147,29 @@ final class MySQLUserRepository implements UserRepository
         return false;
     }
 
-    public function getUserInformationById($id) {
+    public function isUserActive($email)
+    {
+        $query = "SELECT * FROM user WHERE email = :email;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':email', $email, PDO::PARAM_STR);
+
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+            if ($row['status'] == 'active') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getUserInformationById($id)
+    {
         $query = "SELECT * FROM user WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':id', $id);
-        
+
         $statement->execute();
         $count = $statement->rowCount();
         if ($count > 0) {
@@ -160,7 +178,8 @@ final class MySQLUserRepository implements UserRepository
         return $row;
     }
 
-    public function updateActivatingUser($id) {
+    public function updateActivatingUser($id)
+    {
         $query = "UPDATE user SET status = 'active', balance=20.00 WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':id', $id, PDO::PARAM_STR);
@@ -203,7 +222,8 @@ final class MySQLUserRepository implements UserRepository
         return false;
     }
 
-    public function insertImage($file, $user_id) {
+    public function insertImage($file, $user_id)
+    {
         $query = "UPDATE user SET profile_picture = :file WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':file', $file);
@@ -212,7 +232,8 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
-    public function updatePhone ($phone, $user_id) {
+    public function updatePhone($phone, $user_id)
+    {
         $query = "UPDATE user SET phone = :phone WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':phone', $phone, PDO::PARAM_INT);
@@ -221,7 +242,8 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
-    public function updatePassword ($password, $user_id) {
+    public function updatePassword($password, $user_id)
+    {
         $query = "UPDATE user SET password = :pass WHERE user_id = :id;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':pass', $password);
@@ -229,9 +251,10 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
-    public function createTransaction($userId, $type, $amount, $action) {
+    public function createTransaction($userId, $type, $amount, $action)
+    {
         $query = "INSERT INTO Transactions (user_id, description, amount, action)
-                    VALUES (:userId, :type, :amount, :action);"; 
+                    VALUES (:userId, :type, :amount, :action);";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $userId);
         $statement->bindParam(':amount', $amount);
@@ -240,7 +263,8 @@ final class MySQLUserRepository implements UserRepository
         $statement->execute();
     }
 
-    public function accountExists($userId, $owner, $iban) {
+    public function accountExists($userId, $owner, $iban)
+    {
         $query = "SELECT * FROM Accounts WHERE user_id = :userId;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $userId);
@@ -249,7 +273,7 @@ final class MySQLUserRepository implements UserRepository
         if ($count > 0) {
             $rows = $statement->fetchAll();
             for ($i = 0; $i < $count; $i++) {
-                if ($row['owner_name'] == $owner && $row['iban'] == $iban) {
+                if ($rows[$i]['owner_name'] == $owner && $rows[$i]['iban'] == $iban) {
                     return true;
                 }
             }
@@ -257,11 +281,12 @@ final class MySQLUserRepository implements UserRepository
         return false;
     }
 
-    public function getAccountTransactions($userId) {
+    public function getAccountTransactions($userId)
+    {
         $query = "SELECT * FROM Transactions WHERE user_id = :userId ORDER BY created_at DESC LIMIT 5;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $userId);
-        
+
         $statement->execute();
         $count = $statement->rowCount();
         if ($count > 0) {
@@ -275,7 +300,8 @@ final class MySQLUserRepository implements UserRepository
         }
     }
 
-    public function createRequest ($orgId, $destId, $amount, $status) {
+    public function createRequest($orgId, $destId, $amount, $status)
+    {
         $query = "INSERT INTO Requests (org_user_id, dest_user_id, amount, status)
                     VALUES (:orgId, :destId, :amount, :status);";
         $statement = $this->database->connection()->prepare($query);
@@ -285,12 +311,67 @@ final class MySQLUserRepository implements UserRepository
         $statement->bindParam(':status', $status);
         $statement->execute();
     }
-    
-    public function getAllAccountTransactions($userId) {
+
+    public function getPendingIncomingRequests($userId)
+    {
+        $query = "SELECT * FROM Requests WHERE dest_user_id = :userId && status = 'PENDING';";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $userId);
+
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $rows = $statement->fetchAll();
+            $requests = [];
+            for ($i = 0; $i < $count; $i++) {
+                $user = $this->getUserInformationById(($rows[$i]['org_user_id']));
+                $request = new PendingRequest(intval($rows[$i]['request_id']), $user['email'], floatval($rows[$i]['amount']), $rows[$i]['status']);
+                array_push($requests, $request);
+            }
+            return $requests;
+        }
+    }
+
+    public function getPendingOutgoingRequests($userId)
+    {
+        $query = "SELECT * FROM Requests WHERE org_user_id = :userId && status = 'PENDING';";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':userId', $userId);
+
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $rows = $statement->fetchAll();
+            $requests = [];
+            for ($i = 0; $i < $count; $i++) {
+                $user = $this->getUserInformationById(($rows[$i]['dest_user_id']));
+                $request = new PendingRequest(intval($rows[$i]['request_id']), $user['email'], floatval($rows[$i]['amount']), $rows[$i]['status']);
+                array_push($requests, $request);
+            }
+            return $requests;
+        }
+    }
+
+    public function getRequestById($reqId)
+    {
+        $query = "SELECT * FROM Requests WHERE request_id = :reqId ;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':reqId', $reqId);
+
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+            return $row;
+        }
+    }
+
+    public function getAllAccountTransactions($userId)
+    {
         $query = "SELECT * FROM Transactions WHERE user_id = :userId ORDER BY created_at DESC;";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $userId);
-        
+
         $statement->execute();
         $count = $statement->rowCount();
         if ($count > 0) {
@@ -304,4 +385,3 @@ final class MySQLUserRepository implements UserRepository
         }
     }
 }
-
