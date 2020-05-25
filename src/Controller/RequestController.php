@@ -89,6 +89,7 @@ final class RequestController
             //update user new balance & create transaction
             $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "sub");
             $this->container->get('user_repository')->createTransaction($userId, 'Send Money', $amount, 'send');
+            $this->container->get('user_repository')->createTransaction($destId, 'Receive Money', $amount, 'receive');
             return $response->withHeader('Location', '/account/money/requests/pending')->withStatus(200);
         }
     }
