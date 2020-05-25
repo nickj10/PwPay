@@ -59,7 +59,7 @@ $app->get('/account/summary', AccountController::class . ':showDashboard');
 $app->get('/profile', ProfileController::class . ':showProfile');
 $app->post('/profile', ProfileController::class . ':profileAction')->setName('profile_form');
 
-$app->get('/profile/security', ProfileSecurityController::class . ':showProfileSecurity');
+$app->get('/profile/security', ProfileSecurityController::class . ':showProfileSecurity')->setName('security_form_form');
 $app->post('/profile/security', ProfileSecurityController::class . ':profileSecurityAction')->setName('security_form');
 
 $app->get('/account/bank-account', TransactionsController::class . ':showLoadMoney')->setName('associate-account');
@@ -71,7 +71,7 @@ $app->post('/account/money/send', SendMoneyController::class . ':sendMoneyAction
 
 $app->get('/account/transactions', TransactionsController::class . ':showTransactions');
 
-$app->get('/account/money/requests', RequestController::class . ':showRequest');
+$app->get('/account/money/requests', RequestController::class . ':showRequest')->setName('request-money-form');
 $app->post('/account/money/requests', RequestController::class . ':requestAction')->setName('request-money');
 $app->get('/account/money/requests/pending', RequestController::class . ':showRequestsPending');
 $app->get('/account/money/requests/{id}/accept', RequestController::class . ':acceptRequest');
