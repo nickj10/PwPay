@@ -343,7 +343,7 @@ final class MySQLUserRepository implements UserRepository
 
     public function getPendingOutgoingRequests($userId)
     {
-        $query = "SELECT * FROM Requests WHERE org_user_id = :userId && status = 'PENDING';";
+        $query = "SELECT * FROM Requests WHERE org_user_id = :userId && (status = 'PENDING'OR status = 'PAID');";
         $statement = $this->database->connection()->prepare($query);
         $statement->bindParam(':userId', $userId);
 
