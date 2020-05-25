@@ -76,7 +76,7 @@ final class RequestController
             $this->container->get('flash')->addMessage('notifications', self::INCORRECT_USER);
         } else {
             // Check if the user has enough money to fulfil the request
-            if (floatval($userInfo['balance']) <= $amount) {
+            if (floatval($userInfo['balance']) < $amount) {
                 $errors['insuficientBalance'] = self::NOT_ENOUGH_MONEY;
                 $this->container->get('flash')->addMessage('notifications', sprintf(self::NOT_ENOUGH_MONEY, $amount));
             }
