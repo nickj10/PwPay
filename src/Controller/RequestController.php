@@ -15,10 +15,30 @@ final class RequestController
     private const NO_EMAIL_DDBB = 'This email is not in the ddbb';
     private const SAME_EMAIL = 'You cannot request money from yourself';
     private const INACTIVE_USER = 'The user from whom you want to request money is inactive';
+    private const INCORRECT_USER = 'You are not the one to whom the request is assigned to';
+    private const NOT_ENOUGH_MONEY = 'You do not have enough balance in your wallet';
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    public function showRequestsPending(Request $request, Response $response): Response
+    {
+        if (empty($_SESSION['user_id'])) {
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
+        }
+        $messages = $this->container->get('flash')->getMessages();
+        $notifications = $messages['notifications'] ?? [];
+
+        $incoming_requests = $this->container->get('user_repository')->getPendingIncomingRequests($_SESSION['user_id']);
+        $outgoing_requests = $this->container->get('user_repository')->getPendingOutgoingRequests($_SESSION['user_id']);
+        return $this->container->get('view')->render($response, 'pending_requests.twig', [
+            'session' => $_SESSION['user_id'],
+            'notifications' => $notifications,
+            'incoming' => $incoming_requests,
+            'outgoing' => $outgoing_requests
+        ]);
     }
 
     public function showRequest(Request $request, Response $response): Response
@@ -27,9 +47,42 @@ final class RequestController
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
         }
         return $this->container->get('view')->render($response, 'request.twig', [
-            'session' => $_SESSION['user_id'],
-            'user' => $user
+            'session' => $_SESSION['user_id']
         ]);
+    }
+
+    public function acceptRequest(Request $request, Response $response): Response
+    {
+        if (empty($_SESSION['user_id'])) {
+            return $response->withHeader('Location', '/sign-in')->withStatus(403);
+        }
+        // Check for errors
+        $errors = [];
+        // TODO: Do validations
+        $requestId = $request->getAttribute('id');
+
+        // Get information from the ddbb
+        $moneyRequest = $this->container->get('user_repository')->getRequestById($requestId);
+        $userInfo = $this->container->get('user_repository')->getUserById($_SESSION['user_id']);
+
+        // Check if the user is the one to whom the request is assigned to
+        if ($moneyRequest['dest_user_id'] == $_SESSION['user_id']) {
+            $errors['incorrectUser'] = self::INCORRECT_USER;
+        }
+
+        // Check if the user has enough money to fulfil the request
+        if ($userInfo['balance'] >= $moneyRequest['amount']) {
+            $errors['insuficientBalance'] = self::NOT_ENOUGH_MONEY;
+        }
+
+        // Return to pending requests page if there are errors
+        if(count($errors) > 0) {
+            //$this->container->get('flash')->addMessage('notifications', sprintf(self::SEND_OK, $result['email']));
+            return $response->withHeader('Location', '/account/money/requests/pending')->withStatus(302);
+        } else {
+            
+        }
+
     }
 
     public function requestAction(Request $request, Response $response): Response
