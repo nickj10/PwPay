@@ -4,9 +4,14 @@
 {% endblock %}
 
 {% block content %}
-	<div class="container dashboard">
+	<div class="empty-container dashboard">
 		<br></br>
-	<div class="row">
+	<div class="row profile">
+		{% if notifications is not empty %}
+			{% for notification in notifications %}
+				<div class="msg msg-correct z-depth-3">{{ notification }}</div>
+			{% endfor %}
+		{% endif %}
 		<div class="col s12 ">
 			<h4>Hello USER,</h4>
 		</div>
@@ -34,9 +39,11 @@
 		<div class="col s12 center">
 			<h5>TRANSACTIONS</h5>
 		</div>
-		<br></br>
-	<br></br>
-<table class="striped responsive-table">
+		<br>
+	</br>
+	<br>
+</br>
+<table class="striped transactions-table">
 	<tbody>
 		{% if transactions is not empty %}
 			{% for transaction in transactions %}
@@ -50,27 +57,28 @@
 						{% endif %}
 					</td>
 				</tr>
-			</td>
-		</tr>
-	{% endfor %}
-{% endif %}
-</tbody>
-</table>
-</div>
-<div class="section row">
+			{% endfor %}
+		{% endif %}
+	</tbody>
+</table></div><div class="section row">
 <div class="col s6">
-<div class="icon-block">
-<h2 class="center">
-	<a href="#!" style="color:
-																													    					rgb(151, 10, 10) !important;">
-		<i class="material-icons">file_upload</i>
-	</a>
-</h2>
-<h5 class="center black-text">Send Money</h></div></div><div class="col s6"><div class="icon-block">
-<h2 class="center">
-	<a href="#!" style="color:
-																													    					rgb(151, 10, 10) !important;">
-		<i class="material-icons">file_download</i>
-	</a>
-</h2>
-<h5 class="center black-text">Request Money</h></div></div></div></div>{% endblock %}
+	<div class="icon-block">
+		<h2 class="center">
+			<a href="{{url_for('send-money-form')}}" style="color: rgb(151, 10, 10) !important;">
+				<i class="material-icons">file_upload</i>
+			</a>
+		</h2>
+		<h5 class="center black-text">Send Money</h>
+	</div>
+</div>
+<div class="col s6">
+	<div class="icon-block">
+		<h2 class="center">
+
+			<a href="{{url_for('request-money-form')}}" style="color: rgb(151, 10, 10) !important;">
+				<i class="material-icons">file_download</i>
+			</a>
+		</h2>
+		<h5 class="center black-text">Request Money</h>
+	</div>
+</div></div></div>{% endblock %}

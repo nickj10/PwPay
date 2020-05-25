@@ -20,14 +20,17 @@
 					<div class="card-action center red darken-4 ">
 						
 						<h3 class="white-text" style="margin-top=75%">My Profile</h3>
-						<img src="/assets/pictures/default.png" alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
+						{% if profile_pic is not empty %}
+							<img src={{ '/uploads/' ~ profile_pic }} alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
+						{% else %}
+							<img src="/assets/pictures/default.png" alt="default_image" id="image_profile" class="circle responsive-img" width="200" height="200">
+						{% endif %}
 					</div>
 						
 					<div class="card-content">
 					<br>
 					<br>
 						<br>
-						<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
 						<br>
     					<input id="examina" class="black-text" type="file" name="files"/>
 						
@@ -64,8 +67,8 @@
 															  {% if user['phone'] != 0 %}
 																value = {{ user['phone'] }}
 															  {% endif %}/>
-							{% if form_errors['phone'] is not empty %}
-								<p class="error-msg"> {{ form_errors['phone'] }} </p>
+							{% if phone_error['phone'] is not empty %}
+								<p class="error-msg"> {{ phone_error['phone'] }} </p>
 							{% endif %}
 						</div>
 						{% if form_error is not empty %}
@@ -78,7 +81,7 @@
 						<br>
 						<div class="form-field center-align">
 								<button type="submit" value="Save" class="btn-large waves-effect waves-light teal lighten-1">Save</button>
-								<p> <a href="http://pwpay.grup16:8030/profile/security" class="grey-text text-darken-1" style="text-decoration:underline;"> 
+								<p> <a href="{{ url_for('security_form_form') }}" class="grey-text text-darken-1" style="text-decoration:underline;"> 
 									Change password </a>
 								</p>
 						</div><br>

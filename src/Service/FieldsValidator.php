@@ -32,6 +32,13 @@ class FieldsValidator
         return $this->errors;
     }
 
+    public function validateMoneyRequest(array $data)
+    {
+        $this->validateEmail($data);
+        $this->validateAmount($data);
+        return $this->errors;
+    }
+
     public function validateProfile (array $data) {
         $this->validatePhone($data);
         return $this->errors;
@@ -57,8 +64,38 @@ class FieldsValidator
         return $this->errors;
     }
 
-    public function validateAmount(array $data) {
+    public function validateTransaction (array $data) {
         $this->errors = [];
+        $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $amount = $data['amount'];
+        if (empty($email) && empty($amount)) {
+            $this->errors['empty_fields'] = "All fields are required to send money.";
+        }
+        else {
+            if (!empty($email) && !empty($amount)) {
+                $this->validateEmail($data);
+                $this->validateAmount($data);
+            }
+        }
+        if (empty($email) && !empty($amount)) {
+            $this->errors['empty_email'] = "Please indicate a destination email.";
+        }
+        else {
+            if (!empty($email) && empty($amount)) {
+                $this->errors['empty_amount'] = "Please indicate an amount to send.";
+            }
+        }
+        return $this->errors;
+    }
+
+    public function validateLoadMoney (array $data) {
+        $this->errors = [];
+        $this->validateAmount($data);
+        return $this->errors;
+
+    }
+
+    public function validateAmount(array $data) {
         if (empty($data['amount'])) {
             $this->errors['amount_error'] = "Please indicate an amount to load.";
         }
@@ -67,7 +104,6 @@ class FieldsValidator
                 $this->errors['amount_negative'] = "Please indicate a valid amount.";
             }
         }
-        return $this->errors;
     }
 
     private function validateEmail ($data) {

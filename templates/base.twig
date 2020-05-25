@@ -33,16 +33,52 @@
 					<!--   User in session   -->
 					{% if session is not empty %}
 					<li><a id="inSession" href="/account/summary">Dashboard</a></li>
-					<li><a id="inSession" href="/account/bank-account">Transactions</a></li>
+					<li><a id="inSession" href="/account/bank-account">Accounts</a></li>
+					<li><a id="inSession" href="/account/transactions">Transactions</a></li>
+					<li><a id="inSession" href="/account/money/requests/pending">Requests</a></li>
 					<li>
 					<a id="inSession" href="/profile">
-						<img src="/assets/pictures/default.png" alt="Profile" class="circle responsive-img" width=25 height=25>
+						{% if profile_pic is not empty %}
+							<img src={{ '/uploads/' ~ profile_pic }} alt="Profile" class="circle responsive-img" width=25 height=25>
+						{% else %}
+							<img src="/assets/pictures/default.png" alt="Profile" class="circle responsive-img" width=25 height=25>
+						{% endif %}
 					</a>
+					</li>
 					<li>
 					<a id="inSession" href="javascript:clickLogout()"><i class="material-icons">exit_to_app</i></a>
 					</li>
-					
 					{% endif %}
+					</ul>
+					<ul id="nav-mobile" class="sidenav">
+						<!--   User not in session   -->
+						{% if session is empty %}
+						<li><a id="notInSession" href="/sign-in">Sign in</a></li>
+						<li><a id="notInSession" href="/sign-up">Register</a></li>
+						{% endif %}
+						<!--   User in session   -->
+						{% if session is not empty %}
+						<li>
+						<a id="inSession" href="/profile">
+							{% if profile_pic is not empty %}
+								<img src={{ '/uploads/' ~ profile_pic }} alt="Profile" class="profile-img circle responsive-img" width=25 height=25>
+							{% else %}
+								<img src="/assets/pictures/default.png" alt="Profile" class="profile-img circle responsive-img" width=25 height=25>
+							{% endif %}
+						</a>
+						</li>
+						<li><a id="inSession" href="/account/summary">Dashboard</a></li>
+						<li><a id="inSession" href="/account/bank-account">Accounts</a></li>
+						<li><a id="inSession" href="/account/transactions">Transactions</a></li>
+						<li>
+							<a id="inSession" href="javascript:clickLogout()"><i class="material-icons">exit_to_app</i></a>
+						</li>
+						{% endif %}
+					</ul>
+					<a href="#" data-target="nav-mobile" class="sidenav-trigger">
+						<i class="material-icons">menu</i>
+					</a>
+
 				</div>
 			</nav>
 			<form id="logout-form" hidden action="{{ url_for('logout') }}" method="POST">
