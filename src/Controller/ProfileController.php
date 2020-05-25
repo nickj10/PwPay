@@ -40,8 +40,7 @@ final class ProfileController
     {
         if (empty($_SESSION['user_id'])) {
             return $response->withHeader('Location', '/sign-in')->withStatus(403);
-        }
-        else {
+        } else {
             $uploadedFile = $request->getUploadedFiles();
             $file = $uploadedFile['files'];
             $data = $request->getParsedBody();
@@ -72,8 +71,7 @@ final class ProfileController
                             'info' => $info,
                             'user' => $updatedUser
                         ]);
-                    }
-                    else {
+                    } else {
                         //If it returns an array there are errors
                         return $this->container->get('view')->render($response, 'profile.twig', [
                             'session' => $_SESSION['user_id'],
@@ -83,9 +81,18 @@ final class ProfileController
                         ]);
                     }
                 }
+                $info = self::CHANGES_OK;
+                // Get updated information
+                $updatedUser = $this->container->get('user_repository')->getUserInformationById($user_id);
+                return $this->container->get('view')->render($response, 'profile.twig', [
+                    'session' => $_SESSION['user_id'],
+                    'profile_pic' => $user['profile_picture'],
+                    'info' => $info,
+                    'user' => $updatedUser
+                ]);
             }
             //If it there's no picture uploaded 
-            if ($file->getError()!== UPLOAD_ERR_OK || empty($data['phone'])) {
+            if ($file->getError() !== UPLOAD_ERR_OK || empty($data['phone'])) {
                 $error['form_error'] = self::FORM_ERROR;
                 return $this->container->get('view')->render($response, 'profile.twig', [
                     'session' => $_SESSION['user_id'],
