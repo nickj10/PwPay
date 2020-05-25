@@ -37,14 +37,13 @@ class ImageHandler {
             if ($format != self::ALLOWED_EXTENSION) {
                 $this->errors['extension'] = sprintf(self::INVALID_EXTENSION_ERROR, $format);
             }
-            //Checks if the size is valid
-            if ($size >= self::ALLOWED_SIZE) {
-                $this->errors['size'] = self::INVALID_SIZE_ERROR;
-            }
-            //If extension and size is valid, we check for the dimension
-            if ($format == self::ALLOWED_EXTENSION && $size <= self::ALLOWED_SIZE) {
-                //If dimension is too big, we crop the image to 400x400
-                if ($width > self::ALLOWED_DIMENSION || $height > self::ALLOWED_DIMENSION) {
+            else {
+                //Checks if the size is valid
+                if ($size >= self::ALLOWED_SIZE) {
+                    $this->errors['size'] = self::INVALID_SIZE_ERROR;
+                }
+                else {
+                    //If extension and size is valid, we check for the dimension
                     $circle = new Imagick();
                     $circle->newImage(400, 400, 'none');
                     $circle->setimageformat('png');
@@ -54,23 +53,24 @@ class ImageHandler {
                     $draw->circle(400/2, 400/2, 400/2, 400);
                     $circle->drawimage($draw);
 
-                    $cropImage = new Imagick($tmpName);
-                    $cropImage->cropThumbnailImage(400,400);
-                    $cropImage->compositeimage($circle, Imagick::COMPOSITE_DSTIN, 0, 0);
-                    $cropImage->writeImage(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $filename);
-                    return $filename;
-                }
-                else {
-                    //If dimension is fine we generate a unique name and store it to a folder
-                    $file->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $filename);
-                    return $filename;
+                    if ($format == self::ALLOWED_EXTENSION && $size <= self::ALLOWED_SIZE) {
+                        //If dimension is too big, we crop the image to 400x400
+                        if ($width > self::ALLOWED_DIMENSION || $height > self::ALLOWED_DIMENSION) {
+                            $cropImage = new Imagick($tmpName);
+                            $cropImage->cropThumbnailImage(400,400);
+                            $cropImage->compositeimage($circle, Imagick::COMPOSITE_DSTIN, 0, 0);
+                            $cropImage->writeImage(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $filename);
+                            return $filename;
+                        }
+                        else {
+                            //If dimension is fine we generate a unique name and store it to a folder
+                            $file->moveTo(self::UPLOADS_DIR . DIRECTORY_SEPARATOR . $filename);
+                            return $filename;
+                        }
+                    }
                 }
             }
         }
         return $this->errors;
-
     }
-
-
-
 }
