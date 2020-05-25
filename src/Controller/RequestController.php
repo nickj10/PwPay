@@ -18,6 +18,7 @@ final class RequestController
     private const INACTIVE_USER = 'The user from whom you want to request money is inactive';
     private const INCORRECT_USER = 'You are not the one to whom the request is assigned to';
     private const NOT_ENOUGH_MONEY = 'You do not have enough balance in your wallet to send %s€';
+    private const SUCCESS_MESSAGE = 'You have successfully sent %s€ to %s!';
 
     public function __construct(ContainerInterface $container)
     {
@@ -67,6 +68,7 @@ final class RequestController
         $userInfo = $this->container->get('user_repository')->getUserInformationById($userId);
         $amount = floatval($moneyRequest['amount']);
         $destId = $moneyRequest['org_user_id'];
+        $destUser = $this->container->get('user_repository')->getUserInformationById($destId);
 
         // Check if the user is the one to whom the request is assigned to
         if ($moneyRequest['dest_user_id'] != $userId) {
@@ -90,7 +92,9 @@ final class RequestController
             $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "sub");
             $this->container->get('user_repository')->createTransaction($userId, 'Send Money', $amount, 'send');
             $this->container->get('user_repository')->createTransaction($destId, 'Receive Money', $amount, 'receive');
-            return $response->withHeader('Location', '/account/money/requests/pending')->withStatus(200);
+            // Add success message to flash
+            $this->container->get('flash')->addMessage('notifications', sprintf(self::SUCCESS_MESSAGE, $amount, $destUser['email']));
+            return $response->withHeader('Location', '/account/summary')->withStatus(200);
         }
     }
 
@@ -134,6 +138,7 @@ final class RequestController
                 $response,
                 'request.twig',
                 [
+                    'session' => $_SESSION['user_id'],
                     'form_errors' => $errors,
                     'data' => $data
                 ]
