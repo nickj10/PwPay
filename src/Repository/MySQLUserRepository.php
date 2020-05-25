@@ -352,6 +352,20 @@ final class MySQLUserRepository implements UserRepository
         }
     }
 
+    public function getRequestById($reqId)
+    {
+        $query = "SELECT * FROM Requests WHERE request_id = :reqId ;";
+        $statement = $this->database->connection()->prepare($query);
+        $statement->bindParam(':reqId', $reqId);
+
+        $statement->execute();
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $row = $statement->fetch();
+            return $row;
+        }
+    }
+
     public function getAllAccountTransactions($userId)
     {
         $query = "SELECT * FROM Transactions WHERE user_id = :userId ORDER BY created_at DESC;";
