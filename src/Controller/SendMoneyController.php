@@ -17,7 +17,7 @@ final class SendMoneyController
     private const INACTIVE_EMAIL = "You're trying to send money to an inactive account.";
     private const NO_ACCOUNT = "The email you introduced doesn't have an account.";
     private const SEND_OK = "You have successfully sent money to %s.";
-    
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -46,7 +46,7 @@ final class SendMoneyController
         $userId = $_SESSION['user_id'];
         $errors = $this->container->get('validator')->validateTransaction($data);
         if (count($errors) == 0) {
-            $email = filter_var($data['email'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $email = filter_var($data['email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             //Check if the user has enough balance
             $user = $this->container->get('user_repository')->getUserInformationById($userId);
             if ($user['balance'] >= $data['amount'] && $user['email'] != $email) {
@@ -54,11 +54,12 @@ final class SendMoneyController
                 if ($result > 0 && $result['status'] == 'active') {
                     $destId = $result['user_id'];
                     $amount = $data['amount'];
-                    $this->container->get('user_repository')->createRequest($userId,$destId,$amount,self::SENT);
-                    $this->container->get('user_repository')->updateAccountBalance($destId,$amount,"add");
+                    $this->container->get('user_repository')->createRequest($userId, $destId, $amount, self::SENT);
+                    $this->container->get('user_repository')->updateAccountBalance($destId, $amount, "add");
                     //update user new balance & create transaction
                     $this->container->get('user_repository')->updateAccountBalance($userId, $amount, "sub");
                     $this->container->get('user_repository')->createTransaction($userId, 'Send Money', $amount, 'send');
+                    $this->container->get('user_repository')->createTransaction($destId, 'Receive Money', $amount, 'receive');
                     //redirect to dashboard with Flash message
                     $this->container->get('flash')->addMessage('notifications', sprintf(self::SEND_OK, $result['email']));
                     return $response->withHeader('Location', '/account/summary')->withStatus(302);
@@ -69,8 +70,7 @@ final class SendMoneyController
                 if ($result == null) {
                     $errors['no_account'] = self::NO_ACCOUNT;
                 }
-            }
-            else {
+            } else {
                 $errors['no_money'] = sprintf(self::NO_MONEY, $user['balance']);
                 if ($user['email'] == $email) {
                     $errors['same_email'] = self::SAME_EMAIL;
@@ -86,8 +86,5 @@ final class SendMoneyController
                 'data' => $data
             ]
         );
-
     }
-
-
 }
