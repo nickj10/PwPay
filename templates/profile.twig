@@ -31,7 +31,6 @@
 					<br>
 					<br>
 						<br>
-						<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
 						<br>
     					<input id="examina" class="black-text" type="file" name="files"/>
 						
@@ -68,8 +67,8 @@
 															  {% if user['phone'] != 0 %}
 																value = {{ user['phone'] }}
 															  {% endif %}/>
-							{% if form_errors['phone'] is not empty %}
-								<p class="error-msg"> {{ form_errors['phone'] }} </p>
+							{% if phone_error['phone'] is not empty %}
+								<p class="error-msg"> {{ phone_error['phone'] }} </p>
 							{% endif %}
 						</div>
 						{% if form_error is not empty %}
