@@ -27,6 +27,21 @@
 							{% if data is not empty %} value={{ data['email'] }} 
 							{% endif %}/>
 						</div>
+						{% if form_errors['nonExistingEmail'] is not empty %}
+							<p class="error-msg">
+						{{ form_errors['nonExistingEmail'] }}
+							</p>
+						{% endif %}
+						{% if form_errors['emailInactive'] is not empty %}
+							<p class="error-msg">
+						{{ form_errors['emailInactive'] }}
+							</p>
+						{% endif %}
+						{% if form_errors['sameEmail'] is not empty %}
+							<p class="error-msg">
+						{{ form_errors['sameEmail'] }}
+							</p>
+						{% endif %}
 						<div class="form-field">
 							<label for="amount">Amount:</label>
 							<input type="number" step="0.01" 
@@ -42,21 +57,6 @@
 						{% if form_errors['amount_negative'] is not empty %}
 							<p class="error-msg">
 						{{ form_errors['amount_negative'] }}
-							</p>
-						{% endif %}
-						{% if form_errors['nonExistingEmail'] is not empty %}
-							<p class="error-msg">
-						{{ form_errors['nonExistingEmail'] }}
-							</p>
-						{% endif %}
-						{% if form_errors['emailInactive'] is not empty %}
-							<p class="error-msg">
-						{{ form_errors['emailInactive'] }}
-							</p>
-						{% endif %}
-						{% if form_errors['sameEmail'] is not empty %}
-							<p class="error-msg">
-						{{ form_errors['sameEmail'] }}
 							</p>
 						{% endif %}
 						<div class="form-field center-align">
